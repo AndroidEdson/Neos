@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.azore.compustore">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,10 +24,10 @@
         <activity android:name=".ClientesActivity" />
         <activity android:name=".OrdenesActivity" />
         <activity android:name=".ReportesActivity" />
-        <activity android:name=".Pop"
-            android:theme="@style/AppTheme.CustomTheme"
-            />
-
+        <activity
+            android:name=".Pop"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".Add_categorie_product"></activity>
     </application>
 
 </manifest>

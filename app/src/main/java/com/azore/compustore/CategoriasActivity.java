@@ -101,6 +101,8 @@ public class CategoriasActivity extends AppCompatActivity {
     private LayoutInflater layoutInflater;
     private ConstraintLayout constraintLayout;
 
+    private final int request_code=0;
+
 
 
 //__________________________________________________________
@@ -118,13 +120,22 @@ public class CategoriasActivity extends AppCompatActivity {
 
         inventory= new Inventory(getApplicationContext());
         //List<CategoryProduct> categories= Arrays.asList(new CategoryProduct(1,"Armin"));
-        final List<CategoryProduct> categories = inventory.getAllCategoriesProduct();
+        final List<CategoryProduct> categories = inventory.category_alfabetic();
 
       //  Toast.makeText(this,categories.get(0).getDescription()+"  "+categories.get(1).getDescription(),Toast.LENGTH_SHORT).show();
        // Toast.makeText(this,Integer.toString(categories.size()),Toast.LENGTH_SHORT).show();
 
         adapter= new CategoriesAdapter(categories,this);
         recyclerView.setAdapter(adapter);
+
+
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
 
 
@@ -145,12 +156,38 @@ public class CategoriasActivity extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
-                Toast.makeText(this,"me tocaste",Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(this,Add_categorie_product.class);
+                startActivityForResult(i, request_code);
+
                 return true;
-               // Codigo prueba
 
         }
         return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==request_code && resultCode== RESULT_OK){
+
+            //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
+
+        inventory= new Inventory(getApplicationContext());
+            final List<CategoryProduct> categories = inventory.category_alfabetic();
+            adapter= new CategoriesAdapter(categories,this);
+            recyclerView.setAdapter(adapter);
+
+
+
+        }
+        else
+        {
+            //Toast.makeText(getApplicationContext(), "No OK :(", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
 }
