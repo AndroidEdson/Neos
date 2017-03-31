@@ -53,7 +53,6 @@ public final class Inventory {
 
                //list.add(new Category(cursor.getInt(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.ID))),
                //   cursor.getString(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.DESCRIPTION)))));
-
                list.add((cursor.getCategoryProduct()));  // metodo wrappcursor
 
            }
@@ -111,10 +110,34 @@ public final class Inventory {
         // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
     }
 
+    // Validación de nombre categorias para que no haya un nombre repetido
 
 
+    public int NameValidation(String name)
+    {
+        int i=0;
+        List<CategoryProduct> list = new ArrayList<CategoryProduct>();
+
+        CategoryProductCursor cursor = new CategoryProductCursor(db.query(InventoryDbSchema.Categories_Table.NAME,
+                null,
+              "UPPER("+ InventoryDbSchema.Categories_Table.Columns.DESCRIPTION + ")=?",
+                new String[] {name.toUpperCase()},
+                null,
+                null,
+                null));
+
+         i = cursor.getCount();
+        return i;
+
+    }
+
+    // PARA ELIMINAR UNA CATEGORIA
 
 
+    public void deleteCategory(String tableName, String i) {
+
+            db.delete(tableName, "id = ?", new String[] {i});
+    }
 
 
     // ACTUALIZAR O MODIFICAR CATEGORIA

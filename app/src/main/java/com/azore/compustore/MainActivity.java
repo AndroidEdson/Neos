@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -97,8 +98,10 @@ public class MainActivity extends AppCompatActivity {
     }
     // Boton reportes
     public void BtnReportes(View v){
-        Intent i = new Intent(this,ReportesActivity.class);
-        startActivity(i);
+        //Intent i = new Intent(this,ReportesActivity.class);
+       // startActivity(i);
+
+
     }
 
 

@@ -1,6 +1,8 @@
 package com.azore.compustore;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +33,16 @@ public class Add_categorie_product extends AppCompatActivity {
 
         inventory= new Inventory(getApplicationContext());
 
+
+        cancel_categories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert();
+            }
+        });
+
+
+
         save_categories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,10 +54,18 @@ public class Add_categorie_product extends AppCompatActivity {
                 else {
 
 
-                    Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                    inventory.AddCategory(Integer.parseInt(editText_id.getText().toString()), editText_description.getText().toString());
-                    Intent intent_back = new Intent();
-                    setResult(RESULT_OK, intent_back);
+                    if( inventory.NameValidation(editText_description.getText().toString()) >= 1 )
+                    {
+                        Toast.makeText(getApplicationContext(), "Ya existe una categoria con ese nombre", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                        inventory.AddCategory(Integer.parseInt(editText_id.getText().toString()), editText_description.getText().toString());
+                        Intent intent_back = new Intent();
+                        setResult(RESULT_OK, intent_back);
+                        finish();
+                    }
 
                 }
 
@@ -54,5 +74,31 @@ public class Add_categorie_product extends AppCompatActivity {
         });
 
 
+    }// END ON CREATE
+
+    public void showAlert( ){
+        AlertDialog.Builder myAlert= new AlertDialog.Builder(this);
+        myAlert.setMessage("¿Seguro que quieres cancelar?")
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+            }
+        })
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                   finish();
+                    }
+                })
+                .setTitle("Product Categories")
+                .setIcon(R.drawable.ic_shortcut_warning)
+                .create();
+        myAlert.show();
+
     }
-}
+
+
+
+}//END FINAL

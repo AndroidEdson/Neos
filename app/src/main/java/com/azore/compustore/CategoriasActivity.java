@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -21,8 +24,9 @@ import com.azore.compustore.fiuady.db.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.Inflater;
 
-public class CategoriasActivity extends AppCompatActivity {
+public class CategoriasActivity extends AppCompatActivity   {
 
     private class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -50,15 +54,26 @@ public class CategoriasActivity extends AppCompatActivity {
             int position = getAdapterPosition() ;
             CategoryProduct categoryProduct=this.categoryProducts.get(position);
 
-            Toast.makeText(getApplicationContext(), categoryProduct.getDescription()+" "+Integer.toString(categoryProduct.getId()) , Toast.LENGTH_LONG).show();
-          //  startActivity(new Intent(getApplicationContext(),Pop.class));
+            //Toast.makeText(getApplicationContext(), categoryProduct.getDescription()+" "+Integer.toString(categoryProduct.getId()) , Toast.LENGTH_LONG).show();
 
-            constraintLayout= (ConstraintLayout) findViewById(R.id.popup_category);
-            layoutInflater=(LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            ViewGroup container =( ViewGroup) layoutInflater.inflate(R.layout.pop_up_category, null);
-            popupWindow= new PopupWindow(container, 400,400, true);
+          Intent intent = new Intent(getApplicationContext(), Pop.class);
+          intent.putExtra(Pop.EXTRA_DESCRIPTION, categoryProduct.getDescription());
+          intent.putExtra(Pop.EXTRA_ID, categoryProduct.getId());
+          startActivityForResult(intent, request_code2);
 
-            popupWindow.showAtLocation(constraintLayout, Gravity.NO_GRAVITY, 500,500);
+            // CONSTRUICCION DEL POP UP
+      //     constraintLayout= (ConstraintLayout) findViewById(R.id.popup_category);
+      //     layoutInflater=(LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+      //     ViewGroup container =( ViewGroup) layoutInflater.inflate(R.layout.pop_up_category, null);
+      //     popupWindow= new PopupWindow(container, 400,400, true);
+      //     popupWindow.showAtLocation(constraintLayout, Gravity.NO_GRAVITY, 500,500);
+
+        //    PopupMenu popupMenu= new PopupMenu(CategoriasActivity.this,recyclerView);
+        //    popupMenu.getMenuInflater().inflate(R.menu.my_popup, popupMenu.getMenu());
+        //    popupMenu.setGravity();
+        //    popupMenu.show();
+//
+
           //  textView_name.setText(categoryProduct.getDescription().toString());
         }
 
@@ -98,10 +113,16 @@ public class CategoriasActivity extends AppCompatActivity {
 
 
     private PopupWindow  popupWindow;
+   // private PopupMenu popupMenu;
     private LayoutInflater layoutInflater;
     private ConstraintLayout constraintLayout;
 
     private final int request_code=0;
+    private final int request_code2=1;
+
+
+    private ImageButton edit_popup;
+    private ImageButton delete_popup;
 
 
 
@@ -117,6 +138,9 @@ public class CategoriasActivity extends AppCompatActivity {
 
         recyclerView=(RecyclerView) findViewById(R.id.recycler_categories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+      //  edit_popup= (ImageButton)findViewById(R.id.popup_image_categori_edit);
+        //delete_popup= (ImageButton)findViewById(R.id.popup_image_categori_delete);
+
 
         inventory= new Inventory(getApplicationContext());
         //List<CategoryProduct> categories= Arrays.asList(new CategoryProduct(1,"Armin"));
@@ -129,9 +153,22 @@ public class CategoriasActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-
-
     }
+
+ public void ShowPopUp(View v) {
+
+     PopupMenu popupMenu= new PopupMenu(getApplicationContext(),v);
+     MenuInflater inflater=  popupMenu.getMenuInflater();
+     inflater.inflate(R.menu.my_popup, popupMenu.getMenu());
+     popupMenu.show();
+
+ }
+
+ public void item_edit_menu(){
+     Toast.makeText(getApplicationContext(),"Hola",Toast.LENGTH_SHORT).show();
+ }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -171,11 +208,12 @@ public class CategoriasActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode==request_code && resultCode== RESULT_OK){
+        if ((requestCode==request_code && resultCode== RESULT_OK) || (requestCode==request_code2 && resultCode== RESULT_OK))
+        {
 
             //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
 
-        inventory= new Inventory(getApplicationContext());
+            inventory= new Inventory(getApplicationContext());
             final List<CategoryProduct> categories = inventory.category_alfabetic();
             adapter= new CategoriesAdapter(categories,this);
             recyclerView.setAdapter(adapter);
@@ -188,6 +226,8 @@ public class CategoriasActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), "No OK :(", Toast.LENGTH_SHORT).show();
 
         }
+
+
 
     }
 }
