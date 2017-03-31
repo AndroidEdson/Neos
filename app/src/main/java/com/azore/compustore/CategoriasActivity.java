@@ -121,6 +121,7 @@ public class CategoriasActivity extends AppCompatActivity   {
 
     private final int request_code=0;
     private final int request_code2=1;
+    private AlertDialog dialog ;
 
 
 //__________________________________________________________
@@ -192,8 +193,8 @@ public class CategoriasActivity extends AppCompatActivity   {
             case R.id.agregar:
                 // Codigo prueba
 
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-                View mView = getLayoutInflater().inflate(R.layout.dialog_add,null);
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+                final View mView = getLayoutInflater().inflate(R.layout.dialog_add,null);
                 final EditText mId = (EditText)mView.findViewById(R.id.etId);
                 final EditText mName = (EditText)mView.findViewById(R.id.etName);
                 Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
@@ -219,16 +220,14 @@ public class CategoriasActivity extends AppCompatActivity   {
                             {
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
                                 inventory.AddCategory(Integer.parseInt(mId.getText().toString()), mName.getText().toString());
-                                Intent intent_back = new Intent();
-                                setResult(RESULT_OK, intent_back);
-                                finish();
+                                updateRecycler();
 
                             }
                         }
                     }
                 });
                 mBuilder.setView(mView);
-                AlertDialog dialog = mBuilder.create();
+                dialog = mBuilder.create();
                 dialog.show();
 
                 mCancelar.setOnClickListener(new View.OnClickListener() {
@@ -254,14 +253,16 @@ public class CategoriasActivity extends AppCompatActivity   {
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                      popupWindow.dismiss();
 
                     }
                 })
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                     popupWindow.dismiss();
+                        dialog.dismiss();
+
                     }
                 })
                 .setTitle("Product Categories")
@@ -269,6 +270,14 @@ public class CategoriasActivity extends AppCompatActivity   {
                 .create();
         myAlert.show();
 
+    }
+
+
+    public void updateRecycler(){
+        inventory= new Inventory(getApplicationContext());
+        final List<CategoryProduct> categories = inventory.category_alfabetic();
+        adapter= new CategoriesAdapter(categories,this);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -284,8 +293,6 @@ public class CategoriasActivity extends AppCompatActivity   {
             final List<CategoryProduct> categories = inventory.category_alfabetic();
             adapter= new CategoriesAdapter(categories,this);
             recyclerView.setAdapter(adapter);
-
-
 
         }
         else

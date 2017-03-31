@@ -128,7 +128,6 @@ public final class Inventory {
 
          i = cursor.getCount();
         return i;
-
     }
 
     // PARA ELIMINAR UNA CATEGORIA
@@ -141,13 +140,14 @@ public final class Inventory {
 
 
     // ACTUALIZAR O MODIFICAR CATEGORIA
-    public  void  updateCategory(CategoryProduct category)
+    public  void  updateCategory(String id, String new_name)
     {
 
-        ContentValues values = new ContentValues();
-        values.put(InventoryDbSchema.Categories_Table.Columns.DESCRIPTION, category.getDescription());// asegura que siempre da correcto
 
-        db.update(InventoryDbSchema.Categories_Table.NAME, values, InventoryDbSchema.Categories_Table.Columns.ID + " = ?", new String[]{Integer.toString(category.getId())});
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Categories_Table.Columns.DESCRIPTION, new_name);// asegura que siempre da correcto
+
+        db.update(InventoryDbSchema.Categories_Table.NAME, values, InventoryDbSchema.Categories_Table.Columns.ID + " = ?", new String[]{id});
 
     }
 

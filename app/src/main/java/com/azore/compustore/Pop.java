@@ -69,11 +69,19 @@ public class Pop extends Activity{
             @Override
             public void onClick(View v) {
 
+                String name_modified="";
 
+              if(  inventory.NameValidation(name_modified.toUpperCase())>=1) {
+                  Toast.makeText(getApplicationContext(),"Ya existe una categoria con este nombre", Toast.LENGTH_SHORT).show();
+              }
+              else{
+                inventory.updateCategory("11", "Modificado");
+                Toast.makeText(getApplicationContext(),"Modificado", Toast.LENGTH_SHORT).show();
+                Intent intent_back = new Intent();
+                setResult(RESULT_OK, intent_back);
+                finish();
 
-
-                // Toast.makeText(getApplicationContext(),"modifica", Toast.LENGTH_SHORT).show();
-
+            }
             }
         });
 
@@ -88,29 +96,7 @@ public class Pop extends Activity{
                 setResult(RESULT_OK, intent_back);
                 finish();
 //
-                //  AlertDialog.Builder myAlert= new AlertDialog.Builder(getApplicationContext());
-              //  myAlert.setMessage("¿Seguro que desea Eliminar?")
-              //          .setNegativeButton("No", new DialogInterface.OnClickListener() {
-              //              @Override
-              //              public void onClick(DialogInterface dialog, int which) {
-              //                  dialog.dismiss();
-//
-              //              }
-              //          })
-              //          .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-              //              @Override
-              //              public void onClick(DialogInterface dialog, int which) {
-              //                  inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
-              //                  Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
-              //                  Intent intent_back = new Intent();
-              //                  setResult(RESULT_OK, intent_back);
-              //                  finish();
-              //              }
-              //          })
-              //          .setTitle("Product Categories")
-              //          .setIcon(R.drawable.ic_shortcut_warning)
-              //          .create();
-              //  myAlert.show();
+
 
             }
         });
