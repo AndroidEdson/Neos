@@ -39,9 +39,10 @@
         android:id="@+id/btnCancelar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_light"
-        android:text="@string/cancelar"
         android:layout_marginTop="5dp"
+        android:background="@android:color/holo_red_light"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/cancelar"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:textStyle="bold" />
