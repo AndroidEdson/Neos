@@ -260,8 +260,7 @@ public class CategoriasActivity extends AppCompatActivity   {
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                     popupWindow.dismiss();
-                        dialog.dismiss();
+                   finish();
 
                     }
                 })

@@ -5,14 +5,17 @@
     android:padding="10dp"
     android:orientation="vertical">
 
+
+
     <EditText
         android:id="@+id/etId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:inputType="number"
         android:ems="10"
         android:hint="@string/id"
-        android:inputType="textPersonName" />
+      />
 
     <EditText
         android:id="@+id/etName"
@@ -28,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@android:color/holo_green_dark"
         android:fontFamily="sans-serif-light"
         android:text="@string/guardar"
         android:textColor="@android:color/background_light"

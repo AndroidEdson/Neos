@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
        CategoryProduct c= new CategoryProduct(categoryProductList.get(1).getId(),categoryProductList.get(1).getDescription() );
         //Toast.makeText(getApplicationContext(), c.getDescription() , Toast.LENGTH_LONG).show();
 
-        Toast.makeText(this,Integer.toString(categoryProductList.size()),Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this,Integer.toString(categoryProductList.size()),Toast.LENGTH_SHORT).show();
 
 
     }
