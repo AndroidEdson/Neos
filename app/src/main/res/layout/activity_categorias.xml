@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/popup_category"
+    android:id="@+id/recycler_categories"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context="com.azore.compustore.CategoriasActivity">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_categories"
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        android:background="@android:color/darker_gray"
-        android:paddingBottom="6dp"
-        android:paddingLeft="64dp"
-        android:paddingRight="64dp"
-        android:paddingTop="64dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
-
-
-    </android.support.v7.widget.RecyclerView>
-
-
-</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.RecyclerView>
