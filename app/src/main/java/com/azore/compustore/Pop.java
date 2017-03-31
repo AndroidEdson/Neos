@@ -83,7 +83,7 @@ public class Pop extends Activity{
                 Intent intent_back = new Intent();
                 setResult(RESULT_OK, intent_back);
                 finish();
-
+//
                 //  AlertDialog.Builder myAlert= new AlertDialog.Builder(getApplicationContext());
               //  myAlert.setMessage("¿Seguro que desea Eliminar?")
               //          .setNegativeButton("No", new DialogInterface.OnClickListener() {
