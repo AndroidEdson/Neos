@@ -54,11 +54,11 @@ public class CategoriasActivity extends AppCompatActivity   {
             int position = getAdapterPosition() ;
             CategoryProduct categoryProduct=this.categoryProducts.get(position);
 
-            //Toast.makeText(getApplicationContext(), categoryProduct.getDescription()+" "+Integer.toString(categoryProduct.getId()) , Toast.LENGTH_LONG).show();
+          //  Toast.makeText(getApplicationContext(), categoryProduct.getDescription()+" "+Integer.toString(categoryProduct.getId()) , Toast.LENGTH_LONG).show();
 
           Intent intent = new Intent(getApplicationContext(), Pop.class);
           intent.putExtra(Pop.EXTRA_DESCRIPTION, categoryProduct.getDescription());
-          intent.putExtra(Pop.EXTRA_ID, categoryProduct.getId());
+          intent.putExtra(Pop.EXTRA_ID, Integer.toString(categoryProduct.getId()));
           startActivityForResult(intent, request_code2);
 
             // CONSTRUICCION DEL POP UP
@@ -72,9 +72,7 @@ public class CategoriasActivity extends AppCompatActivity   {
         //    popupMenu.getMenuInflater().inflate(R.menu.my_popup, popupMenu.getMenu());
         //    popupMenu.setGravity();
         //    popupMenu.show();
-//
-
-          //  textView_name.setText(categoryProduct.getDescription().toString());
+            //  textView_name.setText(categoryProduct.getDescription().toString());
         }
 
     }
@@ -119,11 +117,6 @@ public class CategoriasActivity extends AppCompatActivity   {
 
     private final int request_code=0;
     private final int request_code2=1;
-
-
-    private ImageButton edit_popup;
-    private ImageButton delete_popup;
-
 
 
 //__________________________________________________________

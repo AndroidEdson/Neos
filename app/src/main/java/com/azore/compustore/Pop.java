@@ -52,7 +52,7 @@ public class Pop extends Activity{
         name_categorie= (TextView)findViewById(R.id.textview_categories) ;
 
         inventory= new Inventory(getApplicationContext());
-        Toast.makeText(getApplicationContext(),name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),id, Toast.LENGTH_SHORT).show();
 
         DisplayMetrics dm =new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -68,7 +68,11 @@ public class Pop extends Activity{
         edit_popup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"modifica", Toast.LENGTH_SHORT).show();
+
+
+
+
+                // Toast.makeText(getApplicationContext(),"modifica", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -107,7 +111,7 @@ public class Pop extends Activity{
               //          .setIcon(R.drawable.ic_shortcut_warning)
               //          .create();
               //  myAlert.show();
-//
+
             }
         });
 
