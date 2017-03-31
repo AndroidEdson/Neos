@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
-    android:orientation="vertical">
+    android:paddingTop="10dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="10dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="0dp"
+    android:orientation="vertical"
 
+    >
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout2"
-        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/textview_categories"
@@ -21,63 +18,45 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/background_light"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="Name"
             android:textStyle="bold"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
 
-    </RelativeLayout>
+            />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="5dp"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+
+        >
+    <ImageButton
+        android:id="@+id/popup_image_categori_edit"
+        android:layout_width="76dp"
+        android:layout_height="75dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_shortcut_edit"
+        android:contentDescription="" />
 
 
-        <ImageButton
-            android:id="@+id/popup_image_categori_edit"
-            android:layout_width="76dp"
-            android:layout_height="75dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_shortcut_edit"
-            android:paddingRight="16dp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
-
-        <TextView
+    <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="Modificar"
-            android:layout_gravity="center"
-            tools:layout_editor_absoluteX="108dp"
-            tools:layout_editor_absoluteY="46dp" />
-
+           />
 
     </LinearLayout>
 
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="5dp"
         android:orientation="horizontal"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+
+        >
+
 
         <ImageButton
             android:id="@+id/popup_image_categori_delete"
@@ -85,8 +64,7 @@
             android:layout_height="75dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_shortcut_delete_forever"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="109dp" />
+           />
 
 
         <TextView
@@ -94,10 +72,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Eliminar"
-            android:layout_gravity="center"
-            tools:layout_editor_absoluteX="108dp"
-            tools:layout_editor_absoluteY="136dp" />
-
-
+            android:layout_gravity="center_vertical"
+           />
     </LinearLayout>
-</RelativeLayout>
+
+
+</LinearLayout>

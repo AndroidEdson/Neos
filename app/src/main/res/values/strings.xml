@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Compustore</string>
+    <string name="id">ID</string>
+    <string name="nombre">Nombre</string>
+    <string name="guardar">GUARDAR</string>
+    <string name="cancelar">CANCELAR</string>
 </resources>
