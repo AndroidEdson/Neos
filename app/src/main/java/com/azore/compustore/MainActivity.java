@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
 // Valiendo verga 3 am
-    //arcique chupala
+    //arcique chupala haha xD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
