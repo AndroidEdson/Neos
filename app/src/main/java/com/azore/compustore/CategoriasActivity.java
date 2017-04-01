@@ -58,25 +58,14 @@ public class CategoriasActivity extends AppCompatActivity   {
             int position = getAdapterPosition() ;
             CategoryProduct categoryProduct=this.categoryProducts.get(position);
 
-          //  Toast.makeText(getApplicationContext(), categoryProduct.getDescription()+" "+Integer.toString(categoryProduct.getId()) , Toast.LENGTH_LONG).show();
 
           Intent intent = new Intent(getApplicationContext(), Pop.class);
           intent.putExtra(Pop.EXTRA_DESCRIPTION, categoryProduct.getDescription());
           intent.putExtra(Pop.EXTRA_ID, Integer.toString(categoryProduct.getId()));
+
           startActivityForResult(intent, request_code2);
 
-            // CONSTRUICCION DEL POP UP
-      //     constraintLayout= (ConstraintLayout) findViewById(R.id.popup_category);
-      //     layoutInflater=(LayoutInflater)getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-      //     ViewGroup container =( ViewGroup) layoutInflater.inflate(R.layout.pop_up_category, null);
-      //     popupWindow= new PopupWindow(container, 400,400, true);
-      //     popupWindow.showAtLocation(constraintLayout, Gravity.NO_GRAVITY, 500,500);
 
-        //    PopupMenu popupMenu= new PopupMenu(CategoriasActivity.this,recyclerView);
-        //    popupMenu.getMenuInflater().inflate(R.menu.my_popup, popupMenu.getMenu());
-        //    popupMenu.setGravity();
-        //    popupMenu.show();
-            //  textView_name.setText(categoryProduct.getDescription().toString());
         }
 
     }
@@ -114,14 +103,11 @@ public class CategoriasActivity extends AppCompatActivity   {
     private Inventory inventory;
 
 
-    private PopupWindow  popupWindow;
-   // private PopupMenu popupMenu;
-    private LayoutInflater layoutInflater;
-    private ConstraintLayout constraintLayout;
 
     private final int request_code=0;
     private final int request_code2=1;
-    private AlertDialog dialog ;
+    private AlertDialog dialogShow ;
+
 
 
 //__________________________________________________________
@@ -137,16 +123,14 @@ public class CategoriasActivity extends AppCompatActivity   {
 
         recyclerView=(RecyclerView) findViewById(R.id.recycler_categories);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-      //  edit_popup= (ImageButton)findViewById(R.id.popup_image_categori_edit);
-        //delete_popup= (ImageButton)findViewById(R.id.popup_image_categori_delete);
+
 
 
         inventory= new Inventory(getApplicationContext());
-        //List<CategoryProduct> categories= Arrays.asList(new CategoryProduct(1,"Armin"));
+
         final List<CategoryProduct> categories = inventory.category_alfabetic();
 
-      //  Toast.makeText(this,categories.get(0).getDescription()+"  "+categories.get(1).getDescription(),Toast.LENGTH_SHORT).show();
-       // Toast.makeText(this,Integer.toString(categories.size()),Toast.LENGTH_SHORT).show();
+
 
         adapter= new CategoriesAdapter(categories,this);
         recyclerView.setAdapter(adapter);
@@ -154,18 +138,7 @@ public class CategoriasActivity extends AppCompatActivity   {
 
     }
 
- public void ShowPopUp(View v) {
 
-     PopupMenu popupMenu= new PopupMenu(getApplicationContext(),v);
-     MenuInflater inflater=  popupMenu.getMenuInflater();
-     inflater.inflate(R.menu.my_popup, popupMenu.getMenu());
-     popupMenu.show();
-
- }
-
- public void item_edit_menu(){
-     Toast.makeText(getApplicationContext(),"Hola",Toast.LENGTH_SHORT).show();
- }
 
 
 
@@ -200,7 +173,9 @@ public class CategoriasActivity extends AppCompatActivity   {
                 Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
                 Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
 
-
+                mBuilder.setView(mView);
+                dialogShow = mBuilder.create();
+                dialogShow.show();
                 mGuardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -220,15 +195,14 @@ public class CategoriasActivity extends AppCompatActivity   {
                             {
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
                                 inventory.AddCategory(Integer.parseInt(mId.getText().toString()), mName.getText().toString());
+                                dialogShow.dismiss();
                                 updateRecycler();
 
                             }
                         }
                     }
                 });
-                mBuilder.setView(mView);
-                dialog = mBuilder.create();
-                dialog.show();
+
 
                 mCancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -253,14 +227,14 @@ public class CategoriasActivity extends AppCompatActivity   {
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                      popupWindow.dismiss();
+                      dialog.dismiss();
 
                     }
                 })
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                   finish();
+                      dialogShow.dismiss();
 
                     }
                 })

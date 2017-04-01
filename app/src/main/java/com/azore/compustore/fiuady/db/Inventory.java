@@ -10,9 +10,7 @@ import android.text.Editable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Armín on 27/03/2017.
- */
+
 
 class CategoryProductCursor extends CursorWrapper{
 

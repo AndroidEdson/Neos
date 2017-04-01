@@ -19,15 +19,17 @@
         <TextView
             android:id="@+id/textview_categories"
             android:layout_width="match_parent"
-            android:layout_height="29dp"
-            android:paddingTop="10dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="Name"
-            android:textColor="@color/colorAccent"
 
-            android:textStyle="bold" />
+
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
