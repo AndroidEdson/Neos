@@ -63,10 +63,10 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
+        android:id="@+id/delete_layout_categories"
         android:layout_height="wrap_content"
         style="?android:listSeparatorTextViewStyle"
         android:orientation="horizontal"
-
         >
 
 
@@ -89,16 +89,16 @@
 
     <LinearLayout
         android:id="@+id/linear_modified_categorie"
+        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?android:listSeparatorTextViewStyle"
-        android:orientation="horizontal"
         android:visibility="invisible">
 
         <ImageButton
             android:id="@+id/save_modified_categories"
             android:layout_width="76dp"
             android:layout_height="75dp"
+            android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
             android:clickable="false"
             android:src="@drawable/ic_shortcut_save" />
@@ -107,8 +107,8 @@
             android:id="@+id/new_modified_categories"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:textStyle="italic"
             android:hint="Nuevo nombre"
+            android:textStyle="italic"
 
             />
 

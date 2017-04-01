@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
@@ -32,9 +33,12 @@ public class Pop extends Activity{
     public static final String EXTRA_ID = "com.azore.compustore.extra_id";
     public static final String EXTRA_DESCRIPTION = "com.azore.compustore.extra_description";
     private LinearLayout modified_layout;
+    private LinearLayout delete_layout;
+
     private EditText new_name_category;
-    int width=0;
-    int height=0;
+    private int width=0;
+    private int height=0;
+    private int aux=0;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,8 @@ public class Pop extends Activity{
         name_categorie= (TextView)findViewById(R.id.textview_categories) ;
 
         modified_layout= (LinearLayout)findViewById(R.id.linear_modified_categorie);
+        delete_layout= (LinearLayout)findViewById(R.id.delete_layout_categories);
+
         new_name_category= (EditText)findViewById(R.id.new_modified_categories);
 
         inventory= new Inventory(getApplicationContext());
@@ -65,12 +71,26 @@ public class Pop extends Activity{
 
         DisplayMetrics dm =new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        width = dm.widthPixels;
+        height = dm.heightPixels;
+
+        // PARA CLASIFICAR CUALES TENDRAN OPCION ELIMINAR
+         aux = inventory.ExistProductWhitCategory(id);
+        //Toast.makeText(getApplicationContext(), Integer.toString(aux),Toast.LENGTH_SHORT).show();
+
+        if( aux >= 1 )
+        {
+            delete_layout.setVisibility(View.INVISIBLE);
+            getWindow().setLayout((int) (width * .8), (int) (height * .22));
+            name_categorie.setText(name);
 
 
-         width= dm.widthPixels;
-         height= dm.heightPixels;
-        getWindow().setLayout((int)(width*.8) ,(int)(height*.35));
-        name_categorie.setText(name);
+        }
+        else {
+            delete_layout.setVisibility(View.VISIBLE);
+            getWindow().setLayout((int) (width * .8), (int) (height * .35));
+            name_categorie.setText(name);
+        }
 
 
 
@@ -81,14 +101,20 @@ public class Pop extends Activity{
                 if (modified_layout.getVisibility()== View.VISIBLE) {
                     new_name_category.setText("");
                     save_button.setEnabled(false);
-                    getWindow().setLayout((int)(width*.8) ,(int)(height*.35));
-                    modified_layout.setVisibility(View.INVISIBLE);
+                    if (aux >=1) {
+                        getWindow().setLayout((int) (width * .8), (int) (height * .22));
+                    }
+                    else{
+                        getWindow().setLayout((int)(width*.8) ,(int)(height*.35));
+                    }
 
+                    modified_layout.setVisibility(View.INVISIBLE);
 
                 }else {
                     new_name_category.setText("");
                     save_button.setEnabled(true);
-                    getWindow().setLayout((int)(width*.8) ,(int)(height*.47));
+
+                    getWindow().setLayout((int)(width*.8) ,(int)(height*.48));
                     modified_layout.setVisibility(View.VISIBLE);
 
                 }
@@ -131,11 +157,11 @@ public class Pop extends Activity{
             @Override
             public void onClick(View v) {
 
-                inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
-                Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
-                Intent intent_back = new Intent();
-                setResult(RESULT_OK, intent_back);
-                finish();
+             inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
+             Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
+             Intent intent_back = new Intent();
+             setResult(RESULT_OK, intent_back);
+             finish();
 //
 
 

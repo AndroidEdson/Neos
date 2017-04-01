@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+//***************************************************************************************************
+// CATEGORY CURSOR
 class CategoryProductCursor extends CursorWrapper{
 
     public CategoryProductCursor(Cursor cursor) {super(cursor);}
@@ -20,13 +21,32 @@ class CategoryProductCursor extends CursorWrapper{
     public CategoryProduct getCategoryProduct(){
 
         Cursor cursor = getWrappedCursor();
-        return  new CategoryProduct(cursor.getInt(cursor.getColumnIndex((InventoryDbSchema.Categories_Table.Columns.ID))),
+        return  new CategoryProduct(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Categories_Table.Columns.ID)),
         cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Categories_Table.Columns.DESCRIPTION)));
 
     }
 
 }
 
+//***************************************************************************************************
+// PRODUCT CURSOR
+class ProductCursor extends  CursorWrapper{
+    public ProductCursor(Cursor cursor) {super(cursor);}
+
+    public Products getProduct  () {
+        Cursor cursor = getWrappedCursor();
+        return new Products(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Products_Table.Columns.ID)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Products_Table.Columns.CATEGORY_ID)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Products_Table.Columns.DESCRITPION)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Products_Table.Columns.PRICE)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Products_Table.Columns.QUANTITY)));
+    }
+}
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+        // INICIO DE FUNCIONES INVENTORY
 
 public final class Inventory {
     private InventoryHelper inventoryHelper;
@@ -37,7 +57,9 @@ public final class Inventory {
         db= inventoryHelper.getWritableDatabase();
 
     }
-
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //***************************************************************************************************
     //_________________________ FUNCIONES CATEGORY_________________________________________________________________________________________
 
        public List<CategoryProduct> getAllCategoriesProduct() {
@@ -52,10 +74,8 @@ public final class Inventory {
                //list.add(new Category(cursor.getInt(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.ID))),
                //   cursor.getString(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.DESCRIPTION)))));
                list.add((cursor.getCategoryProduct()));  // metodo wrappcursor
-
            }
            cursor.close();
-
            return list;
 
 
@@ -114,7 +134,6 @@ public final class Inventory {
     public int NameValidation(String name)
     {
         int i=0;
-        List<CategoryProduct> list = new ArrayList<CategoryProduct>();
 
         CategoryProductCursor cursor = new CategoryProductCursor(db.query(InventoryDbSchema.Categories_Table.NAME,
                 null,
@@ -150,6 +169,47 @@ public final class Inventory {
     }
 
 
-    //_________________________END FUNCIONES CATEGORY_________________________________
+    // FUNCION PARA SABER SI HAY CATEGORIAS ASIGNADAS A PRODUCTOS (PARA SABER SI PUEDEN ELIMINARSE O NO)
 
+    public int ExistProductWhitCategory(String id_categorie){
+
+      int i=0;
+      CategoryProductCursor cursor = new CategoryProductCursor(db.query(InventoryDbSchema.Products_Table.NAME,
+              null,
+               InventoryDbSchema.Products_Table.Columns.CATEGORY_ID + "=?",
+              new String[] {id_categorie},
+              null,
+              null,
+              null));
+
+      i = cursor.getCount();
+      return i;
+
+    }
+
+
+
+    //_________________________END FUNCIONES CATEGORY_________________________________
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //_________________________ FUNCIONES CATEGORY_________________________________________________________________________________________
+
+    public List<Products> getAllProducts() {
+        List<Products> list = new ArrayList<Products>();
+
+
+        ProductCursor cursor = new ProductCursor((db.rawQuery("SELECT * FROM products ORDER BY id", null)));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
 }
+
+
+
+}// ______________________________________END INVENTORY_________________________________________________________
