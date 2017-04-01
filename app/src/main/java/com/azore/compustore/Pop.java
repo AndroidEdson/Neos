@@ -41,6 +41,7 @@ public class Pop extends Activity{
 
         setContentView(R.layout.pop_up_category);
 
+
         Intent i = getIntent();
 
         id= i.getStringExtra(EXTRA_ID);
