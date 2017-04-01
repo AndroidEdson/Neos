@@ -142,14 +142,7 @@ public class CategoriasActivity extends AppCompatActivity   {
 
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-
-
-
-    }
 
     //Hace que aparezca el icono en el App Bar
     @Override

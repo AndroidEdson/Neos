@@ -28,7 +28,6 @@
             android:name=".Pop"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"
             />
-        <activity android:name=".Add_categorie_product"></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,5 @@
 package com.azore.compustore.fiuady.db;
 
-import android.icu.util.ULocale;
-
-/**
- * Created by Armín on 28/03/2017.
- */
 
 public class CategoryProduct {
 
