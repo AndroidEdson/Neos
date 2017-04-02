@@ -1,12 +1,114 @@
 package com.azore.compustore;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class ProductosActivity extends AppCompatActivity {
+import com.azore.compustore.fiuady.db.CategoryProduct;
+import com.azore.compustore.fiuady.db.Inventory;
+
+import java.util.List;
+
+public class ProductosActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
+
+    private class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView txtDescription;
+        Context context;
+        private List<CategoryProduct> categoryProducts;
+
+        public CategoryHolder(View itemView, Context context, List<CategoryProduct> categoryProducts){
+
+            super(itemView);
+            this.context= context;
+            this.categoryProducts= categoryProducts;
+            itemView.setOnClickListener(this);
+            txtDescription= (TextView) itemView.findViewById(R.id.txt_categories_description);
+
+        }
+
+        public void bindCategories(CategoryProduct categoriesProduct){
+            txtDescription.setText(categoriesProduct.getDescription());
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition() ;
+            CategoryProduct categoryProduct=this.categoryProducts.get(position);
+
+
+            Intent intent = new Intent(getApplicationContext(), Pop.class);
+            intent.putExtra(Pop.EXTRA_DESCRIPTION, categoryProduct.getDescription());
+            intent.putExtra(Pop.EXTRA_ID, Integer.toString(categoryProduct.getId()));
+
+            startActivityForResult(intent, request_code2);
+
+
+        }
+
+    }
+
+
+    private  class CategoriesAdapter extends  RecyclerView.Adapter<ProductosActivity.CategoryHolder>{
+        private List<CategoryProduct> categories_product;
+        Context context;
+
+        public CategoriesAdapter(List<CategoryProduct> categories_product, Context context){
+            this.categories_product=categories_product;
+            this.context=context;
+        }
+
+
+        @Override
+        public ProductosActivity.CategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.categories_list_item,parent,false);
+            return new ProductosActivity.CategoryHolder(view,context,categories_product);
+        }
+
+        @Override
+        public void onBindViewHolder(ProductosActivity.CategoryHolder holder, int position) {
+            holder.bindCategories(categories_product.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return categories_product.size();
+        }
+    }
+
+    private RecyclerView recyclerView;
+    private ProductosActivity.CategoriesAdapter adapter;
+    private Inventory inventory;
+    private Spinner categoriesSpinner;
+
+
+
+    private final int request_code=0;
+    private final int request_code2=1;
+    private AlertDialog dialogShow ;
+
+
+
+//__________________________________________________________
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,13 +116,56 @@ public class ProductosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_productos);
         //Cambiar texto de App bar
         getSupportActionBar().setTitle("Productos");
+        inventory= new Inventory(getApplicationContext());
+
+
+        recyclerView=(RecyclerView) findViewById(R.id.recycler_products);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        categoriesSpinner  = (Spinner)findViewById(R.id.categories_list);
+
+
+
+        inventory= new Inventory(getApplicationContext());
+
+        final List<CategoryProduct> categories = inventory.category_alfabetic();
+
+
+
+        adapter= new ProductosActivity.CategoriesAdapter(categories,this);
+        recyclerView.setAdapter(adapter);
+
+        ArrayAdapter<String> adapter
+                = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
+
+        categoriesSpinner.setAdapter(adapter);
+
+        // equivalente a for each
+        List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
+        for(CategoryProduct category : categoriesProduct){
+            adapter.add(category.getDescription());
+        }
+
+
     }
+
+
+
+
+
+
+
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu2,menu);
+        MenuItem menuItem = menu.findItem(R.id.buscar);
+        SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
         return true;
+
     }
+
+
 
     //Cuando se selecciona algo del item bar
     @Override
@@ -29,12 +174,129 @@ public class ProductosActivity extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
-                Toast.makeText(this,"me tocaste",Toast.LENGTH_SHORT).show();
+
+                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+                final View mView = getLayoutInflater().inflate(R.layout.dialog_add,null);
+                final EditText mId = (EditText)mView.findViewById(R.id.etId);
+                final EditText mName = (EditText)mView.findViewById(R.id.etName);
+                Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
+                Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
+
+                mBuilder.setView(mView);
+                dialogShow = mBuilder.create();
+                dialogShow.show();
+                mGuardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if ( mId.getText().toString().equals("") || mName.getText().toString().equals("") )
+                        {
+                            Toast.makeText(getApplicationContext(), "¡Error! Campos Vacíos", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+
+
+                            if( inventory.NameValidation(mName.getText().toString()) >= 1 )
+                            {
+                                Toast.makeText(getApplicationContext(), "Ya existe una categoria con ese nombre", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                                inventory.AddCategory(Integer.parseInt(mId.getText().toString()), mName.getText().toString());
+                                dialogShow.dismiss();
+                                updateRecycler();
+
+                            }
+                        }
+                    }
+                });
+
+
+                mCancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CancelarshowAlert();
+                    }
+                });
+
+
+
+
+
                 return true;
-            // Codigo prueba
 
         }
         return super.onOptionsItemSelected(item);
 
     }
-}
+    public void CancelarshowAlert( ){
+        AlertDialog.Builder myAlert= new AlertDialog.Builder(this);
+        myAlert.setMessage("¿Seguro que quieres cancelar?")
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                })
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialogShow.dismiss();
+
+                    }
+                })
+                .setTitle("Product Categories")
+                .setIcon(R.drawable.ic_shortcut_warning)
+                .create();
+        myAlert.show();
+
+    }
+
+
+    public void updateRecycler(){
+        inventory= new Inventory(getApplicationContext());
+        final List<CategoryProduct> categories = inventory.category_alfabetic();
+        adapter= new ProductosActivity.CategoriesAdapter(categories,this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode==request_code && resultCode== RESULT_OK) || (requestCode==request_code2 && resultCode== RESULT_OK))
+        {
+
+            //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
+
+            inventory= new Inventory(getApplicationContext());
+            final List<CategoryProduct> categories = inventory.category_alfabetic();
+            adapter= new ProductosActivity.CategoriesAdapter(categories,this);
+            recyclerView.setAdapter(adapter);
+
+        }
+        else
+        {
+            //Toast.makeText(getApplicationContext(), "No OK :(", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+
+    }
+
+    //SearchView
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        return false;
+    }
+
+    }
