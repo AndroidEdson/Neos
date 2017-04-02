@@ -23,42 +23,43 @@ import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
 
 public class ProductosActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
 
-    private class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ProductsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView txtDescription;
         Context context;
-        private List<CategoryProduct> categoryProducts;
+        private List<Products> Products;
 
-        public CategoryHolder(View itemView, Context context, List<CategoryProduct> categoryProducts){
+        public ProductsHolder(View itemView, Context context, List<Products> Products){
 
             super(itemView);
             this.context= context;
-            this.categoryProducts= categoryProducts;
+            this.Products= Products;
             itemView.setOnClickListener(this);
             txtDescription= (TextView) itemView.findViewById(R.id.txt_categories_description);
 
         }
 
-        public void bindCategories(CategoryProduct categoriesProduct){
-            txtDescription.setText(categoriesProduct.getDescription());
+        public void bindCategories(Products product){
+            txtDescription.setText(product.getDescription());
         }
 
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition() ;
-            CategoryProduct categoryProduct=this.categoryProducts.get(position);
+            Products product=this.Products.get(position);
 
 
             Intent intent = new Intent(getApplicationContext(), Pop.class);
-            intent.putExtra(Pop.EXTRA_DESCRIPTION, categoryProduct.getDescription());
-            intent.putExtra(Pop.EXTRA_ID, Integer.toString(categoryProduct.getId()));
+            intent.putExtra(Pop.EXTRA_DESCRIPTION, product.getDescription());
+            intent.putExtra(Pop.EXTRA_ID, Integer.toString(product.getId()));
 
             startActivityForResult(intent, request_code2);
 
@@ -68,35 +69,35 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     }
 
 
-    private  class CategoriesAdapter extends  RecyclerView.Adapter<ProductosActivity.CategoryHolder>{
-        private List<CategoryProduct> categories_product;
+    private  class ProductsAdapter extends  RecyclerView.Adapter<ProductosActivity.ProductsHolder>{
+        private List<Products> products;
         Context context;
 
-        public CategoriesAdapter(List<CategoryProduct> categories_product, Context context){
-            this.categories_product=categories_product;
+        public ProductsAdapter(List<Products> products, Context context){
+            this.products=products;
             this.context=context;
         }
 
 
         @Override
-        public ProductosActivity.CategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ProductosActivity.ProductsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.categories_list_item,parent,false);
-            return new ProductosActivity.CategoryHolder(view,context,categories_product);
+            return new ProductosActivity.ProductsHolder(view,context,products);
         }
 
         @Override
-        public void onBindViewHolder(ProductosActivity.CategoryHolder holder, int position) {
-            holder.bindCategories(categories_product.get(position));
+        public void onBindViewHolder(ProductosActivity.ProductsHolder holder, int position) {
+            holder.bindCategories(products.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return categories_product.size();
+            return products.size();
         }
     }
 
     private RecyclerView recyclerView;
-    private ProductosActivity.CategoriesAdapter adapter;
+    private ProductosActivity.ProductsAdapter adapter;
     private Inventory inventory;
     private Spinner categoriesSpinner;
 
@@ -127,11 +128,11 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         inventory= new Inventory(getApplicationContext());
 
-        final List<CategoryProduct> categories = inventory.category_alfabetic();
+        final List<Products> products = inventory.getAllProducts();
 
 
 
-        adapter= new ProductosActivity.CategoriesAdapter(categories,this);
+        adapter= new ProductosActivity.ProductsAdapter(products,this);
         recyclerView.setAdapter(adapter);
 
         ArrayAdapter<String> adapter
@@ -257,8 +258,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
     public void updateRecycler(){
         inventory= new Inventory(getApplicationContext());
-        final List<CategoryProduct> categories = inventory.category_alfabetic();
-        adapter= new ProductosActivity.CategoriesAdapter(categories,this);
+        final List<Products> products = inventory.getAllProducts();
+        adapter= new ProductosActivity.ProductsAdapter(products,this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -272,8 +273,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
             //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
 
             inventory= new Inventory(getApplicationContext());
-            final List<CategoryProduct> categories = inventory.category_alfabetic();
-            adapter= new ProductosActivity.CategoriesAdapter(categories,this);
+            final List<Products> products = inventory.getAllProducts();
+            adapter= new ProductosActivity.ProductsAdapter(products,this);
             recyclerView.setAdapter(adapter);
 
         }
