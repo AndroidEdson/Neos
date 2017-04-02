@@ -33,6 +33,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private class ProductsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView txtDescription;
+        private TextView txtPrice;
+
         Context context;
         private List<Products> Products;
 
@@ -42,12 +44,15 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
             this.context= context;
             this.Products= Products;
             itemView.setOnClickListener(this);
-            txtDescription= (TextView) itemView.findViewById(R.id.txt_categories_description);
+            txtDescription= (TextView) itemView.findViewById(R.id.txt_product_description);
+            txtPrice= (TextView) itemView.findViewById(R.id.txt_product_price);
+
 
         }
 
         public void bindCategories(Products product){
             txtDescription.setText(product.getDescription());
+            txtPrice.setText(Integer.toString(product.getPrice())) ;
         }
 
 
@@ -75,13 +80,14 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         public ProductsAdapter(List<Products> products, Context context){
             this.products=products;
+
             this.context=context;
         }
 
 
         @Override
         public ProductosActivity.ProductsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.categories_list_item,parent,false);
+            View view = getLayoutInflater().inflate(R.layout.product_list_item,parent,false);
             return new ProductosActivity.ProductsHolder(view,context,products);
         }
 
@@ -117,12 +123,12 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         setContentView(R.layout.activity_productos);
         //Cambiar texto de App bar
         getSupportActionBar().setTitle("Productos");
-        inventory= new Inventory(getApplicationContext());
+        inventory = new Inventory(getApplicationContext());
 
 
-        recyclerView=(RecyclerView) findViewById(R.id.recycler_products);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_products);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        categoriesSpinner  = (Spinner)findViewById(R.id.categories_list);
+        categoriesSpinner = (Spinner) findViewById(R.id.spinner_products);
 
 
 
@@ -132,19 +138,23 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
 
 
-        adapter= new ProductosActivity.ProductsAdapter(products,this);
-        recyclerView.setAdapter(adapter);
 
-        ArrayAdapter<String> adapter
+        ArrayAdapter<String> spinner_adapter
                 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
 
-        categoriesSpinner.setAdapter(adapter);
 
         // equivalente a for each
         List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
         for(CategoryProduct category : categoriesProduct){
-            adapter.add(category.getDescription());
+            spinner_adapter.add(category.getDescription());
         }
+
+
+        categoriesSpinner.setAdapter(spinner_adapter);
+
+        adapter= new ProductosActivity.ProductsAdapter(products,this);
+        recyclerView.setAdapter(adapter);
+
 
 
     }
