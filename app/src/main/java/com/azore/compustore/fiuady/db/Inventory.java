@@ -98,6 +98,7 @@ public final class Inventory {
                 null,
                 "description COLLATE NOCASE ASC"));
 
+
         while (cursor.moveToNext()){
 
             //list.add(new Category(cursor.getInt(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.ID))),
@@ -210,6 +211,37 @@ public final class Inventory {
         return list;
 }
 
+    // PRODUCTOS ALFABETICAMENTE
+
+    public List products_alfabetic()
+    {
+
+        List<Products> list = new ArrayList<Products>();
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        ProductCursor cursor = new ProductCursor(db.query("products",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "description COLLATE NOCASE ASC"));
+
+
+        while (cursor.moveToNext()){
+
+            //list.add(new Category(cursor.getInt(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.ID))),
+            //   cursor.getString(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.DESCRIPTION)))));
+
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+
+        return list;
+
+    }
 
 
 }// ______________________________________END PRODUCTS_________________________________________________________

@@ -128,7 +128,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         inventory= new Inventory(getApplicationContext());
 
-        final List<Products> products = inventory.getAllProducts();
+        final List<Products> products = inventory.products_alfabetic();
 
 
 
@@ -258,7 +258,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
     public void updateRecycler(){
         inventory= new Inventory(getApplicationContext());
-        final List<Products> products = inventory.getAllProducts();
+        final List<Products> products = inventory.products_alfabetic();
         adapter= new ProductosActivity.ProductsAdapter(products,this);
         recyclerView.setAdapter(adapter);
     }
@@ -273,7 +273,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
             //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
 
             inventory= new Inventory(getApplicationContext());
-            final List<Products> products = inventory.getAllProducts();
+            final List<Products> products = inventory.products_alfabetic();
             adapter= new ProductosActivity.ProductsAdapter(products,this);
             recyclerView.setAdapter(adapter);
 
