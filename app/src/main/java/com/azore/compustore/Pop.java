@@ -70,10 +70,7 @@ public class Pop extends Activity{
         inventory= new Inventory(getApplicationContext());
      //   Toast.makeText(getApplicationContext(),id, Toast.LENGTH_SHORT).show();
 
-        DisplayMetrics dm =new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        width = dm.widthPixels;
-        height = dm.heightPixels;
+
 
         // PARA CLASIFICAR CUALES TENDRAN OPCION ELIMINAR
          aux = inventory.ExistProductWhitCategory(id);
@@ -81,15 +78,15 @@ public class Pop extends Activity{
 
         if( aux >= 1 )
         {
-            delete_layout.setVisibility(View.INVISIBLE);
-            getWindow().setLayout((int) (width * .8), (int) (height * .22));
+            delete_layout.setVisibility(View.GONE);
+            modified_layout.setVisibility(View.GONE);
             name_categorie.setText(name);
 
 
         }
         else {
             delete_layout.setVisibility(View.VISIBLE);
-            getWindow().setLayout((int) (width * .8), (int) (height * .35));
+            modified_layout.setVisibility(View.GONE);
             name_categorie.setText(name);
         }
 
@@ -102,20 +99,11 @@ public class Pop extends Activity{
                 if (modified_layout.getVisibility()== View.VISIBLE) {
                     new_name_category.setText("");
                     save_button.setEnabled(false);
-                    if (aux >=1) {
-                        getWindow().setLayout((int) (width * .8), (int) (height * .22));
-                    }
-                    else{
-                        getWindow().setLayout((int)(width*.8) ,(int)(height*.35));
-                    }
-
-                    modified_layout.setVisibility(View.INVISIBLE);
+                    modified_layout.setVisibility(View.GONE);
 
                 }else {
                     new_name_category.setText("");
                     save_button.setEnabled(true);
-
-                    getWindow().setLayout((int)(width*.8) ,(int)(height*.48));
                     modified_layout.setVisibility(View.VISIBLE);
 
                 }
