@@ -255,7 +255,7 @@ public final class Inventory {
                 new String[] {id_categorie},
                 null,
                 null,
-                null));
+                "description COLLATE NOCASE ASC"));
 
         while (cursor.moveToNext()){
 

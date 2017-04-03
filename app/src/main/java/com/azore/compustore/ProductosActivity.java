@@ -169,7 +169,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                 }
                 else{
 
-                    final List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position).getId()));
+                    final List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position-1).getId()));
                     adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
