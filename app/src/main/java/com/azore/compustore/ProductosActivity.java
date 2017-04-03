@@ -132,7 +132,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_products);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        categoriesSpinner = (Spinner) findViewById(R.id.spinner_products);
+        categoriesSpinner = (Spinner) findViewById(R.id.categories_list);
 
 
         inventory = new Inventory(getApplicationContext());

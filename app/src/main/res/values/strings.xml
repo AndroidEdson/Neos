@@ -4,6 +4,6 @@
     <string name="nombre">Nombre</string>
     <string name="guardar">GUARDAR</string>
     <string name="cancelar">CANCELAR</string>
-    <string name="descripci_n">Descripción</string>
     <string name="precio">Precio</string>
+    <string name="descripci_n">Descripción</string>
 </resources>
