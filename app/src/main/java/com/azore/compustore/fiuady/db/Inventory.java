@@ -270,6 +270,20 @@ public final class Inventory {
 
     }
 
+    public List<Products> searchProducts(String input) {
+        List<Products> list = new ArrayList<Products>();
+
+
+        ProductCursor cursor = new ProductCursor((db.rawQuery("SELECT * FROM products WHERE description LIKE '%"+input+"%'", null)));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+
 
 
 
