@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -131,38 +132,61 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         categoriesSpinner = (Spinner) findViewById(R.id.spinner_products);
 
 
-
-        inventory= new Inventory(getApplicationContext());
+        inventory = new Inventory(getApplicationContext());
 
         final List<Products> products = inventory.products_alfabetic();
 
-
-
-
-        ArrayAdapter<String> spinner_adapter
-                = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
 
         // equivalente a for each
-        List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
-        for(CategoryProduct category : categoriesProduct){
-            spinner_adapter.add(category.getDescription());
+        spinner_adapter.add("Todos");
+        final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
+        for (CategoryProduct category : categoriesProduct) {
+                spinner_adapter.add(category.getDescription());
         }
 
 
         categoriesSpinner.setAdapter(spinner_adapter);
 
-        adapter= new ProductosActivity.ProductsAdapter(products,this);
+        adapter = new ProductosActivity.ProductsAdapter(products, this);
         recyclerView.setAdapter(adapter);
 
 
+        categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+               // int j = Integer.valueOf(spinner_adapter.getItem(position));
+                //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
+
+                if (position==0 ) {
+
+                    final List<Products> products = inventory.products_alfabetic();
+                    adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+
+                }
+                else{
+
+                    final List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position).getId()));
+                    adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
     }
-
-
-
-
-
 
 
     //Hace que aparezca el icono en el App Bar
@@ -280,7 +304,6 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         if ((requestCode==request_code && resultCode== RESULT_OK) || (requestCode==request_code2 && resultCode== RESULT_OK))
         {
 
-            //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
 
             inventory= new Inventory(getApplicationContext());
             final List<Products> products = inventory.products_alfabetic();
@@ -307,6 +330,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+
+
         return false;
     }
 

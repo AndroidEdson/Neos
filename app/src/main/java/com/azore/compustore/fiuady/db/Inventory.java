@@ -244,4 +244,34 @@ public final class Inventory {
     }
 
 
+    // PARA EL FILTRO POR CATEGORIAS EN PRODUCTOS
+
+    public List<Products> categoryFilters(String id_categorie){
+
+        List<Products> list = new ArrayList<Products>();
+        ProductCursor cursor = new ProductCursor(db.query(InventoryDbSchema.Products_Table.NAME,
+                null,
+                InventoryDbSchema.Products_Table.Columns.CATEGORY_ID + "=?",
+                new String[] {id_categorie},
+                null,
+                null,
+                null));
+
+        while (cursor.moveToNext()){
+
+            //list.add(new Category(cursor.getInt(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.ID))),
+            //   cursor.getString(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.DESCRIPTION)))));
+
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+
+        }
+
+        return list;
+
+    }
+
+
+
+
+
 }// ______________________________________END PRODUCTS_________________________________________________________
