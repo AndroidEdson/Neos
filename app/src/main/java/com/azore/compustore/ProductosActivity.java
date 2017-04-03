@@ -181,7 +181,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+//
             }
         });
 
