@@ -117,6 +117,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
 
 
+
 //__________________________________________________________
 
     @Override
@@ -213,34 +214,51 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                 // Codigo prueba
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-                final View mView = getLayoutInflater().inflate(R.layout.dialog_add,null);
+                final View mView = getLayoutInflater().inflate(R.layout.products_add,null);
                 final EditText mId = (EditText)mView.findViewById(R.id.etId);
-                final EditText mName = (EditText)mView.findViewById(R.id.etName);
+                final EditText mDescription = (EditText)mView.findViewById(R.id.etDescription);
+                final EditText mPrecio = (EditText)mView.findViewById(R.id.etprecio);
+                final Spinner spinner = (Spinner)mView.findViewById(R.id.SpinnerCategory);
                 Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
                 Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
+                final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+
+
+                // equivalente a for each
+                final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
+                for (CategoryProduct category : categoriesProduct) {
+                    spinner_adapter.add(category.getDescription());
+                }
+
+
+                spinner.setAdapter(spinner_adapter);
 
                 mBuilder.setView(mView);
                 dialogShow = mBuilder.create();
                 dialogShow.show();
+
+
+
+
                 mGuardar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        if ( mId.getText().toString().equals("") || mName.getText().toString().equals("") )
+                        if ( mId.getText().toString().equals("") || mDescription.getText().toString().equals("")|| mPrecio.getText().toString().equals("") )
                         {
-                            Toast.makeText(getApplicationContext(), "¡Error! Campos Vacíos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "¡Error! Campo Vacío", Toast.LENGTH_SHORT).show();
                         }
                         else {
 
 
-                            if( inventory.NameValidation(mName.getText().toString()) >= 1 )
+                            if( inventory.NameValidationProducts(mDescription.getText().toString()) >= 1 )
                             {
                                 Toast.makeText(getApplicationContext(), "Ya existe una categoria con ese nombre", Toast.LENGTH_SHORT).show();
                             }
                             else
                             {
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                                inventory.AddCategory(Integer.parseInt(mId.getText().toString()), mName.getText().toString());
+                                inventory.AddProduct(categoriesProduct.get(spinner.getSelectedItemPosition()).getId(),Integer.parseInt(mId.getText().toString()),mDescription.getText().toString(),Integer.parseInt(mPrecio.getText().toString()));
                                 dialogShow.dismiss();
                                 updateRecycler();
 

@@ -298,6 +298,43 @@ public final class Inventory {
         return list;
     }
 
+    // Validación de nombre categorias para que no haya un nombre repetido
+
+
+    public int NameValidationProducts(String name)
+    {
+        int i=0;
+
+        ProductCursor cursor = new ProductCursor(db.query(InventoryDbSchema.Products_Table.NAME,
+                null,
+                "UPPER("+ InventoryDbSchema.Products_Table.Columns.DESCRITPION + ")=?",
+                new String[] {name.toUpperCase()},
+                null,
+                null,
+                null));
+
+        i = cursor.getCount();
+        return i;
+    }
+
+    // Añadir Producto
+
+    public void AddProduct(int category_id,int id, String description,int price)
+    {
+        ///Agregar un elemento a la base de datos
+
+        db =inventoryHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Products_Table.Columns.CATEGORY_ID, category_id);
+        contentValues.put(InventoryDbSchema.Products_Table.Columns.ID, id);
+        contentValues.put(InventoryDbSchema.Products_Table.Columns.DESCRITPION, description);
+        contentValues.put(InventoryDbSchema.Products_Table.Columns.PRICE, price);
+        contentValues.put(InventoryDbSchema.Products_Table.Columns.QUANTITY, 0);
+        db.insert(InventoryDbSchema.Products_Table.NAME, null, contentValues);
+
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
 
 
 

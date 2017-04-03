@@ -1,37 +1,23 @@
 package com.azore.compustore;
-import android.app.Dialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.azore.compustore.fiuady.db.*;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class CategoriasActivity extends AppCompatActivity   {
     private class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -166,7 +152,7 @@ public class CategoriasActivity extends AppCompatActivity   {
                 // Codigo prueba
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-                final View mView = getLayoutInflater().inflate(R.layout.dialog_add,null);
+                final View mView = getLayoutInflater().inflate(R.layout.category_add,null);
                 final EditText mId = (EditText)mView.findViewById(R.id.etId);
                 final EditText mName = (EditText)mView.findViewById(R.id.etName);
                 Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
@@ -188,7 +174,7 @@ public class CategoriasActivity extends AppCompatActivity   {
 
                             if( inventory.NameValidation(mName.getText().toString()) >= 1 )
                             {
-                                Toast.makeText(getApplicationContext(), "Ya existe una categoria con ese nombre", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Ya existe un producto con ese nombre", Toast.LENGTH_SHORT).show();
                             }
                             else
                             {
