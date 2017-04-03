@@ -270,11 +270,25 @@ public final class Inventory {
 
     }
 
+    public List<Products> searchProductsForCategory(String input,int category_id) {
+        List<Products> list = new ArrayList<Products>();
+
+
+        ProductCursor cursor = new ProductCursor((db.rawQuery("SELECT * FROM (SELECT * FROM products WHERE description LIKE '%" +input+"%'  ORDER BY description ASC) WHERE category_id=" + category_id , null)));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+
     public List<Products> searchProducts(String input) {
         List<Products> list = new ArrayList<Products>();
 
 
-        ProductCursor cursor = new ProductCursor((db.rawQuery("SELECT * FROM products WHERE description LIKE '%"+input+"%'"+"  ORDER BY description ASC", null)));
+        ProductCursor cursor = new ProductCursor((db.rawQuery("SELECT * FROM products WHERE description LIKE '%" +input+"%'  ORDER BY description ASC" , null)));
 
         while (cursor.moveToNext()) {
             list.add((cursor.getProduct()));  // metodo wrappcursor

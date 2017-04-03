@@ -113,6 +113,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private final int request_code=0;
     private final int request_code2=1;
     private AlertDialog dialogShow ;
+    public int PosicionSpinner;
 
 
 
@@ -160,6 +161,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                // int j = Integer.valueOf(spinner_adapter.getItem(position));
                 //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
 
+                PosicionSpinner = position;
                 if (position==0 ) {
 
                     final List<Products> products = inventory.products_alfabetic();
@@ -332,9 +334,18 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
 
         if(newText != null) {
-            final List<Products> products = inventory.searchProducts(newText);
-            adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
-            recyclerView.setAdapter(adapter);
+            if(PosicionSpinner == 0){
+                final List<Products> products = inventory.searchProducts(newText);
+                adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
+                recyclerView.setAdapter(adapter);
+            }
+            else{
+                final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
+                final List<Products> products = inventory.searchProductsForCategory(newText,categoriesProduct.get(PosicionSpinner-1).getId());
+                adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
+                recyclerView.setAdapter(adapter);
+            }
+
         }
 
         return false;
