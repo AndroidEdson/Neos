@@ -331,6 +331,11 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
 
+        if(newText != null) {
+            final List<Products> products = inventory.searchProducts(newText);
+            adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
+            recyclerView.setAdapter(adapter);
+        }
 
         return false;
     }
