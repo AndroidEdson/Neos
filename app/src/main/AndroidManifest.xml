@@ -26,8 +26,13 @@
         <activity android:name=".ReportesActivity" />
         <activity
             android:name=".Pop"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog"
-            />
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".PopUp_products"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity android:name=".add_stock_products"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
     </application>
 
 </manifest>

@@ -337,6 +337,38 @@ public final class Inventory {
     }
 
 
+    //SELECT products.qty FROM products where products.id==1
+ // SABER LA CANTIDAD DE STOCK PARA UN PRODUCTO
+    public List<Products> QtyProducts(String id)
+    {
+
+        List<Products> list = new ArrayList<Products>();
+
+        ProductCursor cursor = new ProductCursor(db.query(InventoryDbSchema.Products_Table.NAME,
+                null,
+                 InventoryDbSchema.Products_Table.Columns.ID + "=?",
+                new String[] {id},
+                null,
+                null,
+                null));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+
+        }
+
+        return list;
+    }
+
+// SIRVE PARA ACTUALIZAR EL STOCK
+
+    public  void  updateQuantityProducts(String id,  String qty )
+    {
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Products_Table.Columns.QUANTITY, Integer.valueOf(qty));// asegura que siempre da correcto
+
+        db.update(InventoryDbSchema.Products_Table.NAME, values, InventoryDbSchema.Products_Table.Columns.ID + " = ?", new String[]{id});
+    }
 
 
 }// ______________________________________END PRODUCTS_________________________________________________________

@@ -63,9 +63,10 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
             Products product=this.Products.get(position);
 
 
-            Intent intent = new Intent(getApplicationContext(), Pop.class);
-            intent.putExtra(Pop.EXTRA_DESCRIPTION, product.getDescription());
-            intent.putExtra(Pop.EXTRA_ID, Integer.toString(product.getId()));
+            Intent intent = new Intent(getApplicationContext(), PopUp_products.class);
+            intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
+            intent.putExtra(PopUp_products.EXTRA_ID, Integer.toString(product.getId()));
+            intent.putExtra(PopUp_products.EXTRA_QTY, Integer.toString(product.getQty()));
 
             startActivityForResult(intent, request_code2);
 
@@ -176,7 +177,6 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                     adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
-
                 }
 
 
@@ -285,6 +285,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         return super.onOptionsItemSelected(item);
 
     }
+
     public void CancelarshowAlert( ){
         AlertDialog.Builder myAlert= new AlertDialog.Builder(this);
         myAlert.setMessage("¿Seguro que quieres cancelar?")
@@ -321,9 +322,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ((requestCode==request_code && resultCode== RESULT_OK) || (requestCode==request_code2 && resultCode== RESULT_OK))
+        if ( (requestCode==request_code2 && resultCode== RESULT_OK))
         {
-
 
             inventory= new Inventory(getApplicationContext());
             final List<Products> products = inventory.products_alfabetic();
@@ -333,7 +333,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         }
         else
         {
-            //Toast.makeText(getApplicationContext(), "No OK :(", Toast.LENGTH_SHORT).show();
+
 
         }
 

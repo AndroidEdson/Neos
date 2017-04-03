@@ -146,11 +146,11 @@ public class Pop extends Activity{
             @Override
             public void onClick(View v) {
 
-             inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
-             Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
-             Intent intent_back = new Intent();
-             setResult(RESULT_OK, intent_back);
-             finish();
+                inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
+                Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
+                Intent intent_back = new Intent();
+                setResult(RESULT_OK, intent_back);
+                finish();
 //
 
 

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:paddingTop="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingEnd="0dp"
+    android:paddingStart="0dp"
+    android:layout_height="wrap_content"
+    tools:context="com.azore.compustore.PopUp_products"
+    android:orientation="vertical"
+    android:weightSum="1"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textview_products"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimary"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Name"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linear_modified_categorie"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/pop_add_stock_products"
+            android:layout_width="76dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:src="@drawable/ic_shortcut_library_add" />
+
+        <TextView
+            android:id="@+id/txt_tag_stock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Agregar a Stock" />
+
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="?android:listSeparatorTextViewStyle"
+
+        >
+
+        <ImageButton
+            android:id="@+id/pop_edit_product"
+            android:layout_width="76dp"
+            android:layout_height="75dp"
+            android:background="@android:color/transparent"
+            android:contentDescription=""
+            android:src="@drawable/ic_shortcut_edit" />
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Modificar" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:id="@+id/delete_layout_categories"
+        android:layout_height="wrap_content"
+        style="?android:listSeparatorTextViewStyle"
+        android:orientation="horizontal"
+        >
+
+
+        <ImageButton
+            android:id="@+id/pop_delete_product"
+            android:layout_width="76dp"
+            android:layout_height="75dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_shortcut_delete_forever" />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:layout_gravity="center_vertical"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>
