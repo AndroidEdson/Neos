@@ -326,6 +326,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     //SearchView
     @Override
     public boolean onQueryTextSubmit(String query) {
+        onQueryTextChange(query);
         return false;
     }
 
