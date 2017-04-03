@@ -20,6 +20,10 @@ public class EnsamblesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
+
+
+
+
     }
 
     //Cuando se selecciona algo del item bar

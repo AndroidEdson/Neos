@@ -115,7 +115,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private final int request_code2=1;
     private AlertDialog dialogShow ;
     public int PosicionSpinner;
-
+    private List<Products> productos_pr;
 
 
 
@@ -144,7 +144,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         // equivalente a for each
         spinner_adapter.add("Todos");
-        final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
+         final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
         for (CategoryProduct category : categoriesProduct) {
                 spinner_adapter.add(category.getDescription());
         }
@@ -173,7 +173,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                 }
                 else{
 
-                    final List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position-1).getId()));
+                     List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position-1).getId()));
                     adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
@@ -322,23 +322,25 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ( (requestCode==request_code2 && resultCode== RESULT_OK))
-        {
-
-            inventory= new Inventory(getApplicationContext());
-            final List<Products> products = inventory.products_alfabetic();
-            adapter= new ProductosActivity.ProductsAdapter(products,this);
+        if ( (requestCode==request_code2 && resultCode== RESULT_OK)) {
+            int aux = categoriesSpinner.getSelectedItemPosition();
+            inventory = new Inventory(getApplicationContext());
+            if (aux == 0) {
+                final List<Products> products = inventory.products_alfabetic();
+                adapter= new ProductosActivity.ProductsAdapter(products,getApplicationContext());
+            } else
+            {
+               // products
+                final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
+                final List<Products> products = inventory.categoryFilters( String.valueOf(categoriesProduct.get(aux-1).getId()));
+                adapter= new ProductosActivity.ProductsAdapter(products,getApplicationContext());
+                //Toast.makeText(getApplicationContext(), categoriesProduct.get(aux+1).getDescription() , Toast.LENGTH_SHORT).show();
+            }
             recyclerView.setAdapter(adapter);
 
         }
-        else
-        {
 
-
-        }
-
-
-
+        else {}
     }
 
     //SearchView

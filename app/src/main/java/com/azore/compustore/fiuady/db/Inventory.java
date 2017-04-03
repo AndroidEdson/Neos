@@ -46,6 +46,37 @@ class ProductCursor extends  CursorWrapper{
 //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
+
+// ASSEMBLIES CURSOR
+class AssembliesCursor extends  CursorWrapper{
+    public AssembliesCursor(Cursor cursor) {super(cursor);}
+
+  public Assemblies getAssemblies  () {
+      Cursor cursor = getWrappedCursor();
+      return new Assemblies(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Assemblies_Table.Columns.ID)),
+              cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Assemblies_Table.Columns.DESCRIPTION)));
+  }
+}
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+// ASSEMBLIES CURSOR
+class AssemblyProductCursor extends  CursorWrapper{
+    public AssemblyProductCursor(Cursor cursor) {super(cursor);}
+
+    public Assembly_Products getAssemblyProduct  () {
+        Cursor cursor = getWrappedCursor();
+        return new Assembly_Products (getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblyProducts_Table.Columns.ID)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblyProducts_Table.Columns.QUANTITY)));
+    }
+}
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
         // INICIO DE FUNCIONES INVENTORY
 
 public final class Inventory {
