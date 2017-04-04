@@ -52,8 +52,9 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         }
 
         public void bindCategories(Products product){
+
             txtDescription.setText(product.getDescription());
-            txtPrice.setText(Integer.toString(product.getPrice())) ;
+            txtPrice.setText(Double.toString((double) product.getPrice()/100));
         }
 
 
@@ -258,7 +259,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                             else
                             {
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                                inventory.AddProduct(categoriesProduct.get(spinner.getSelectedItemPosition()).getId(),Integer.parseInt(mId.getText().toString()),mDescription.getText().toString(),Integer.parseInt(mPrecio.getText().toString()));
+                                inventory.AddProduct(categoriesProduct.get(spinner.getSelectedItemPosition()).getId(),Integer.parseInt(mId.getText().toString()),mDescription.getText().toString(),(Double.parseDouble(mPrecio.getText().toString()))*100);
                                 dialogShow.dismiss();
                                 updateRecycler();
 
@@ -303,7 +304,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
                     }
                 })
-                .setTitle("Product Categories")
+                .setTitle("Product")
                 .setIcon(R.drawable.ic_shortcut_warning)
                 .create();
         myAlert.show();

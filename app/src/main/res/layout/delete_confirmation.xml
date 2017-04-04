@@ -27,7 +27,7 @@
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:padding="10dp"
-            android:text="Stock"
+            android:text="Confirmación"
             android:textColor="@android:color/background_light"
             android:textSize="18sp" />
 
@@ -38,22 +38,18 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:padding="10dp"
-       >
+        >
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:text="Cantidad en Stock"
-            android:textColor="@android:color/black" />
-
-        <Spinner
-            android:id="@+id/spinner_stock"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"/>
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:text="¿Seguro que desea eliminarlo?"
+            android:textColor="@android:color/black" />
+
+
 
     </LinearLayout>
 
@@ -67,17 +63,17 @@
         >
 
         <Button
-            android:id="@+id/btn_stock_add"
+            android:id="@+id/btn_delete_confirmation"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:background="@android:color/holo_green_dark"
             android:fontFamily="sans-serif-light"
-            android:text="Guardar"
+            android:text="Eliminar"
             android:textColor="@android:color/background_light"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_cancel_Stock"
+            android:id="@+id/btn_cancel_confirmation"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:background="@android:color/holo_red_light"

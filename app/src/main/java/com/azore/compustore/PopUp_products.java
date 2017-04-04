@@ -8,11 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.InventoryDbSchema;
 
 import java.util.List;
 
@@ -21,6 +28,7 @@ public class PopUp_products extends Activity {
 
     ImageButton btn_stock;
     ImageButton btn_edit;
+    private Inventory inventory;
     ImageButton btn_delete;
     TextView txt_product_name;
 
@@ -33,7 +41,9 @@ public class PopUp_products extends Activity {
     private String qty;
     private  AlertDialog dialogShow ;
     int  request_code2=1;
-
+    int  request_code3=1;
+    private int aux=0;
+    private LinearLayout delete_layout;
 
 
     @Override
@@ -62,6 +72,23 @@ public class PopUp_products extends Activity {
 
         txt_product_name.setText(name);
 
+        inventory= new Inventory(getApplicationContext());
+
+        delete_layout= (LinearLayout)findViewById(R.id.delete_layout_categories);
+        // PARA CLASIFICAR CUALES TENDRAN OPCION ELIMINAR
+        aux = inventory.ExistAssemblyWhitProduct(id);
+        //Toast.makeText(getApplicationContext(), Integer.toString(aux),Toast.LENGTH_SHORT).show();
+
+        if( aux >= 1 )
+        {
+            delete_layout.setVisibility(View.GONE);
+
+
+
+        }
+        else {
+            delete_layout.setVisibility(View.VISIBLE);
+        }
 
 btn_stock.setOnClickListener(new View.OnClickListener() {
     @Override
@@ -79,6 +106,27 @@ btn_stock.setOnClickListener(new View.OnClickListener() {
 
 });
 
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), delete_confirmation.class);
+                startActivityForResult(intent, request_code3);
+
+            }
+        });
+
+     btn_edit.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             Intent intent = new Intent(getApplicationContext(), modify_products.class);
+             intent.putExtra(modify_products.EXTRA_ID_STOCK, id);
+             startActivityForResult(intent, request_code2);
+         }
+     });
+
+
+
+
 
 }// END ONCREATE
 
@@ -90,6 +138,18 @@ btn_stock.setOnClickListener(new View.OnClickListener() {
         {
 
             //  Toast.makeText(getApplicationContext(), " OK :(", Toast.LENGTH_SHORT).show();
+            Intent intent_back = new Intent();
+            setResult(RESULT_OK, intent_back);
+            finish();
+
+
+        }
+
+        if ( (requestCode==request_code3 && resultCode== RESULT_OK))
+        {
+
+            inventory.deleteCategory(InventoryDbSchema.Products_Table.NAME, id);
+            Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
             Intent intent_back = new Intent();
             setResult(RESULT_OK, intent_back);
             finish();

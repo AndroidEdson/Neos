@@ -36,9 +36,8 @@ public class Pop extends Activity{
     private LinearLayout delete_layout;
 
     private EditText new_name_category;
-    private int width=0;
-    private int height=0;
     private int aux=0;
+    int  request_code=1;
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,11 +145,9 @@ public class Pop extends Activity{
             @Override
             public void onClick(View v) {
 
-                inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
-                Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
-                Intent intent_back = new Intent();
-                setResult(RESULT_OK, intent_back);
-                finish();
+                Intent intent = new Intent(getApplicationContext(), delete_confirmation.class);
+                startActivityForResult(intent, request_code);
+
 //
 
 
@@ -159,5 +156,20 @@ public class Pop extends Activity{
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if ( (requestCode==request_code && resultCode== RESULT_OK))
+        {
+
+            inventory.deleteCategory(InventoryDbSchema.Categories_Table.NAME, id);
+            Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
+            Intent intent_back = new Intent();
+            setResult(RESULT_OK, intent_back);
+            finish();
+
+
+        }
+    }
 }

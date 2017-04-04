@@ -32,6 +32,10 @@
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity android:name=".add_stock_products"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".modify_products"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".delete_confirmation"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
     </application>
 

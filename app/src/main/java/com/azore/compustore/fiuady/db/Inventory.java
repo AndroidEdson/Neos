@@ -350,7 +350,7 @@ public final class Inventory {
 
     // Añadir Producto
 
-    public void AddProduct(int category_id,int id, String description,int price)
+    public void AddProduct(int category_id,int id, String description,double price)
     {
         ///Agregar un elemento a la base de datos
 
@@ -402,4 +402,40 @@ public final class Inventory {
     }
 
 
+    // PARA ELIMINAR UN PRODUCTO
+
+
+    public void delteProduct(String tableName, String i) {
+
+        db.delete(tableName, "id = ?", new String[] {i});
+    }
+
+    // SIRVE PARA MODIFICAR EL PRODUCTO
+
+    public  void  updateProducts(String id,int category_id,  String description, double price )
+    {
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Products_Table.Columns.DESCRITPION, description);// asegura que siempre da correcto
+        values.put(InventoryDbSchema.Products_Table.Columns.PRICE, price);
+        values.put(InventoryDbSchema.Products_Table.Columns.CATEGORY_ID, category_id);
+        db.update(InventoryDbSchema.Products_Table.NAME, values, InventoryDbSchema.Products_Table.Columns.ID + " = ?", new String[]{id});
+    }
+
+    // FUNCION PARA SABER SI HAY CATEGORIAS ASIGNADAS A PRODUCTOS (PARA SABER SI PUEDEN ELIMINARSE O NO)
+
+    public int ExistAssemblyWhitProduct(String id_product){
+
+        int i=0;
+        ProductCursor cursor = new ProductCursor(db.query(InventoryDbSchema.AssemblyProducts_Table.NAME,
+                null,
+                InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID + "=?",
+                new String[] {id_product},
+                null,
+                null,
+                null));
+
+        i = cursor.getCount();
+        return i;
+
+    }
 }// ______________________________________END PRODUCTS_________________________________________________________
