@@ -35,6 +35,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         private TextView txtDescription;
         private TextView txtPrice;
+        private  TextView txtStock;
 
         Context context;
         private List<Products> Products;
@@ -47,6 +48,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
             itemView.setOnClickListener(this);
             txtDescription= (TextView) itemView.findViewById(R.id.txt_product_description);
             txtPrice= (TextView) itemView.findViewById(R.id.txt_product_price);
+            txtStock= (TextView) itemView.findViewById(R.id.txt_stock_product);
+
 
 
         }
@@ -55,6 +58,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
             txtDescription.setText(product.getDescription());
             txtPrice.setText(Double.toString((double) product.getPrice()/100));
+            txtStock.setText(String.valueOf(product.getQty()));
         }
 
 

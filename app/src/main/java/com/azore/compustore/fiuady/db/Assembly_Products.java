@@ -10,7 +10,6 @@ public final class Assembly_Products {
         private  int product_id;
         private  int qty;
 
-
     public Assembly_Products(int id, int product_id, int qty) {
         this.id = id;
         this.product_id = product_id;
@@ -36,8 +35,5 @@ public final class Assembly_Products {
     public void setQty(int qty) {
         this.qty = qty;
     }
-
-
-
 
 }

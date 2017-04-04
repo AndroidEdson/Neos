@@ -23,7 +23,6 @@ class CategoryProductCursor extends CursorWrapper{
         Cursor cursor = getWrappedCursor();
         return  new CategoryProduct(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Categories_Table.Columns.ID)),
         cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Categories_Table.Columns.DESCRIPTION)));
-
     }
 
 }
@@ -438,4 +437,42 @@ public final class Inventory {
         return i;
 
     }
-}// ______________________________________END PRODUCTS_________________________________________________________
+// ______________________________________END PRODUCTS_________________________________________________________
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+//_________________________ FUNCIONES ASSEMBLIES _________________________________________________________________________________________
+
+
+    // PRODUCTOS ALFABETICAMENTE
+
+    public List getAssemblies_alfabetic()
+    {
+        List<Assemblies> list = new ArrayList<Assemblies>();
+
+        AssembliesCursor cursor = new AssembliesCursor(db.query(InventoryDbSchema.Assemblies_Table.NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "description COLLATE NOCASE ASC"));
+
+        while (cursor.moveToNext()){
+
+            list.add((cursor.getAssemblies()));  // metodo wrappcursor
+        }
+
+        cursor.close();
+        return list;
+    }
+
+
+
+    //***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+} // END FINAL DEL MUNDO UNIVERSAL DEL COSMOS

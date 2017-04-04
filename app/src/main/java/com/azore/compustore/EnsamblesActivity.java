@@ -1,12 +1,103 @@
 package com.azore.compustore;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.azore.compustore.fiuady.db.Assemblies;
+import com.azore.compustore.fiuady.db.Assembly_Products;
+import com.azore.compustore.fiuady.db.CategoryProduct;
+import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.Products;
+
+import java.util.List;
+
 public class EnsamblesActivity extends AppCompatActivity {
+
+    private class AssembliesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView txtDescription;
+        Context context;
+        private List<Assemblies> assemblies;
+
+        public AssembliesHolder(View itemView, Context context, List<Assemblies> assemblies){
+
+            super(itemView);
+            this.context= context;
+            this.assemblies= assemblies;
+            itemView.setOnClickListener(this);
+            txtDescription= (TextView) itemView.findViewById(R.id.txt_assemblie_description);
+
+        }
+
+        public void bindCategories(Assemblies assemblies){
+            txtDescription.setText(assemblies.getDescription());
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition() ;
+            Assemblies assemblies=this.assemblies.get(position);
+
+
+         //   Intent intent = new Intent(getApplicationContext(), PopUp_products.class);
+         //   intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
+         //   intent.putExtra(PopUp_products.EXTRA_ID, Integer.toString(product.getId()));
+         //   intent.putExtra(PopUp_products.EXTRA_QTY, Integer.toString(product.getQty()));
+    Toast.makeText(getApplicationContext(), "works ", Toast.LENGTH_SHORT).show();
+           // startActivityForResult(intent, request_code2);
+
+
+        }
+
+    }
+
+
+    private  class AssembliesAdapter extends  RecyclerView.Adapter<AssembliesHolder>{
+        private List<Assemblies> assemblies;
+        Context context;
+
+        public AssembliesAdapter(List<Assemblies> assemblies, Context context){
+            this.assemblies=assemblies;
+            this.context=context;
+        }
+
+
+        @Override
+        public AssembliesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.ensambles_list_item,parent,false);
+            return new AssembliesHolder(view,context,assemblies);
+        }
+
+        @Override
+        public void onBindViewHolder(AssembliesHolder holder, int position) {
+            holder.bindCategories(assemblies.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return assemblies.size();
+        }
+    }
+
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //************************************ONCREATE*********************************************
+
+    private RecyclerView recyclerView;
+    private AssembliesAdapter adapter;
+    private Inventory inventory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,7 +105,28 @@ public class EnsamblesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ensambles);
         //Cambiar texto de App bar
         getSupportActionBar().setTitle("Ensambles");
+
+        inventory= new Inventory(getApplicationContext());
+        recyclerView= (RecyclerView) findViewById(R.id.recycler_assemblies);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        final List<Assemblies> assemblies = inventory.getAssemblies_alfabetic();
+
+        Toast.makeText(getApplicationContext(),  assemblies.get(1).getDescription() , Toast.LENGTH_SHORT).show();
+
+        adapter= new AssembliesAdapter(assemblies,this);
+        recyclerView.setAdapter(adapter);
+
+
     }
+
+    //**************************************************************************************
+    //**************************************************************************************
+    //************************************ END ONCREATE*********************************************
+
+
+
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

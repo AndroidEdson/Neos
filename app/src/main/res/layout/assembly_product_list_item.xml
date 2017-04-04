@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/image_assemblie"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_shortcut_local_mall"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:id="@+id/txt_assemblie_product_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="12.25"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:text="TextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/image_assemblie"
+        android:layout_toEndOf="@+id/image_assemblie" />
+
+    <TextView
+        android:id="@+id/txt_tag_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="12.25"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:text="Cantidad: "
+        android:textStyle="bold"
+        android:layout_below="@+id/txt_assemblie_product_description"
+        android:layout_toRightOf="@+id/image_assemblie"
+        android:layout_toEndOf="@+id/image_assemblie" />
+
+    <TextView
+        android:id="@+id/txt_assemblie_product_qty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="12.25"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:text="TextView"
+        android:textStyle="bold"
+        android:layout_alignBaseline="@+id/txt_tag_qty"
+        android:layout_alignBottom="@+id/txt_tag_qty"
+        android:layout_toRightOf="@+id/txt_tag_qty"
+        android:layout_toEndOf="@+id/txt_tag_qty" />
+
+
+
+</RelativeLayout>

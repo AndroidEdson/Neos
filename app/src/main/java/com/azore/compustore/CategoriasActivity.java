@@ -20,6 +20,7 @@ import com.azore.compustore.fiuady.db.*;
 import java.util.List;
 
 public class CategoriasActivity extends AppCompatActivity   {
+
     private class CategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView txtDescription;
