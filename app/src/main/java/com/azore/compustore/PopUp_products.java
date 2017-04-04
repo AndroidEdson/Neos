@@ -41,7 +41,7 @@ public class PopUp_products extends Activity {
     private String qty;
     private  AlertDialog dialogShow ;
     int  request_code2=1;
-    int  request_code3=1;
+    int  request_code3=2;
     private int aux=0;
     private LinearLayout delete_layout;
 
