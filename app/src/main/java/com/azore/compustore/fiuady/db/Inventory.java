@@ -76,7 +76,35 @@ class AssemblyProductCursor extends  CursorWrapper{
 //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
-        // INICIO DE FUNCIONES INVENTORY
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+// ASSEMBLIES CURSOR
+class CustomersCursor extends  CursorWrapper{
+    public CustomersCursor(Cursor cursor) {super(cursor);}
+
+    public Customers getCustomers  () {
+        Cursor cursor = getWrappedCursor();
+        return new Customers(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.ID)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.FIRST_NAME)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.LAST_NAME)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.ADDRESS)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.PHONE1)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.PHONE2)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.PHONE3)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.EMAIL)));
+    }
+}
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+
+
+// INICIO DE FUNCIONES INVENTORY
 
 public final class Inventory {
     private InventoryHelper inventoryHelper;
