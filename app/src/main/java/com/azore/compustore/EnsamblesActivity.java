@@ -134,8 +134,6 @@ public class EnsamblesActivity extends AppCompatActivity {
         return true;
 
 
-
-
     }
 
     //Cuando se selecciona algo del item bar
@@ -145,7 +143,9 @@ public class EnsamblesActivity extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
-                Toast.makeText(this,"me tocaste",Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(getApplicationContext(),add_assemblies.class);
+                startActivity(i);
                 return true;
             // Codigo prueba
 

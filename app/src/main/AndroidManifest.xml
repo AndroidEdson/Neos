@@ -30,13 +30,19 @@
         <activity
             android:name=".PopUp_products"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-        <activity android:name=".add_stock_products"
+        <activity
+            android:name=".add_stock_products"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".modify_products"
+        <activity
+            android:name=".modify_products"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".delete_confirmation"
+        <activity
+            android:name=".delete_confirmation"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-
+        <activity
+            android:name=".PopUp_Add_Assemblies"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".add_assemblies"></activity>
     </application>
 
 </manifest>
