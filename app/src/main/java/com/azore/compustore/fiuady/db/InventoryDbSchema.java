@@ -94,9 +94,6 @@ public final class InventoryDbSchema {
             public static final String EDITABLE = "editable";
             public static final String PREVIOUS = "previous";
             public static final String NEXT = "next";
-            public static final String PHONE2 = "phone2";
-            public static final String PHONE3 = "phone3";
-            public static final String EMAIL = "e_mail";
 
         }
     }
@@ -119,7 +116,7 @@ public final class InventoryDbSchema {
 
     // _____________________________________________________________________________
     public static final class Order_Assemblies_Table {
-        public static final String NAME = "orders";
+        public static final String NAME = "order_assemblies";
 
         public static final class Columns {
             public static final String ID = "id";

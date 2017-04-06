@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.Inventory;
 
@@ -32,6 +33,8 @@ public class PopUp_Ensambles extends Activity {
     private String name;
 
     private  LinearLayout quitar_stock;
+    private  LinearLayout quitar_eliminar;
+
 
     public static String EXTRA_DESCRIPTION_ENSAMBLE = "com.azore.compustore.id.add.assemblies.description_ensamble";
     public static String EXTRA_ID_ENSAMBLE = "com.azore.compustore.id.add.assemblies.id_ensamble";
@@ -59,10 +62,22 @@ public class PopUp_Ensambles extends Activity {
         btn_delete= (ImageButton) findViewById(R.id.pop_delete_product);
         txt_product_name= (TextView) findViewById(R.id.textview_products);
         quitar_stock= (LinearLayout)findViewById(R.id.linear_modified_categorie);
+        quitar_eliminar= (LinearLayout)findViewById(R.id.delete_layout_categories);
 
         inventory = new Inventory(getApplicationContext());
         txt_product_name.setText(name);
         quitar_stock.setVisibility(TextView.GONE);
+
+        int j=0;
+        j= inventory.ExistAssembliesInOrders(id);
+
+        if (j>=1)
+        {
+           quitar_eliminar.setVisibility(View.GONE);
+        }
+
+
+
 
 
         btn_edit.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +89,20 @@ public class PopUp_Ensambles extends Activity {
                 intent.putExtra(modif_ensamble.EXTRA_ID_ENSAMBLE_MODIF,id);
                // intent.putExtra(PopUp_products.EXTRA_QTY, Integer.toString(product.getQty()));
                 startActivityForResult(intent, request_code1);
+            }
+        });
+
+
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                inventory.deleteAssemblies(id);
+                Intent intent_back = new Intent();
+                setResult(RESULT_OK, intent_back);
+                Toast.makeText(getApplicationContext(), "Ensamble Eliminado", Toast.LENGTH_SHORT).show();
+                finish();
+
             }
         });
 
