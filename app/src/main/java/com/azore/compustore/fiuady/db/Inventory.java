@@ -81,7 +81,7 @@ class AssemblyProductCursor extends  CursorWrapper{
 //***************************************************************************************************
 //***************************************************************************************************
 
-// Customer CURSOR
+// ASSEMBLIES CURSOR
 class CustomersCursor extends  CursorWrapper{
     public CustomersCursor(Cursor cursor) {super(cursor);}
 
@@ -495,6 +495,125 @@ public final class Inventory {
         cursor.close();
         return list;
     }
+
+
+       //
+        Cursor cursor= (db.rawQuery("SELECT  MAX(id) FROM "+TableName, null));
+
+       cursor.moveToFirst();
+
+        //List<Products> list = new ArrayList<Products>();
+        int maxid= cursor.getInt(cursor.getColumnIndex("MAX(id)"));
+        return maxid;
+
+    }
+
+// FUNCION PARA AÑADIR NUEVOS ENSAMBLES
+    public void AddAssemblies(int id, String description)
+    {
+        ///Agregar un elemento a la base de datos
+
+        db =inventoryHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Assemblies_Table.Columns.ID, id);
+        contentValues.put(InventoryDbSchema.Assemblies_Table.Columns.DESCRIPTION, description);
+        db.insert(InventoryDbSchema.Assemblies_Table.NAME, null, contentValues);
+
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+
+    // FUNCION GENERICA PARA SABER SI YA EXISTE ALGUNO ELEMENTO CON ESE NOMBRE (DESCRIPTION)
+    public int NameValidationGeneric(String TableName, String name_compare)
+    {
+        int i=0;
+
+        ProductCursor cursor = new ProductCursor(db.query(TableName,
+                null,
+                "UPPER("+ "description" + ")=?",
+                new String[] {name_compare.toUpperCase()},
+                null,
+                null,
+                null));
+
+        i = cursor.getCount();
+        return i;
+    }
+
+    // GENERAR LISTA DE PRODUCTOS QUE CONTIENE CADA ENSAMBLE
+
+    public  List<Products> getProductsAssembly(String id_ensamble) {
+
+        List<Products> list = new ArrayList<Products>();
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizo = "SELECT p.id, p.category_id, p.description, p.price, ap.qty FROM assemblies a " +
+                "INNER JOIN assembly_products ap ON (a.id = ap.id) " +
+                "INNER JOIN products p ON (p.id=ap.product_id) " +
+                "WHERE a.id=" + id_ensamble;
+        ProductCursor cursor = new ProductCursor(db.rawQuery(query_macizo, null));
+
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getProduct()));
+        }
+
+        return list;
+    }
+
+    // QUERY QUE DEVULVE CUANTOS PRODUCTOS DE UN TIPO NECESITA PARA CADA ENSAMBLE
+
+
+    public  int getNumberOfProductsOnEnsambly(String id_product) {
+
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizo = "SELECT ap.qty " +
+                "FROM assemblies a INNER JOIN assembly_products ap ON (a.id = ap.id) " +
+                "INNER JOIN products p ON (p.id=ap.product_id) " +
+                "where p.id="+ id_product;
+
+
+        Cursor cursor = (db.rawQuery(query_macizo, null));
+        cursor.moveToFirst();
+
+        //List<Products> list = new ArrayList<Products>();
+        int qty_product= cursor.getInt(cursor.getColumnIndex("qty"));
+        return qty_product;
+
+
+    }
+
+
+        // PARA ACTUALIZAR LA CANTIDAD DE PRODUCTO EN UN ENSAMBLE (MODIFICAR ASSEMBLY_PRODUCTS
+
+    public  void  updateAssemblyProduct( String id, String product_id,  int qty )
+    {
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.AssemblyProducts_Table.Columns.QUANTITY,qty );
+        //db.update(InventoryDbSchema.AssemblyProducts_Table.NAME, values, InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID + "= ?", new String[]{product_id});
+         db.update(InventoryDbSchema.AssemblyProducts_Table.NAME, values, InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID + " = ? AND " + InventoryDbSchema.AssemblyProducts_Table.Columns.ID + "= ?", new String[]{product_id, id});
+    db.close();
+    }
+
+    public void deleteProductFromEnsambly( String id_ensamble, String id_product) {
+
+        db.delete(InventoryDbSchema.AssemblyProducts_Table.NAME, InventoryDbSchema.AssemblyProducts_Table.Columns.ID +" = ? AND " + InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID +" = ?", new String[] {id_ensamble,id_product});
+    }
+
+    public void updateAssemblies( String id, String new_name) {
+
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Assemblies_Table.Columns.DESCRIPTION,new_name );
+        //db.update(InventoryDbSchema.AssemblyProducts_Table.NAME, values, InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID + "= ?", new String[]{product_id});
+        db.update(InventoryDbSchema.Assemblies_Table.NAME, values, InventoryDbSchema.Assemblies_Table.Columns.ID + "= ?", new String[]{ id});
+    }
+
 
 //_________________________END FUNCIONES ASSEMBLIES_________________________________
     //***************************************************************************************************

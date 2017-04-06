@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
@@ -146,6 +147,9 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
+
+        // int products_max = inventory.getLastId(InventoryDbSchema.Products_Table.NAME);
+       // Toast.makeText(getApplicationContext(), String.valueOf(products_max), Toast.LENGTH_SHORT).show();
 
         // equivalente a for each
         spinner_adapter.add("Todos");

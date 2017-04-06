@@ -10,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +22,12 @@ import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
 
-public class add_assemblies extends AppCompatActivity {
+public class modif_ensamble extends AppCompatActivity {
+
+    //****************************************************************************
+    //****************************************************************************
+    //********************************RECYCLER ***********************************
+
 
     private class ProductsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -31,7 +36,7 @@ public class add_assemblies extends AppCompatActivity {
         private  TextView txtStock;
 
         Context context;
-        private List<Products> Products;
+        private List<com.azore.compustore.fiuady.db.Products> Products;
 
         public ProductsHolder(View itemView, Context context, List<Products> Products){
 
@@ -61,11 +66,15 @@ public class add_assemblies extends AppCompatActivity {
             Products product=this.Products.get(position);
 
 
-          Intent intent = new Intent(getApplicationContext(), PopUp_Add_Assemblies.class);
-          intent.putExtra(PopUp_Add_Assemblies.EXTRA_DESCRIPTION_ADD_ASSEMBLIES, product.getDescription());
-          intent.putExtra(PopUp_Add_Assemblies.EXTRA_ID_ADD_ASSEMBLIES, Integer.toString(product.getId()));
-          intent.putExtra(PopUp_Add_Assemblies.EXTRA_QTY_ADD_ASSEMBLIES, Integer.toString(product.getQty()));
-          startActivityForResult(intent,request_code2);
+          Intent intent = new Intent(getApplicationContext(), PopUp_Menu_Modify_Assembly.class);
+          intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_DESCRIPTION_PRODUCT, product.getDescription());
+          intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_ID_PRODUCT, Integer.toString(product.getId()));
+          intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_QTY_PRODUCT, Integer.toString(product.getQty()));
+            intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_DESCRIPTION_ENSAMBLE, name_description);
+            intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_ID_ENSAMBLE, id);
+           // Toast.makeText(getApplicationContext(), id+ " " + name_description, Toast.LENGTH_SHORT).show();
+
+            startActivityForResult(intent,request_code2);
 
 
         }
@@ -114,16 +123,28 @@ public class add_assemblies extends AppCompatActivity {
     private Button btn_cancel ;
     private EditText new_description;
 
+    private String name_description;
+    private String id;
+    private TextView txt_change;
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************ONCREATE*********************************
+    public static String EXTRA_DESCRIPTION_ENSAMBLE_MODIF = "com.azore.compustore.id.add.assemblies.description_ensamble.modif";
+    public static String EXTRA_ID_ENSAMBLE_MODIF = "com.azore.compustore.id.add.assemblies.id_ensamble.modif";
+
+
+    //****************************************************************************
+    //****************************************************************************
+    //*********************************ON CREATE *******************************************
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assemblies);
-        getSupportActionBar().setTitle("Nuevo Ensamble");
+
+        Intent i = getIntent();
+        name_description= i.getStringExtra(EXTRA_DESCRIPTION_ENSAMBLE_MODIF);
+        id=i.getStringExtra(EXTRA_ID_ENSAMBLE_MODIF);
+        getSupportActionBar().setTitle(name_description);
 
 
         inventory = new Inventory(getApplicationContext());
@@ -134,36 +155,38 @@ public class add_assemblies extends AppCompatActivity {
         btn_cancel= (Button) findViewById(R.id.btnCancelar);
         new_description= (EditText)findViewById(R.id.edit_new_assembli_description);
 
-        final List<Products> products = inventory.products_alfabetic();
+        new_description.setText(null);
+        new_description.setHint("Nueva descripción");
 
-
-     //   Toast.makeText(getApplicationContext(), products.get(1).getDescription(), Toast.LENGTH_SHORT).show();
-        adapter = new ProductsAdapter(products, this);
+        List<Products> products =inventory.getProductsAssembly(id);
+        adapter = new ProductsAdapter(products, getApplicationContext());
         recyclerView.setAdapter(adapter);
+
+        //txt_change.setText("Num:");
+
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int i= inventory.NameValidationGeneric(InventoryDbSchema.Assemblies_Table.NAME,new_description.getText().toString());
+                int aux = inventory.NameValidationGeneric(InventoryDbSchema.Assemblies_Table.NAME,new_description.getText().toString() );
+                if (new_description.getText().toString().equals(""))
+                {
+                    Toast.makeText(getApplicationContext(),"Descripción no valida",Toast.LENGTH_SHORT).show();
 
-                if ( new_description.getText().toString().equals("")){
-
-                    Toast.makeText(getApplicationContext(), "Descripción Invalida",Toast.LENGTH_SHORT).show();
-
-                }else{
-                    if (i>=1){
-                        Toast.makeText(getApplicationContext(), "Ya existe una descripcion con ese nombre",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if (aux >= 1) {
+                        Toast.makeText(getApplicationContext(),"Ya existe un ensamble con esa descripción",Toast.LENGTH_SHORT).show();
 
                     }else {
 
-                        inventory.AddAssemblies(inventory.getLastId(InventoryDbSchema.Assemblies_Table.NAME) + 1, new_description.getText().toString());
+                        inventory.updateAssemblies(id, new_description.getText().toString());
                         Intent intent_back = new Intent();
                         setResult(RESULT_OK, intent_back);
-                        Toast.makeText(getApplicationContext(), "Nuevo ensamble agregado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
                         finish();
                     }
-
                 }
 
 
@@ -177,17 +200,25 @@ public class add_assemblies extends AppCompatActivity {
             }
         });
 
+    } // END ONCREATE
+
+    //****************************************************************************
+    //****************************************************************************
+    //************************************END ONCREATE****************************************
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-
+       // Toast.makeText(getApplicationContext(),"UPDATED", Toast.LENGTH_LONG).show();
+        List<Products> products =inventory.getProductsAssembly(id);
+        adapter = new ProductsAdapter(products, getApplicationContext());
+        recyclerView.setAdapter(adapter);
 
     }
 
-    //***************************************************************************
-    //***************************************************************************
-    //***************************END ONCREATE*********************************
-
+    //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
@@ -201,7 +232,8 @@ public class add_assemblies extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
-                Toast.makeText(this,"me tocaste",Toast.LENGTH_SHORT).show();
+
+
                 return true;
             // Codigo prueba
 
@@ -210,19 +242,6 @@ public class add_assemblies extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
 
-        //if ((requestCode == request_code2 && resultCode == RESULT_OK)) {
-
-            final List<Products> products = inventory.products_alfabetic();
-            //   Toast.makeText(getApplicationContext(), products.get(1).getDescription(), Toast.LENGTH_SHORT).show();
-            adapter = new ProductsAdapter(products, this);
-            recyclerView.setAdapter(adapter);
-
-      //  }
-
-    }
-}
+}// FINAL DEL COSMOS
