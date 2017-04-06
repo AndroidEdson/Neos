@@ -42,14 +42,12 @@ public class modify_products extends Activity {
         id= i.getStringExtra(EXTRA_ID_STOCK);
 
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        final EditText mId = (EditText)findViewById(R.id.etId);
         final EditText mDescription = (EditText)findViewById(R.id.etDescription);
         final EditText mPrecio = (EditText)findViewById(R.id.etprecio);
         final Spinner spinner = (Spinner)findViewById(R.id.SpinnerCategory);
         Button mGuardar = (Button)findViewById(R.id.btnGuardar);
         Button mCancelar = (Button)findViewById(R.id.btnCancelar);
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
-        mId.setVisibility(View.GONE);
         inventory = new Inventory(getApplicationContext());
 
         // equivalente a for each

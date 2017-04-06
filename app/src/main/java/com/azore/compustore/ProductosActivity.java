@@ -224,7 +224,6 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
                 final View mView = getLayoutInflater().inflate(R.layout.products_add,null);
-                final EditText mId = (EditText)mView.findViewById(R.id.etId);
                 final EditText mDescription = (EditText)mView.findViewById(R.id.etDescription);
                 final EditText mPrecio = (EditText)mView.findViewById(R.id.etprecio);
                 final Spinner spinner = (Spinner)mView.findViewById(R.id.SpinnerCategory);
@@ -253,7 +252,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                     @Override
                     public void onClick(View v) {
 
-                        if ( mId.getText().toString().equals("") || mDescription.getText().toString().equals("")|| mPrecio.getText().toString().equals("") )
+                        if ( mDescription.getText().toString().equals("")|| mPrecio.getText().toString().equals("") )
                         {
                             Toast.makeText(getApplicationContext(), "¡Error! Campo Vacío", Toast.LENGTH_SHORT).show();
                         }
@@ -267,7 +266,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                             else
                             {
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                                inventory.AddProduct(categoriesProduct.get(spinner.getSelectedItemPosition()).getId(),Integer.parseInt(mId.getText().toString()),mDescription.getText().toString(),(Double.parseDouble(mPrecio.getText().toString()))*100);
+                                inventory.AddProduct(categoriesProduct.get(spinner.getSelectedItemPosition()).getId(),inventory.getLastId(InventoryDbSchema.Products_Table.NAME) + 1,mDescription.getText().toString(),(Double.parseDouble(mPrecio.getText().toString()))*100);
                                 dialogShow.dismiss();
                                 updateRecycler();
 

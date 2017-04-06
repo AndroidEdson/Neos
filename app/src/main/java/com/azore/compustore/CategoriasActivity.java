@@ -154,7 +154,6 @@ public class CategoriasActivity extends AppCompatActivity   {
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
                 final View mView = getLayoutInflater().inflate(R.layout.category_add,null);
-                final EditText mId = (EditText)mView.findViewById(R.id.etId);
                 final EditText mName = (EditText)mView.findViewById(R.id.etName);
                 Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
                 Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
@@ -166,7 +165,7 @@ public class CategoriasActivity extends AppCompatActivity   {
                     @Override
                     public void onClick(View v) {
 
-                        if ( mId.getText().toString().equals("") || mName.getText().toString().equals("") )
+                        if (  mName.getText().toString().equals("") )
                         {
                             Toast.makeText(getApplicationContext(), "¡Error! Campos Vacíos", Toast.LENGTH_SHORT).show();
                         }
@@ -180,7 +179,7 @@ public class CategoriasActivity extends AppCompatActivity   {
                             else
                             {
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                                inventory.AddCategory(Integer.parseInt(mId.getText().toString()), mName.getText().toString());
+                                inventory.AddCategory(inventory.getLastId(InventoryDbSchema.Categories_Table.NAME) + 1, mName.getText().toString());
                                 dialogShow.dismiss();
                                 updateRecycler();
 

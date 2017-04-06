@@ -7,16 +7,6 @@
 
 
     <EditText
-        android:id="@+id/customer_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="Id"
-        android:inputType="number"
-        android:textSize="14sp" />
-
-    <EditText
         android:id="@+id/customer_first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

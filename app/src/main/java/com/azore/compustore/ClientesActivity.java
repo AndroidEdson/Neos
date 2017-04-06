@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Customers;
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
@@ -190,7 +191,6 @@ public class ClientesActivity extends AppCompatActivity {
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
                 final View mView = getLayoutInflater().inflate(R.layout.customer_add,null);
-                final EditText mId = (EditText)mView.findViewById(R.id.customer_id);
                 final EditText mNombre = (EditText)mView.findViewById(R.id.customer_first_name);
                 final EditText mApellido = (EditText)mView.findViewById(R.id.customer_last_name);
                 final EditText mDireccion = (EditText)mView.findViewById(R.id.customer_address);
@@ -220,7 +220,7 @@ public class ClientesActivity extends AppCompatActivity {
                         else {
 
                                 Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                                inventory.AddCustomer(Integer.parseInt(mId.getText().toString()),mNombre.getText().toString(),mApellido.getText().toString(),mDireccion.getText().toString(),mTel1.getText().toString(),mTel2.getText().toString(),mTel3.getText().toString(),mEmail.getText().toString());
+                                inventory.AddCustomer(inventory.getLastId(InventoryDbSchema.Customers_Table.NAME) + 1,mNombre.getText().toString(),mApellido.getText().toString(),mDireccion.getText().toString(),mTel1.getText().toString(),mTel2.getText().toString(),mTel3.getText().toString(),mEmail.getText().toString());
                                 dialogShow.dismiss();
                                 updateRecycler();
                         }

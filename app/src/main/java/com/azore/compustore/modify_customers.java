@@ -39,7 +39,6 @@ public class modify_customers extends Activity {
         inventory = new Inventory(getApplicationContext());
 
 
-        final EditText mId = (EditText)findViewById(R.id.customer_id);
         final EditText mNombre = (EditText)findViewById(R.id.customer_first_name);
         final EditText mApellido = (EditText)findViewById(R.id.customer_last_name);
         final EditText mDireccion = (EditText)findViewById(R.id.customer_address);
@@ -49,7 +48,7 @@ public class modify_customers extends Activity {
         final EditText mEmail = (EditText)findViewById(R.id.customer_email);
         Button mGuardar = (Button) findViewById(R.id.customer_save);
         Button mCancelar = (Button) findViewById(R.id.customer_cancel);
-        mId.setVisibility(View.GONE);
+
 
 
 
