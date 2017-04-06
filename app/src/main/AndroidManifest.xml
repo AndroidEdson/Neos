@@ -14,7 +14,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -56,6 +55,13 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity android:name=".add_assemblies" />
         <activity android:name=".modif_ensamble"></activity>
+        <activity
+            android:name=".Pop_up_customers"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".modify_customers"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
     </application>
 
 </manifest>

@@ -12,14 +12,6 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/etId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="@string/id"
-        android:inputType="numberDecimal"/>
-    <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
