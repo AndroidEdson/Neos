@@ -25,11 +25,12 @@ import com.azore.compustore.fiuady.db.Customers;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
+import com.guna.libmultispinner.MultiSelectionSpinner;
 
 import java.util.List;
 
 
-public class ClientesActivity extends AppCompatActivity {
+public class ClientesActivity extends AppCompatActivity implements MultiSelectionSpinner.OnMultipleItemsSelectedListener {
 
 
 
@@ -164,7 +165,11 @@ public class ClientesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-
+        String[] array = {"Nombre", "Apellido", "Dirección", "Telefono", "Email"};
+        MultiSelectionSpinner multiSelectionSpinner = (MultiSelectionSpinner) findViewById(R.id.customer_spinner);
+        multiSelectionSpinner.setItems(array);
+        multiSelectionSpinner.setSelection(new int[]{0});
+        multiSelectionSpinner.setListener(this);
 
 
 
@@ -292,5 +297,13 @@ public class ClientesActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void selectedIndices(List<Integer> indices) {
 
+    }
+
+    @Override
+    public void selectedStrings(List<String> strings) {
+        Toast.makeText(this, strings.toString(), Toast.LENGTH_LONG).show();
+    }
 }
