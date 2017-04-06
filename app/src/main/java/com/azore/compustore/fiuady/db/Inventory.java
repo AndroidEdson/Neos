@@ -50,11 +50,11 @@ class ProductCursor extends  CursorWrapper{
 class AssembliesCursor extends  CursorWrapper{
     public AssembliesCursor(Cursor cursor) {super(cursor);}
 
-  public Assemblies getAssemblies  () {
-      Cursor cursor = getWrappedCursor();
-      return new Assemblies(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Assemblies_Table.Columns.ID)),
-              cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Assemblies_Table.Columns.DESCRIPTION)));
-  }
+    public Assemblies getAssemblies  () {
+        Cursor cursor = getWrappedCursor();
+        return new Assemblies(cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Assemblies_Table.Columns.ID)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Assemblies_Table.Columns.DESCRIPTION)));
+    }
 }
 
 //***************************************************************************************************
@@ -73,15 +73,17 @@ class AssemblyProductCursor extends  CursorWrapper{
     }
 }
 
-//***************************************************************************************************
-//***************************************************************************************************
-//***************************************************************************************************
+
+
 
 //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
 
-// ASSEMBLIES CURSOR
+// CustomersCURSOR
 class CustomersCursor extends  CursorWrapper{
     public CustomersCursor(Cursor cursor) {super(cursor);}
 
@@ -495,18 +497,22 @@ public final class Inventory {
         cursor.close();
         return list;
     }
+    // FUNCION GENÉRICA PARA OBTENER EL MAXIMO ID DE CUALQUIER TABLA
+    public int getLastId(String TableName)
+    {
 
-
-       //
+        //
         Cursor cursor= (db.rawQuery("SELECT  MAX(id) FROM "+TableName, null));
 
-       cursor.moveToFirst();
+        cursor.moveToFirst();
 
         //List<Products> list = new ArrayList<Products>();
         int maxid= cursor.getInt(cursor.getColumnIndex("MAX(id)"));
         return maxid;
 
     }
+
+
 
 // FUNCION PARA AÑADIR NUEVOS ENSAMBLES
     public void AddAssemblies(int id, String description)
