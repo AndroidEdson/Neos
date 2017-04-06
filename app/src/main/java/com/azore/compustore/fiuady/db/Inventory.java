@@ -81,7 +81,7 @@ class AssemblyProductCursor extends  CursorWrapper{
 //***************************************************************************************************
 //***************************************************************************************************
 
-// ASSEMBLIES CURSOR
+// Customer CURSOR
 class CustomersCursor extends  CursorWrapper{
     public CustomersCursor(Cursor cursor) {super(cursor);}
 
@@ -496,11 +496,99 @@ public final class Inventory {
         return list;
     }
 
+//_________________________END FUNCIONES ASSEMBLIES_________________________________
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //***************************************************************************************************
+    //_________________________ FUNCIONES CUSTOMERS_________________________________________________________________________________________
+    // PRODUCTOS ALFABETICAMENTE
+
+    public List customers_alfabetic()
+    {
+
+        List<Customers> list = new ArrayList<Customers>();
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        CustomersCursor cursor = new CustomersCursor(db.query("customers",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "first_name COLLATE NOCASE ASC"));
+
+
+        while (cursor.moveToNext()){
+
+            //list.add(new Category(cursor.getInt(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.ID))),
+            //   cursor.getString(cursor.getColumnIndex((InventoryDBSchema.CategoriesTable.Columns.DESCRIPTION)))));
+
+            list.add((cursor.getCustomers()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+
+        return list;
+
+    }
+
+    // Añadir Cliente
+
+    public void AddCustomer(int id, String firstname,String lastname,String address,String Phone1,String Phone2,String Phone3,String email )
+    {
+        ///Agregar un elemento a la base de datos
+
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.ID, id);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.FIRST_NAME, firstname);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.LAST_NAME, lastname);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.ADDRESS, address);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.PHONE1, Phone1);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.PHONE2, Phone2);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.PHONE3,Phone3);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.EMAIL, email);
+
+
+        db.insert(InventoryDbSchema.Customers_Table.NAME, null, contentValues);
+
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+    // PARA ELIMINAR UN Cliente
+
+
+    public void deleteCustomer(String tableName, String i) {
+
+        db.delete(tableName, "id = ?", new String[] {i});
+    }
+
+    // ACTUALIZAR O MODIFICAR CUSTOMER
+    public  void  updateCustomer(String id, String firstname,String lastname,String address,String Phone1,String Phone2,String Phone3,String email )
+    {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.ID, id);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.FIRST_NAME, firstname);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.LAST_NAME, lastname);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.ADDRESS, address);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.PHONE1, Phone1);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.PHONE2, Phone2);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.PHONE3,Phone3);
+        contentValues.put(InventoryDbSchema.Customers_Table.Columns.EMAIL, email);
+
+        db.update(InventoryDbSchema.Customers_Table.NAME, contentValues, InventoryDbSchema.Customers_Table.Columns.ID + " = ?", new String[]{id});
+
+    }
+
+
 
 
     //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
+
+
 
 } // END FINAL DEL MUNDO UNIVERSAL DEL COSMOS

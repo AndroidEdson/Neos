@@ -42,7 +42,13 @@
         <activity
             android:name=".PopUp_Add_Assemblies"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".Pop_up_customers"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity android:name=".add_assemblies"></activity>
+        <activity
+            android:name=".modify_customers"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
     </application>
 
 </manifest>

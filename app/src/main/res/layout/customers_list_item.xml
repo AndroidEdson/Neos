@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="?android:listSeparatorTextViewStyle"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/image_customer"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_shortcut_person"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_gravity="center_vertical"
+
+        />
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:padding="10dp"
+       >
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="5dp"
+           >
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Nombre:"
+           android:textStyle="bold" />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/txt_customer_first_name"
+           android:layout_marginLeft="5dp"
+           android:text="Jorge Eduardo"
+           />
+       </LinearLayout>
+
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="5dp"
+           >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Apellido:"
+               android:textStyle="bold" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/txt_customer_last_name"
+               android:layout_marginLeft="5dp"
+               android:text="Eroza Galaz"
+               />
+       </LinearLayout>
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Dirección:"
+           android:padding="5dp"
+           android:textStyle="bold" />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/txt_customer_address"
+           android:layout_marginLeft="5dp"
+           android:text="Calle 51 numero 353 por 54 y 56 francisco de montejo"
+           />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="5dp"
+           android:id="@+id/label_tel1"
+           >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Tel 1:"
+               android:textStyle="bold" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/txt_customer_phone1"
+               android:layout_marginLeft="5dp"
+               android:text="9536262"
+               />
+       </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="5dp"
+           android:id="@+id/label_tel2"
+           >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Tel 2:"
+               android:textStyle="bold" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/txt_customer_phone2"
+               android:layout_marginLeft="5dp"
+               android:text="9536262"
+               />
+       </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="5dp"
+           android:id="@+id/label_tel3"
+           >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Tel 3:"
+               android:textStyle="bold" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/txt_customer_phone3"
+               android:layout_marginLeft="5dp"
+               android:text="9536262"
+               />
+       </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="5dp"
+           android:id="@+id/label_email"
+           >
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Email:"
+               android:textStyle="bold" />
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/txt_customer_email"
+               android:layout_marginLeft="5dp"
+               android:text="george_erosa@hotmail.com"
+               />
+       </LinearLayout>
+
+   </LinearLayout>
+
+
+</LinearLayout>
