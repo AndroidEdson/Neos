@@ -133,16 +133,14 @@ public class EnsamblesActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ( (requestCode==requestcode1 && resultCode== RESULT_OK)){
 
             final List<Assemblies> assemblies = inventory.getAssemblies_alfabetic();
             adapter= new AssembliesAdapter(assemblies,this);
             recyclerView.setAdapter(adapter);
 
-        }
-
-
     }
+
+
 
     //Hace que aparezca el icono en el App Bar
     @Override

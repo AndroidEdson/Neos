@@ -34,8 +34,6 @@ public class add_stock_products extends Activity {
     public static String EXTRA_QTY_STOCK = "com.azore.compustore.qty_stock";
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

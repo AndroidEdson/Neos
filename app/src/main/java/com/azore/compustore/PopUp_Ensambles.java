@@ -37,6 +37,7 @@ public class PopUp_Ensambles extends Activity {
     public static String EXTRA_ID_ENSAMBLE = "com.azore.compustore.id.add.assemblies.id_ensamble";
 
 
+    private int request_code1=0;
     //***************************************************************************************
     //***************************************************************************************
     //***************************************ON CREATE************************************************
@@ -69,10 +70,10 @@ public class PopUp_Ensambles extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getApplicationContext(), modif_ensamble.class);
-               // intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
-               // intent.putExtra(PopUp_products.EXTRA_ID, Integer.toString(product.getId()));
+                intent.putExtra(modif_ensamble.EXTRA_DESCRIPTION_ENSAMBLE_MODIF, name);
+                intent.putExtra(modif_ensamble.EXTRA_ID_ENSAMBLE_MODIF,id);
                // intent.putExtra(PopUp_products.EXTRA_QTY, Integer.toString(product.getQty()));
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, request_code1);
             }
         });
 
@@ -80,6 +81,15 @@ public class PopUp_Ensambles extends Activity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Intent intent_back = new Intent();
+        setResult(RESULT_OK, intent_back);
+        finish();
+
+    }
 
     //***************************************************************************************
     //***************************************************************************************
