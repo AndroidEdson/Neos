@@ -62,7 +62,6 @@ public class add_stock_products extends Activity {
       //  Toast.makeText(getApplicationContext(),id+ name,Toast.LENGTH_SHORT).show();
       final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
-
         final List<Products> products = inventory.QtyProducts(id);
         //Toast.makeText(getApplicationContext(),qty,Toast.LENGTH_SHORT).show();
 
@@ -98,6 +97,8 @@ inventory.updateQuantityProducts(id, String.valueOf(spinner.getSelectedItem().to
                 finish();
             }
         });
+
+
 
     }
 

@@ -42,7 +42,14 @@
         <activity
             android:name=".PopUp_Add_Assemblies"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".add_assemblies"></activity>
+        <activity
+            android:name=".add_stock_from_ensambles"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".PopUp_Ensambles"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".add_assemblies" />
+        <activity android:name=".modif_ensamble"></activity>
     </application>
 
 </manifest>

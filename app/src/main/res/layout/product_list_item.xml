@@ -75,7 +75,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="16dp"
-        android:text="Stock: "
+        android:text="   Stock: "
         android:textStyle="bold"
         android:layout_alignBaseline="@+id/txt_product_price"
         android:layout_alignBottom="@+id/txt_product_price"

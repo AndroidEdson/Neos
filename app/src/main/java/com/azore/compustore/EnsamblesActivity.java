@@ -17,6 +17,7 @@ import com.azore.compustore.fiuady.db.Assemblies;
 import com.azore.compustore.fiuady.db.Assembly_Products;
 import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
@@ -50,12 +51,11 @@ public class EnsamblesActivity extends AppCompatActivity {
             Assemblies assemblies=this.assemblies.get(position);
 
 
-         //   Intent intent = new Intent(getApplicationContext(), PopUp_products.class);
-         //   intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
-         //   intent.putExtra(PopUp_products.EXTRA_ID, Integer.toString(product.getId()));
-         //   intent.putExtra(PopUp_products.EXTRA_QTY, Integer.toString(product.getQty()));
-    Toast.makeText(getApplicationContext(), "works ", Toast.LENGTH_SHORT).show();
-           // startActivityForResult(intent, request_code2);
+            Intent intent = new Intent(getApplicationContext(), PopUp_Ensambles.class);
+            intent.putExtra(PopUp_Ensambles.EXTRA_DESCRIPTION_ENSAMBLE, assemblies.getDescription());
+            intent.putExtra(PopUp_Ensambles.EXTRA_ID_ENSAMBLE, Integer.toString(assemblies.getId()));
+ //   Toast.makeText(getApplicationContext(), "works ", Toast.LENGTH_SHORT).show();
+            startActivityForResult(intent, request_code2);
 
 
         }
@@ -98,7 +98,8 @@ public class EnsamblesActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AssembliesAdapter adapter;
     private Inventory inventory;
-
+    int requestcode1=0;
+    int request_code2=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,11 +113,13 @@ public class EnsamblesActivity extends AppCompatActivity {
 
 
         final List<Assemblies> assemblies = inventory.getAssemblies_alfabetic();
-
-        Toast.makeText(getApplicationContext(),  assemblies.get(1).getDescription() , Toast.LENGTH_SHORT).show();
-
         adapter= new AssembliesAdapter(assemblies,this);
         recyclerView.setAdapter(adapter);
+
+       // int lastid= inventory.getLastId(InventoryDbSchema.Products_Table.NAME);
+        //Toast.makeText(getApplicationContext(),  String.valueOf(lastid), Toast.LENGTH_SHORT).show();
+
+
 
 
     }
@@ -126,12 +129,28 @@ public class EnsamblesActivity extends AppCompatActivity {
     //************************************ END ONCREATE*********************************************
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ( (requestCode==requestcode1 && resultCode== RESULT_OK)){
+
+            final List<Assemblies> assemblies = inventory.getAssemblies_alfabetic();
+            adapter= new AssembliesAdapter(assemblies,this);
+            recyclerView.setAdapter(adapter);
+
+        }
+
+
+    }
 
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
+
+
 
 
     }
@@ -145,7 +164,7 @@ public class EnsamblesActivity extends AppCompatActivity {
                 // Codigo prueba
 
                 Intent i = new Intent(getApplicationContext(),add_assemblies.class);
-                startActivity(i);
+                startActivityForResult(i, requestcode1);
                 return true;
             // Codigo prueba
 

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.text.Editable;
 
 import java.util.ArrayList;
@@ -72,6 +73,9 @@ class AssemblyProductCursor extends  CursorWrapper{
                 cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblyProducts_Table.Columns.QUANTITY)));
     }
 }
+
+
+
 
 //***************************************************************************************************
 //***************************************************************************************************
@@ -420,7 +424,7 @@ public final class Inventory {
         db.update(InventoryDbSchema.Products_Table.NAME, values, InventoryDbSchema.Products_Table.Columns.ID + " = ?", new String[]{id});
     }
 
-    // FUNCION PARA SABER SI HAY CATEGORIAS ASIGNADAS A PRODUCTOS (PARA SABER SI PUEDEN ELIMINARSE O NO)
+    // FUNCION PARA SABER SI HAY ENSAMBLES ASIGNADAS A PRODUCTOS (PARA SABER SI PUEDEN ELIMINARSE O NO)
 
     public int ExistAssemblyWhitProduct(String id_product){
 
@@ -468,7 +472,53 @@ public final class Inventory {
         return list;
     }
 
+// FUNCION GENÉRICA PARA OBTENER EL MAXIMO ID DE CUALQUIER TABLA
+    public int getLastId(String TableName)
+    {
 
+       //
+        Cursor cursor= (db.rawQuery("SELECT  MAX(id) FROM "+TableName, null));
+
+       cursor.moveToFirst();
+
+        //List<Products> list = new ArrayList<Products>();
+        int maxid= cursor.getInt(cursor.getColumnIndex("MAX(id)"));
+        return maxid;
+
+    }
+
+// FUNCION PARA AÑADIR NUEVOS ENSAMBLES
+    public void AddAssemblies(int id, String description)
+    {
+        ///Agregar un elemento a la base de datos
+
+        db =inventoryHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Assemblies_Table.Columns.ID, id);
+        contentValues.put(InventoryDbSchema.Assemblies_Table.Columns.DESCRIPTION, description);
+        db.insert(InventoryDbSchema.Assemblies_Table.NAME, null, contentValues);
+
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+
+    // FUNCION GENERICA PARA SABER SI YA EXISTE ALGUNO ELEMETO CON ESE NOMBRE (DESCRIPTION)
+    public int NameValidationGeneric(String TableName, String name_compare)
+    {
+        int i=0;
+
+        ProductCursor cursor = new ProductCursor(db.query(TableName,
+                null,
+                "UPPER("+ "description" + ")=?",
+                new String[] {name_compare.toUpperCase()},
+                null,
+                null,
+                null));
+
+        i = cursor.getCount();
+        return i;
+    }
 
     //***************************************************************************************************
 //***************************************************************************************************
