@@ -716,6 +716,24 @@ public final class Inventory {
     }
 
 
+
+    //FUNCION PARA AÑADIR PRODUCTOS A LOS ENSAMBLES NO FAKE 100 REAL
+
+    // FUNCION PARA AÑADIR NUEVOS ENSAMBLES
+    public void AddAssemblyProduct(String id_ensamble, String product_id)
+    {
+        ///Agregar un elemento a la base de datos
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.AssemblyProducts_Table.Columns.ID, Integer.valueOf(id_ensamble));
+        contentValues.put(InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID, Integer.valueOf(product_id));
+        contentValues.put(InventoryDbSchema.AssemblyProducts_Table.Columns.QUANTITY, 1);
+
+        db.insert(InventoryDbSchema.AssemblyProducts_Table.NAME, null, contentValues);
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+
 //***************************************************************************************************
  //***************************************************************************************************
  //_________________________ FUNCIONES CUSTOMERS_________________________________________________________________________________________

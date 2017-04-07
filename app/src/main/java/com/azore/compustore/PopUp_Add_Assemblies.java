@@ -26,6 +26,8 @@ public class PopUp_Add_Assemblies extends Activity {
     ImageButton btn_delete;
     TextView txt_product_name;
     LinearLayout modif_layout;
+    LinearLayout delete_layout;
+
 
     private String       id;
     private String       name;
@@ -58,10 +60,26 @@ public class PopUp_Add_Assemblies extends Activity {
         btn_delete= (ImageButton) findViewById(R.id.pop_delete_product);
         txt_product_name= (TextView) findViewById(R.id.textview_products);
         modif_layout= (LinearLayout)findViewById(R.id.linear_modified_categorie);
+        delete_layout= (LinearLayout)findViewById(R.id.delete_layout_categories);
+
 
         txt_product_name.setText(name);
         modif_layout.setVisibility(TextView.GONE);
         inventory = new Inventory(getApplicationContext());
+
+        int aux=0;
+        aux = inventory.ExistAssemblyWhitProduct(id);
+        //Toast.makeText(getApplicationContext(), Integer.toString(aux),Toast.LENGTH_SHORT).show();
+
+        if( aux >= 1 )
+        {
+            delete_layout.setVisibility(View.GONE);
+
+
+        }
+        else {
+            delete_layout.setVisibility(View.VISIBLE);
+        }
 
 
         btn_edit.setOnClickListener(new View.OnClickListener() {

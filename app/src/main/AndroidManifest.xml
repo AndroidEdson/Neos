@@ -59,6 +59,10 @@
             android:name=".Pop_up_customers"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
+            android:name=".PopUp_add_product_Ensamble"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity android:name=".Add_Product_to_Ensamble" />
+        <activity
             android:name=".modify_customers"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
 

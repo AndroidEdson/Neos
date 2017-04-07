@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Neos.iml" filepath="$PROJECT_DIR$/Neos.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProyectoFinal.iml" filepath="$PROJECT_DIR$/ProyectoFinal.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libmultispinner/libmultispinner.iml" filepath="$PROJECT_DIR$/libmultispinner/libmultispinner.iml" />
       <module fileurl="file://$PROJECT_DIR$/libmultispinner/libmultispinner.iml" filepath="$PROJECT_DIR$/libmultispinner/libmultispinner.iml" />
     </modules>
   </component>

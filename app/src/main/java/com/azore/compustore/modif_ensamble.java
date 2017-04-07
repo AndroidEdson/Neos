@@ -65,7 +65,7 @@ public class modif_ensamble extends AppCompatActivity {
             int position = getAdapterPosition() ;
             Products product=this.Products.get(position);
 
-
+            id_product= String.valueOf(product.getId());
           Intent intent = new Intent(getApplicationContext(), PopUp_Menu_Modify_Assembly.class);
           intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_DESCRIPTION_PRODUCT, product.getDescription());
           intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_ID_PRODUCT, Integer.toString(product.getId()));
@@ -122,9 +122,11 @@ public class modif_ensamble extends AppCompatActivity {
     private Button btn_save ;
     private Button btn_cancel ;
     private EditText new_description;
+    int requestcode3=0;
 
     private String name_description;
     private String id;
+    private String id_product;
     private TextView txt_change;
 
     public static String EXTRA_DESCRIPTION_ENSAMBLE_MODIF = "com.azore.compustore.id.add.assemblies.description_ensamble.modif";
@@ -232,6 +234,13 @@ public class modif_ensamble extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
+
+                Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
+                intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT,id_product);
+                intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, name_description);
+                intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, id);
+                startActivityForResult(intent, requestcode3);
+
 
 
                 return true;

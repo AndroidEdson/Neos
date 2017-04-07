@@ -137,6 +137,9 @@ public class add_assemblies extends AppCompatActivity {
         final List<Products> products = inventory.products_alfabetic();
 
 
+
+
+
      //   Toast.makeText(getApplicationContext(), products.get(1).getDescription(), Toast.LENGTH_SHORT).show();
         adapter = new ProductsAdapter(products, this);
         recyclerView.setAdapter(adapter);
