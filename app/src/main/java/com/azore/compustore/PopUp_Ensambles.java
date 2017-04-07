@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.InventoryDbSchema;
 
 /**
  * Created by Armín on 05/04/2017.
@@ -34,7 +35,7 @@ public class PopUp_Ensambles extends Activity {
 
     private  LinearLayout quitar_stock;
     private  LinearLayout quitar_eliminar;
-
+    private  int request_code4=1;
 
     public static String EXTRA_DESCRIPTION_ENSAMBLE = "com.azore.compustore.id.add.assemblies.description_ensamble";
     public static String EXTRA_ID_ENSAMBLE = "com.azore.compustore.id.add.assemblies.id_ensamble";
@@ -97,11 +98,10 @@ public class PopUp_Ensambles extends Activity {
             @Override
             public void onClick(View v) {
 
-                inventory.deleteAssemblies(id);
-                Intent intent_back = new Intent();
-                setResult(RESULT_OK, intent_back);
-                Toast.makeText(getApplicationContext(), "Ensamble Eliminado", Toast.LENGTH_SHORT).show();
-                finish();
+                Intent intent = new Intent(getApplicationContext(), delete_confirmation.class);
+                // intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
+                startActivityForResult(intent, request_code4);
+
 
             }
         });
@@ -114,10 +114,17 @@ public class PopUp_Ensambles extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Intent intent_back = new Intent();
-        setResult(RESULT_OK, intent_back);
-        finish();
+        if ((requestCode == request_code4) && (resultCode == RESULT_OK)) {
 
+            inventory.deleteAssemblies(id);
+            Intent intent_back = new Intent();
+            setResult(RESULT_OK, intent_back);
+            finish();
+            Toast.makeText(getApplicationContext(), "Ensamble Eliminado ", Toast.LENGTH_SHORT).show();
+
+        }
+
+        finish();
     }
 
     //***************************************************************************************

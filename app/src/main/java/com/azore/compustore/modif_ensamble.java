@@ -20,6 +20,7 @@ import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class modif_ensamble extends AppCompatActivity {
@@ -66,16 +67,17 @@ public class modif_ensamble extends AppCompatActivity {
             Products product=this.Products.get(position);
 
             id_product= String.valueOf(product.getId());
-          Intent intent = new Intent(getApplicationContext(), PopUp_Menu_Modify_Assembly.class);
-          intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_DESCRIPTION_PRODUCT, product.getDescription());
-          intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_ID_PRODUCT, Integer.toString(product.getId()));
-          intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_QTY_PRODUCT, Integer.toString(product.getQty()));
+            name_product= product.getDescription();
+
+            Intent intent = new Intent(getApplicationContext(), PopUp_Menu_Modify_Assembly.class);
+            intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_DESCRIPTION_PRODUCT, product.getDescription());
+            intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_ID_PRODUCT, Integer.toString(product.getId()));
+            intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_QTY_PRODUCT, Integer.toString(product.getQty()));
             intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_DESCRIPTION_ENSAMBLE, name_description);
             intent.putExtra(PopUp_Menu_Modify_Assembly.EXTRA_ID_ENSAMBLE, id);
            // Toast.makeText(getApplicationContext(), id+ " " + name_description, Toast.LENGTH_SHORT).show();
 
             startActivityForResult(intent,request_code2);
-
 
         }
 
@@ -94,7 +96,7 @@ public class modif_ensamble extends AppCompatActivity {
 
         @Override
         public ProductsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.product_list_item,parent,false);
+            View view = getLayoutInflater().inflate(R.layout.product_list_item_with_qty,parent,false);
             return new ProductsHolder(view,context,products);
         }
 
@@ -107,6 +109,17 @@ public class modif_ensamble extends AppCompatActivity {
         public int getItemCount() {
             return products.size();
         }
+
+        public void clear() {
+            int size = this.products.size();
+            if (size > 0) {
+                for (int i = 0; i < size; i++) {
+                    this.products.remove(0);
+                }
+                this.notifyItemRangeRemoved(0, size);
+            }
+        }
+
     }
 
     //____________________________________________________________________________________
@@ -127,6 +140,9 @@ public class modif_ensamble extends AppCompatActivity {
     private String name_description;
     private String id;
     private String id_product;
+    private String name_product;
+    private List<String> new_products;
+
     private TextView txt_change;
 
     public static String EXTRA_DESCRIPTION_ENSAMBLE_MODIF = "com.azore.compustore.id.add.assemblies.description_ensamble.modif";
@@ -143,10 +159,13 @@ public class modif_ensamble extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assemblies);
 
+
+        new_products= new ArrayList<String>();
         Intent i = getIntent();
         name_description= i.getStringExtra(EXTRA_DESCRIPTION_ENSAMBLE_MODIF);
         id=i.getStringExtra(EXTRA_ID_ENSAMBLE_MODIF);
         getSupportActionBar().setTitle(name_description);
+
 
 
         inventory = new Inventory(getApplicationContext());
@@ -159,8 +178,14 @@ public class modif_ensamble extends AppCompatActivity {
 
         new_description.setText(null);
         new_description.setHint("Nueva descripción");
+        new_description.setText(name_description);
 
         List<Products> products =inventory.getProductsAssembly(id);
+        for (int j=0; j<products.size(); j++)
+        {
+            new_products.add(String.valueOf(products.get(j).getId()));
+        }
+
         adapter = new ProductsAdapter(products, getApplicationContext());
         recyclerView.setAdapter(adapter);
 
@@ -198,7 +223,21 @@ public class modif_ensamble extends AppCompatActivity {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                 // Toast.makeText(getApplicationContext(),new_products.get(1)+ " " + new_products.get(2)+ " " +new_products.get(3), Toast.LENGTH_LONG).show();
+                List<Products> products = inventory.getProductsAssembly(id);
+                inventory.deleteAssemblies(id);
+                inventory.AddAssemblies(Integer.valueOf(id), name_description);
+                for (int i=0; i<new_products.size(); i++ )
+                {
+                    if (new_products.get(i)!=null) {
+                        inventory.AddAssemblyProduct(id, new_products.get(i));
+                    }
+                }
+
                 finish();
+                Toast.makeText(getApplicationContext(), "No se realizaron modificaciones", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -213,10 +252,19 @@ public class modif_ensamble extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-       // Toast.makeText(getApplicationContext(),"UPDATED", Toast.LENGTH_LONG).show();
-        List<Products> products =inventory.getProductsAssembly(id);
-        adapter = new ProductsAdapter(products, getApplicationContext());
-        recyclerView.setAdapter(adapter);
+        if ((requestCode == request_code2) && (resultCode == RESULT_OK)) {
+
+        //    new_products.add(data.getDataString());
+          //  Toast.makeText(getApplicationContext(),new_products.get(new_products.size()), Toast.LENGTH_LONG).show();
+
+        }
+
+            List<Products> products = inventory.getProductsAssembly(id);
+            adapter.clear();
+            adapter = new ProductsAdapter(products, getApplicationContext());
+            recyclerView.setAdapter(adapter);
+
+
 
     }
 
@@ -237,6 +285,8 @@ public class modif_ensamble extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
                 intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT,id_product);
+                intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT,name_product);
+
                 intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, name_description);
                 intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, id);
                 startActivityForResult(intent, requestcode3);

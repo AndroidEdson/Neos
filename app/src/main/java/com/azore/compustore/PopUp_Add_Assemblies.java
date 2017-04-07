@@ -67,20 +67,6 @@ public class PopUp_Add_Assemblies extends Activity {
         modif_layout.setVisibility(TextView.GONE);
         inventory = new Inventory(getApplicationContext());
 
-        int aux=0;
-        aux = inventory.ExistAssemblyWhitProduct(id);
-        //Toast.makeText(getApplicationContext(), Integer.toString(aux),Toast.LENGTH_SHORT).show();
-
-        if( aux >= 1 )
-        {
-            delete_layout.setVisibility(View.GONE);
-
-
-        }
-        else {
-            delete_layout.setVisibility(View.VISIBLE);
-        }
-
 
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +75,7 @@ public class PopUp_Add_Assemblies extends Activity {
                    Intent intent = new Intent(getApplicationContext(), add_stock_from_ensambles.class);
                   // intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
                    intent.putExtra(add_stock_from_ensambles.EXTRA_ID_ADD_ASSEMBLIES_STOCK, String.valueOf(id));
-                   intent.putExtra(add_stock_from_ensambles.EXTRA_QTY_ADD_ASSEMBLIES_STOCK, String.valueOf(qty));
+                       intent.putExtra(add_stock_from_ensambles.EXTRA_QTY_ADD_ASSEMBLIES_STOCK, String.valueOf(qty));
                  startActivityForResult(intent, request_code3);
             }
         });
@@ -124,7 +110,8 @@ public class PopUp_Add_Assemblies extends Activity {
 
         if ( (requestCode==request_code4 && resultCode== RESULT_OK))
         {
-            inventory.delteProduct(InventoryDbSchema.Products_Table.NAME, id);
+            int last_id_ensamble = inventory.getLastId(InventoryDbSchema.Assemblies_Table.NAME);
+            inventory.deleteProductFromEnsambly(String.valueOf(last_id_ensamble), id);
             Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
             Intent intent_back = new Intent();
             setResult(RESULT_OK, intent_back);

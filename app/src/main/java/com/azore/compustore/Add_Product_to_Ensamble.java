@@ -3,6 +3,7 @@ package com.azore.compustore;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -74,8 +75,9 @@ public class Add_Product_to_Ensamble extends AppCompatActivity  implements Searc
 
 
             Intent intent = new Intent(getApplicationContext(), PopUp_add_product_Ensamble.class);
-            intent.putExtra(PopUp_add_product_Ensamble.EXTRA_ID_PRODUCT_ASSEMBLY, product.getDescription());
-            intent.putExtra(PopUp_add_product_Ensamble.EXTRA_ID_ASSEMBLY, Integer.toString(product.getId()));
+            intent.putExtra(PopUp_add_product_Ensamble.EXTRA_DESCRIPTION_PRODUCT, product.getDescription());
+            intent.putExtra(PopUp_add_product_Ensamble.EXTRA_ID_PRODUCT_ASSEMBLY, String.valueOf(product.getId()));
+            intent.putExtra(PopUp_add_product_Ensamble.EXTRA_ID_ASSEMBLY, id_ensambles);
 //            intent.putExtra(PopUp_add_product_Ensamble.EXTRA_QTY, Integer.toString(product.getQty()));
 
             startActivityForResult(intent, request_code2);
@@ -117,9 +119,11 @@ public class Add_Product_to_Ensamble extends AppCompatActivity  implements Searc
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //:::::::::::::::::::::::::::VARIABLES  ::::::::::::::::::::::::::::::::::::
- public static String EXTRA_DESCRIPTION_ASSEMBLY ="com.azore.compustore.descripption" ;
+    public static String EXTRA_DESCRIPTION_ASSEMBLY ="com.azore.compustore.descripption" ;
     public static String EXTRA_ID_ASSEMBLY ="com.azore.compustore.id_assembly" ;
     public static String EXTRA_ID_PRODUCT ="com.azore.compustore.id_produt";
+    public static String EXTRA_DESCRIPTION_PRODUCT ="com.azore.compustore.description_produt";
+
 
 
     private RecyclerView recyclerView;
@@ -133,6 +137,12 @@ public class Add_Product_to_Ensamble extends AppCompatActivity  implements Searc
     public int PosicionSpinner;
     private List<Products> productos_pr;
 
+    String id_product;
+    String id_ensambles;
+    String name_product;
+    String name_ensamble;
+    String product_add_flag;
+
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     //:::::::::::::::::::::::::::ON CREATE :::::::::::::::::::::::::::::::::::::
@@ -143,9 +153,18 @@ public class Add_Product_to_Ensamble extends AppCompatActivity  implements Searc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
-        getSupportActionBar().setTitle("Agregar producto");
 
         inventory = new Inventory(getApplicationContext());
+
+        Intent i = getIntent();
+        id_ensambles= i.getStringExtra(EXTRA_ID_ASSEMBLY);
+        id_product= i.getStringExtra(EXTRA_ID_PRODUCT);
+
+        name_ensamble= i.getStringExtra(EXTRA_DESCRIPTION_ASSEMBLY);
+        name_product= i.getStringExtra(EXTRA_DESCRIPTION_ASSEMBLY);
+
+
+        getSupportActionBar().setTitle("Agregar producto a "+ name_ensamble);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_products);
@@ -335,25 +354,15 @@ public class Add_Product_to_Ensamble extends AppCompatActivity  implements Searc
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ( (requestCode==request_code2 && resultCode== RESULT_OK)) {
-            int aux = categoriesSpinner.getSelectedItemPosition();
-            inventory = new Inventory(getApplicationContext());
-            if (aux == 0) {
-                final List<Products> products = inventory.products_alfabetic();
-                adapter= new ProductsAdapter(products,getApplicationContext());
-            } else
-            {
-                // products
-                final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
-                final List<Products> products = inventory.categoryFilters( String.valueOf(categoriesProduct.get(aux-1).getId()));
-                adapter= new ProductsAdapter(products,getApplicationContext());
-                //Toast.makeText(getApplicationContext(), categoriesProduct.get(aux+1).getDescription() , Toast.LENGTH_SHORT).show();
-            }
-            recyclerView.setAdapter(adapter);
-
+        if ((requestCode == request_code2) && (resultCode == RESULT_OK)) {
+            Intent intent_back = new Intent();
+            product_add_flag=data.getDataString();
+            intent_back.setData(Uri.parse(product_add_flag));
+            setResult(RESULT_OK, intent_back);
+         //   Toast.makeText(getApplicationContext(), "Producto Agregado  ", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), product_add_flag, Toast.LENGTH_SHORT).show();
+            finish();
         }
-
-        else {}
     }
 
     //SearchView

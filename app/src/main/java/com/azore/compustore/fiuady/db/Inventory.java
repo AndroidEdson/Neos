@@ -623,9 +623,9 @@ public final class Inventory {
         String query_macizo = "SELECT p.id, p.category_id, p.description, p.price, ap.qty FROM assemblies a " +
                 "INNER JOIN assembly_products ap ON (a.id = ap.id) " +
                 "INNER JOIN products p ON (p.id=ap.product_id) " +
-                "WHERE a.id=" + id_ensamble;
+                "WHERE a.id=" + id_ensamble + " ORDER BY p.description ASC";
+        ProductCursor cursor1 = new ProductCursor(db.rawQuery(query_macizo, null));
         ProductCursor cursor = new ProductCursor(db.rawQuery(query_macizo, null));
-
 
         while (cursor.moveToNext()) {
             list.add((cursor.getProduct()));

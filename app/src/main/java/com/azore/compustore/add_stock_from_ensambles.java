@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.InventoryDbSchema;
 
 /**
  * Created by Armín on 05/04/2017.
@@ -50,6 +51,8 @@ public class add_stock_from_ensambles extends Activity {
 
 
         Intent i = getIntent();
+
+
         inventory = new Inventory(getApplicationContext());
         save_stock=(Button)findViewById(R.id.btn_stock_add);
         cancel_stock=(Button)findViewById(R.id.btn_cancel_Stock);
@@ -58,8 +61,8 @@ public class add_stock_from_ensambles extends Activity {
         txt_tag_stock = (TextView) findViewById( R.id.textView_tag_stock);
 
 
-        txt_add_product.setText("Agregar a ");
-        txt_tag_stock.setText("           Stock:       ");
+        txt_add_product.setText("Agregar a Ensamble");
+        txt_tag_stock.setText("           Num:     ");
 
 
         id=i.getStringExtra(EXTRA_ID_ADD_ASSEMBLIES_STOCK);
@@ -68,7 +71,7 @@ public class add_stock_from_ensambles extends Activity {
 
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
-        for (int u=0; u<15; u++)
+        for (int u=0; u<20; u++)
         {
             spinner_adapter.add(String.valueOf(u+1));
 
@@ -83,10 +86,11 @@ public class add_stock_from_ensambles extends Activity {
 
                 int new_qty = 0;
                  new_qty= Integer.valueOf(qty)+ Integer.valueOf(spinner.getSelectedItem().toString());
-                inventory.updateQuantityProducts(id, String.valueOf(new_qty));
+                int id_ensamble= inventory.getLastId(InventoryDbSchema.Assemblies_Table.NAME);
+                inventory.updateAssemblyProduct(String.valueOf(id_ensamble),id,new_qty );
                 Intent intent_back = new Intent();
                 setResult(RESULT_OK, intent_back);
-                Toast.makeText(getApplicationContext(),"Productos agregados, exitosamente",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Cantidad de producto agregada",Toast.LENGTH_SHORT).show();
                 finish();
 
             }
