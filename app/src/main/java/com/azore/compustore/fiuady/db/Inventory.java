@@ -798,7 +798,39 @@ public final class Inventory {
 
  }
 
+//buscar
+public List<Customers> searchCustomers(String input,boolean first_name,boolean last_name,boolean address
+        ,boolean phone,boolean email) {
+    List<Customers> list = new ArrayList<Customers>();
+    String first_name_str;
+    String last_name_str;
+    String address_name_str;
+    String phone_name_str;
+    String email_str;
 
+        if (first_name == true) first_name_str = "first_name LIKE '%" + input + "%'"; else first_name_str="id < 0 ";
+        if (last_name == true) last_name_str = "OR last_name LIKE '%" + input + "%'"; else last_name_str="";
+        if (address == true) address_name_str = "OR address LIKE '%" + input + "%'"; else address_name_str="";
+        if (phone == true) phone_name_str = "OR phone1 LIKE '%" + input + "%' OR phone2 LIKE '%" + input + "%' OR phone3 LIKE '%" + input + "%'"; else phone_name_str="";
+        if (email == true) email_str = "OR e_mail LIKE '%" + input + "%'"; else email_str="";
+        if((first_name||last_name||address||phone||email) != true)  first_name_str="id > 0 ";
+
+
+        CustomersCursor cursor = new CustomersCursor((db.rawQuery("SELECT * FROM customers WHERE ("
+                + first_name_str + last_name_str + address_name_str + phone_name_str
+                + email_str +
+                ") ORDER BY first_name ASC", null))
+        );
+
+
+
+    while (cursor.moveToNext()) {
+        list.add((cursor.getCustomers()));  // metodo wrappcursor
+
+    }
+    cursor.close();
+    return list;
+}
 
 
 
@@ -806,6 +838,27 @@ public final class Inventory {
  //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
+// ______________________________________END CUSTOMERS_________________________________________________________
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+//_________________________ FUNCIONES ORDERS _________________________________________________________________________________________
+ public int ExistCustomersWhitOrders(String id_customer){
+
+     int i=0;
+     CustomersCursor cursor = new CustomersCursor(db.query(InventoryDbSchema.Orders_Table.NAME,
+             null,
+             InventoryDbSchema.Orders_Table.Columns.COSTUMER_ID + "=?",
+             new String[] {id_customer},
+             null,
+             null,
+             null));
+
+     i = cursor.getCount();
+     return i;
+
+ }
 
 //***************************************************************************************************
 } // END FINAL DEL MUNDO UNIVERSAL DEL COSMOS

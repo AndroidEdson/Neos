@@ -3,11 +3,13 @@ package com.azore.compustore;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +32,7 @@ import com.guna.libmultispinner.MultiSelectionSpinner;
 import java.util.List;
 
 
-public class ClientesActivity extends AppCompatActivity implements MultiSelectionSpinner.OnMultipleItemsSelectedListener {
+public class ClientesActivity extends AppCompatActivity implements MultiSelectionSpinner.OnMultipleItemsSelectedListener,SearchView.OnQueryTextListener {
 
 
 
@@ -47,6 +49,7 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
         private LinearLayout linealphone2;
         private LinearLayout linealphone3;
         private LinearLayout linealemail;
+
 
 
 
@@ -146,6 +149,11 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
     private Inventory inventory;
     private AlertDialog dialogShow ;
     private final int request_code=0;
+    public boolean chkNombre = true;
+    public boolean chkApellido = false;
+    public boolean chkDireccion = false;
+    public boolean chkph = false;
+    public boolean chkemail = false;
 
 
 //__________________________________________________________
@@ -172,7 +180,6 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
         multiSelectionSpinner.setListener(this);
 
 
-
     }
 
 
@@ -181,7 +188,8 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu2,menu);
         MenuItem menuItem = menu.findItem(R.id.buscar);
-
+        SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -299,11 +307,30 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
     }
     @Override
     public void selectedIndices(List<Integer> indices) {
-
+        if(indices.contains(0))chkNombre=true; else chkNombre=false;
+        if(indices.contains(1)) chkApellido=true; else chkApellido=false;
+        if(indices.contains(2)) chkDireccion=true; else chkDireccion=false;
+        if(indices.contains(3)) chkph=true; else chkph=false;
+        if(indices.contains(4)) chkemail=true; else chkemail=false;
     }
 
     @Override
     public void selectedStrings(List<String> strings) {
-        Toast.makeText(this, strings.toString(), Toast.LENGTH_LONG).show();
+
+    }
+    //SearchView
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        onQueryTextChange(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        final List<Customers> customers = inventory.searchCustomers(newText,chkNombre,chkApellido,chkDireccion,chkph,chkemail);
+        adapter = new ClientesActivity.ClientesAdapter(customers, getApplicationContext());
+        recyclerView.setAdapter(adapter);
+        return false;
     }
 }

@@ -64,9 +64,9 @@ public class Pop_up_customers extends Activity{
 
         delete_layout= (LinearLayout)findViewById(R.id.delete_layout_categories);
         // PARA CLASIFICAR CUALES TENDRAN OPCION ELIMINAR
-        //aux = inventory.ExistAssemblyWhitProduct(id);
+        aux = inventory.ExistCustomersWhitOrders(id);
         //Toast.makeText(getApplicationContext(), Integer.toString(aux),Toast.LENGTH_SHORT).show();
-/*
+
         if( aux >= 1 )
         {
             delete_layout.setVisibility(View.GONE);
@@ -78,7 +78,7 @@ public class Pop_up_customers extends Activity{
             delete_layout.setVisibility(View.VISIBLE);
         }
 
-*/
+
 
 
         btn_delete.setOnClickListener(new View.OnClickListener() {
