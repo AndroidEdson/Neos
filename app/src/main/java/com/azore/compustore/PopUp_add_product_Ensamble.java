@@ -86,14 +86,29 @@ public class PopUp_add_product_Ensamble extends Activity {
             @Override
             public void onClick(View v) {
 
-                inventory.AddAssemblyProduct(id_ensamble,id_product);
-              //  Toast.makeText(getApplicationContext(), id_ensamble + "  " + id_product, Toast.LENGTH_LONG).show();
+                int flag=0;
+                    flag= inventory.getNumberOfProductsOnEnsamblyActual(id_ensamble, id_product);
+
+
+                if (flag >=1)
+                {
+                    int new_qty = 0;
+                    new_qty=  Integer.valueOf(flag) +1;
+                    //  Toast.makeText(getApplicationContext(),"id_pro: "+id_product+ " id_ens:  "+ id_assembly+" qty: "+ String.valueOf(new_qty),Toast.LENGTH_LONG).show();
+                    inventory.updateAssemblyProduct(id_ensamble, id_product, new_qty);
+
+                }else
+                {
+                   inventory.AddAssemblyProduct(id_ensamble, id_product);
+                 //     Toast.makeText(getApplicationContext(), id_ensamble + " ENTRE " + id_product, Toast.LENGTH_LONG).show();
+
+                }
+
                 Intent intent_back = new Intent();
                 intent_back.setData(Uri.parse(id_product));
                 setResult(RESULT_OK, intent_back);
-                intent_back.setData(Uri.parse(id_product));
-               // intent_back.putExtra(KEY_PRODUCT_ADD, id_product);
-                Toast.makeText(getApplicationContext(),"Producto Agregado  ",Toast.LENGTH_SHORT).show();
+                // intent_back.putExtra(KEY_PRODUCT_ADD, id_product);
+                Toast.makeText(getApplicationContext(), "Producto Agregado  ", Toast.LENGTH_SHORT).show();
                 finish();
 
             }

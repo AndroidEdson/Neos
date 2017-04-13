@@ -114,6 +114,7 @@ public class add_assemblies extends AppCompatActivity {
     private Button btn_cancel ;
     private EditText new_description;
     private  int lastid;
+    private  String original_name="";
 
     //***************************************************************************
     //***************************************************************************
@@ -155,10 +156,10 @@ public class add_assemblies extends AppCompatActivity {
                 else
                 {
                     inventory.updateAssemblies(String.valueOf(lastid), new_description.getText().toString());
+                    finish();
+                    Toast.makeText(getApplicationContext(), "Agregado Exitosamente",Toast.LENGTH_SHORT).show();
                 }
 
-                finish();
-                Toast.makeText(getApplicationContext(), "Agregado Exitosamente",Toast.LENGTH_SHORT).show();
 
 
             }
@@ -197,22 +198,17 @@ public class add_assemblies extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
-
-                int aux = inventory.NameValidationGeneric(InventoryDbSchema.Assemblies_Table.NAME,new_description.getText().toString() );
+                int aux=0;
+                 aux = inventory.NameValidationGeneric(InventoryDbSchema.Assemblies_Table.NAME,new_description.getText().toString() );
                 if (new_description.getText().toString().equals(""))
                 {
                     Toast.makeText(getApplicationContext(), "Ingrese Nombre del ensamble",Toast.LENGTH_SHORT).show();
                 }else
             {
 
-                if(aux>=1){
+                if(original_name.equals(new_description.getText().toString())) {
 
-                    Toast.makeText(getApplicationContext(), "Ya existe un ensamble con ese nombre",Toast.LENGTH_SHORT).show();
-
-                }
-               else {
-                    inventory.AddAssemblies(lastid, new_description.getText().toString());
-
+                    //inventory.AddAssemblies(lastid, new_description.getText().toString());
                     Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
 
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");
@@ -221,9 +217,26 @@ public class add_assemblies extends AppCompatActivity {
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, new_description.getText().toString());
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, String.valueOf(lastid));
                     startActivityForResult(intent, request_code2);
+
+                }   else {
+                    if (aux >= 1) {
+
+                        Toast.makeText(getApplicationContext(), "Ya existe un ensamble con ese nombre", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        inventory.AddAssemblies(lastid, new_description.getText().toString());
+
+                        Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
+
+                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");
+                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT, "");
+
+                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, new_description.getText().toString());
+                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, String.valueOf(lastid));
+                        startActivityForResult(intent, request_code2);
+                    }
+
                 }
-
-
             }
             // Codigo prueba
 
@@ -240,6 +253,7 @@ public class add_assemblies extends AppCompatActivity {
         adapter = new ProductsAdapter(products, getApplicationContext());
         recyclerView.setAdapter(adapter);
 
+        original_name=new_description.getText().toString();
 
         //if ((requestCode == request_code2 && resultCode == RESULT_OK)) {
 

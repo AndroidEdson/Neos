@@ -2,6 +2,7 @@ package com.azore.compustore;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,93 +13,127 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.azore.compustore.fiuady.db.Assemblies;
 import com.azore.compustore.fiuady.db.Inventory;
+import com.azore.compustore.fiuady.db.OrdenesUnion;
 import com.azore.compustore.fiuady.db.Orders;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class OrdenesActivity extends AppCompatActivity   {
-    private class OrdenesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    // ****************************************INICIO DE RECYCLER*****************************************************
+
+    private class OrdenesUnionHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView txtId;
+        private TextView txtName;
+        private TextView txtStatus;
+        private TextView txtCost;
+        private TextView txtDate;
 
         Context context;
-        private List<Orders> Ordenes;
+        private List<OrdenesUnion> ordenesUnions;
 
-        public OrdenesHolder(View itemView, Context context, List<Orders> ordenes){
+        public OrdenesUnionHolder(View itemView, Context context, List<OrdenesUnion> ordenesUnions){
+
             super(itemView);
             this.context= context;
-            this.Ordenes= ordenes;
+            this.ordenesUnions= ordenesUnions;
             itemView.setOnClickListener(this);
-           // txtFirstName= (TextView) itemView.findViewById(R.id.txt_customer_first_name);
+
+            txtId= (TextView) itemView.findViewById(R.id.txt_id_orden);
+            txtName= (TextView) itemView.findViewById(R.id.txt_name_customer_orden);
+            txtStatus= (TextView) itemView.findViewById(R.id.txt_status_ordenes);
+            txtCost= (TextView) itemView.findViewById(R.id.txt_costo_ordenes);
+            txtDate= (TextView) itemView.findViewById(R.id.txt_date_ordenes);
+
+
+
+
 
         }
 
-        public void bindOrdenes(Orders orders){
-          /*  txtFirstName.setText(customer.getFirst_name());
-            txtLastName.setText(customer.getLast_name());
-            txtAddress.setText(customer.getAddress());
-            txtPhone1.setText(customer.getPhone1());
-            txtPhone2.setText(customer.getPhone2());
-            txtPhone3.setText(customer.getPhone3());
-            txtEmail.setText(customer.getEmail());*/
+        public void bindCategories(OrdenesUnion ordenesUnion){
+            txtId.setText(String.valueOf(ordenesUnion.getId()));
+            txtName.setText(ordenesUnion.getLast_name() + " " + ordenesUnion.getFirst_name());
+            txtStatus.setText(ordenesUnion.getStatus_description());
+            txtCost.setText(Double.toString(( ordenesUnion.getCosto()/100)));
+
+           // Double.toString((double) product.getPrice()/100)
+         //   Date cDate = new Date();
+          //  String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+
+            txtDate.setText(ordenesUnion.getDate());
+
+
         }
 
 
         @Override
         public void onClick(View v) {
-           /* int position = getAdapterPosition() ;
-            Customers customer= this.customers.get(position);
+            int position = getAdapterPosition() ;
+            OrdenesUnion ordenesUnion=this.ordenesUnions.get(position);
 
-            Intent intent = new Intent(getApplicationContext(), Pop_up_customers.class);
-            intent.putExtra(Pop_up_customers.EXTRA_Customer_ID, Integer.toString(customer.getId()));
-            intent.putExtra(Pop_up_customers.EXTRA_First_Name, customer.getFirst_name());
-            startActivityForResult(intent, request_code);
-            */
+//
+          //  Intent intent = new Intent(getApplicationContext(), PopUp_Ensambles.class);
+          //  intent.putExtra(PopUp_Ensambles.EXTRA_DESCRIPTION_ENSAMBLE, assemblies.getDescription());
+          //  intent.putExtra(PopUp_Ensambles.EXTRA_ID_ENSAMBLE, Integer.toString(assemblies.getId()));
+          //  //   Toast.makeText(getApplicationContext(), "works ", Toast.LENGTH_SHORT).show();
+          //  startActivityForResult(intent, request_code2);
+
 
         }
 
     }
 
 
-    private  class OrdenesAdapter extends  RecyclerView.Adapter<OrdenesActivity.OrdenesHolder>{
-        private List<Orders> ordenes;
+    private  class OrdenesUnionAdapter extends  RecyclerView.Adapter< OrdenesUnionHolder >{
+        private List<OrdenesUnion> ordenesUnions;
         Context context;
 
-        public OrdenesAdapter(List<Orders> ordenes, Context context){
-            this.ordenes=ordenes;
+        public OrdenesUnionAdapter(List<OrdenesUnion> ordenesUnions, Context context){
+            this.ordenesUnions=ordenesUnions;
             this.context=context;
         }
 
 
         @Override
-        public OrdenesActivity.OrdenesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.customers_list_item,parent,false);
-            return new OrdenesActivity.OrdenesHolder(view,context,ordenes);
+        public OrdenesUnionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.ordenesunion_list_item,parent,false);
+            return new OrdenesUnionHolder(view, context, ordenesUnions);
         }
 
         @Override
-        public void onBindViewHolder(OrdenesActivity.OrdenesHolder holder, int position) {
-            holder.bindOrdenes(ordenes.get(position));
+        public void onBindViewHolder(OrdenesUnionHolder holder, int position) {
+            holder.bindCategories(ordenesUnions.get(position));
+
         }
 
         @Override
         public int getItemCount() {
-            return ordenes.size();
+            return ordenesUnions.size();
         }
     }
 
+    // ****************************************END  DE RECYCLER*****************************************************
+
+
+    // **************************************** VARIABLES ****************************************************
+
+
     private RecyclerView recyclerView;
-    private OrdenesActivity.OrdenesAdapter adapter;
+    private OrdenesUnionAdapter adapter;
     private Inventory inventory;
     private AlertDialog dialogShow ;
     private final int request_code=0;
-    public boolean chkNombre = true;
-    public boolean chkApellido = false;
-    public boolean chkDireccion = false;
-    public boolean chkph = false;
-    public boolean chkemail = false;
 
+    // ******************************************************************************************************
 
-//__________________________________________________________
+    // **************************************** ON CREATE  ****************************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +141,14 @@ public class OrdenesActivity extends AppCompatActivity   {
         setContentView(R.layout.activity_clientes);
         //Cambiar texto de App bar
         getSupportActionBar().setTitle("Ordenes");
+
         inventory = new Inventory(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_customers);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         inventory = new Inventory(getApplicationContext());
-        final List<Orders> ordenes = inventory.customers_alfabetic();
-        adapter = new OrdenesActivity.OrdenesAdapter(ordenes, this);
+
+        final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
+        adapter = new OrdenesUnionAdapter(ordenes_union, this);
         recyclerView.setAdapter(adapter);
 
     }

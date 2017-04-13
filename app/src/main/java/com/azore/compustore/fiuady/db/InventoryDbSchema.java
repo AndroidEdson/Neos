@@ -126,5 +126,23 @@ public final class InventoryDbSchema {
     }
 
 
+
+    public static final class OrdenesUnion_Table {
+
+        public static final class Columns {
+            public static final String ID = "id";
+            public static final String ID_STATUS = "id_status";
+            public static final String STATUS_DESCRIPTION = "status_description";
+            public static final String ID_CUSTOMER = "id_customer";
+            public static final String FIRST_NAME = "first_name";
+            public static final String LAST_NAME = "last_name";
+            public static final String COSTO = "costo";
+            public static final String DATE = "date";
+
+        }
+    }
+
+
+
 //FIN DE LAS TABLAS______________________________________________________________________________
 }

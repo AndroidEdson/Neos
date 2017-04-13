@@ -142,6 +142,8 @@ public class modif_ensamble extends AppCompatActivity {
     private String id_product;
     private String name_product;
     private List<String> new_products;
+    private List<String> qty_original;
+
 
     private TextView txt_change;
 
@@ -161,6 +163,8 @@ public class modif_ensamble extends AppCompatActivity {
 
 
         new_products= new ArrayList<String>();
+        qty_original= new ArrayList<String>();
+
         Intent i = getIntent();
         name_description= i.getStringExtra(EXTRA_DESCRIPTION_ENSAMBLE_MODIF);
         id=i.getStringExtra(EXTRA_ID_ENSAMBLE_MODIF);
@@ -184,6 +188,7 @@ public class modif_ensamble extends AppCompatActivity {
         for (int j=0; j<products.size(); j++)
         {
             new_products.add(String.valueOf(products.get(j).getId()));
+            qty_original.add(String.valueOf(products.get(j).getQty()));
         }
 
         adapter = new ProductsAdapter(products, getApplicationContext());
@@ -203,19 +208,32 @@ public class modif_ensamble extends AppCompatActivity {
 
                 }
                 else {
-                    if (aux >= 1) {
-                        Toast.makeText(getApplicationContext(),"Ya existe un ensamble con esa descripción",Toast.LENGTH_SHORT).show();
 
-                    }else {
-
+                    if(name_description.equals(new_description.getText().toString()))
+                    {
                         inventory.updateAssemblies(id, new_description.getText().toString());
                         Intent intent_back = new Intent();
                         setResult(RESULT_OK, intent_back);
                         Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
                         finish();
-                    }
-                }
+                    }else{
 
+                        if (aux >= 1) {
+                            Toast.makeText(getApplicationContext(),"Ya existe un ensamble con esa descripción",Toast.LENGTH_SHORT).show();
+
+                        }else {
+
+                            inventory.updateAssemblies(id, new_description.getText().toString());
+                            Intent intent_back = new Intent();
+                            setResult(RESULT_OK, intent_back);
+                            Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+
+                    }
+
+
+                }
 
             }
         });
@@ -225,13 +243,26 @@ public class modif_ensamble extends AppCompatActivity {
             public void onClick(View v) {
 
                  // Toast.makeText(getApplicationContext(),new_products.get(1)+ " " + new_products.get(2)+ " " +new_products.get(3), Toast.LENGTH_LONG).show();
-                List<Products> products = inventory.getProductsAssembly(id);
-                inventory.deleteAssemblies(id);
-                inventory.AddAssemblies(Integer.valueOf(id), name_description);
-                for (int i=0; i<new_products.size(); i++ )
-                {
-                    if (new_products.get(i)!=null) {
-                        inventory.AddAssemblyProduct(id, new_products.get(i));
+             //   List<Products> products = inventory.getProductsAssembly(id);
+
+            //    int permission_delete = inventory.ExistAssembliesInOrders(id);
+
+            //    if (permission_delete>=1)
+            //    {
+            //        inventory.deleteAllProductsFromAssembly(id);
+//
+            //    }
+            //    else {
+//
+            //        inventory.deleteAssemblies(id);
+            //        inventory.AddAssemblies(Integer.valueOf(id), name_description);
+            //
+            //    }
+                inventory.deleteAllProductsFromAssembly(id);
+
+                for (int i = 0; i < new_products.size(); i++) {
+                    if (new_products.get(i) != null) {
+                        inventory.AddAssemblyProductQty(id, new_products.get(i),  qty_original.get(i));
                     }
                 }
 

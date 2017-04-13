@@ -135,6 +135,31 @@ class OrderStatusCursor extends  CursorWrapper{
 
 
 
+// UNION DE ORDENES MACIZO FULL  CURSOR
+class OrderUnionCursor extends  CursorWrapper{
+    public OrderUnionCursor(Cursor cursor) {super(cursor);}
+
+    public OrdenesUnion getOrdenesUnion  () {
+        Cursor cursor = getWrappedCursor();
+        return new OrdenesUnion (getInt(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.ID)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.ID_STATUS)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.STATUS_DESCRIPTION)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.ID_CUSTOMER)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.FIRST_NAME)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.LAST_NAME)),
+                cursor.getDouble(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.COSTO)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrdenesUnion_Table.Columns.DATE)));
+    }
+}
+
+
+
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+
 
 
 
@@ -636,9 +661,7 @@ public final class Inventory {
 
     // QUERY QUE DEVULVE CUANTOS PRODUCTOS DE UN TIPO NECESITA PARA CADA ENSAMBLE
 
-
     public  int getNumberOfProductsOnEnsambly(String id_product) {
-
 
         //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
 
@@ -659,6 +682,28 @@ public final class Inventory {
     }
 
 
+    public  int getNumberOfProductsOnEnsamblyActual(String id_ensamble, String id_product) {
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+        int qty_product=0;
+        String query_macizo = "SELECT qty FROM   assembly_products WHERE id= " + id_ensamble + " AND product_id=" + id_product;
+
+        Cursor cursor = (db.rawQuery(query_macizo, null));
+
+        if (cursor.getCount() >= 1) {
+            cursor.moveToFirst();
+             qty_product= cursor.getInt(cursor.getColumnIndex("qty"));
+
+        }
+        else{
+            qty_product=0;
+        }
+        //List<Products> list = new ArrayList<Products>();
+        return qty_product;
+
+
+    }
+
         // PARA ACTUALIZAR LA CANTIDAD DE PRODUCTO EN UN ENSAMBLE (MODIFICAR ASSEMBLY_PRODUCTS
 
     public  void  updateAssemblyProduct( String id, String product_id,  int qty )
@@ -675,6 +720,11 @@ public final class Inventory {
     public void deleteProductFromEnsambly( String id_ensamble, String id_product) {
 
         db.delete(InventoryDbSchema.AssemblyProducts_Table.NAME, InventoryDbSchema.AssemblyProducts_Table.Columns.ID +" = ? AND " + InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID +" = ?", new String[] {id_ensamble,id_product});
+    }
+
+    public void deleteAllProductsFromAssembly( String id_ensamble) {
+
+        db.delete(InventoryDbSchema.AssemblyProducts_Table.NAME, InventoryDbSchema.AssemblyProducts_Table.Columns.ID +" = ? ", new String[] {id_ensamble});
     }
 
     public void updateAssemblies( String id, String new_name) {
@@ -731,6 +781,39 @@ public final class Inventory {
 
         db.insert(InventoryDbSchema.AssemblyProducts_Table.NAME, null, contentValues);
         // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+    public void AddAssemblyProductQty(String id_ensamble, String product_id, String qty)
+    {
+        ///Agregar un elemento a la base de datos
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.AssemblyProducts_Table.Columns.ID, Integer.valueOf(id_ensamble));
+        contentValues.put(InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID, Integer.valueOf(product_id));
+        contentValues.put(InventoryDbSchema.AssemblyProducts_Table.Columns.QUANTITY, Integer.valueOf(qty));
+
+        db.insert(InventoryDbSchema.AssemblyProducts_Table.NAME, null, contentValues);
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+    // PARA EVITAR QUE SE AGREGUE UN PRODUCTO QUE YA EXISTE A UN MISMO ENSAMBLE
+
+    public int ExistThisProductInAssembly(String id, String id_product)
+    {
+
+        int i=0;
+
+        AssemblyProductCursor cursor = new AssemblyProductCursor(db.query(InventoryDbSchema.AssemblyProducts_Table.NAME,
+                null,
+                InventoryDbSchema.AssemblyProducts_Table.Columns.ID +" = ? AND "+ InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID +" = ?",
+                new String[] {id, id_product},
+                null,
+                null,
+                null));
+
+        i = cursor.getCount();
+        return i;
+
     }
 
 
@@ -851,8 +934,6 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 }
 
 
-
-
  //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
@@ -878,5 +959,40 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
  }
 
+ // PARA OBTENER LA LISTA DEL ORDENES CON LOS DATOS  DE LA INTERFAZ
+
+
+
+    public  List<OrdenesUnion> getOrdersUnion() {
+
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizox2 = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id ORDER BY date(a.date) DESC";
+
+       OrderUnionCursor cursor = new OrderUnionCursor(db.rawQuery(query_macizox2, null));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));
+        }
+
+        return list;
+    }
+
+
+
+
+
+    //***************************************************************************************************
+//***************************************************************************************************
 //***************************************************************************************************
 } // END FINAL DEL MUNDO UNIVERSAL DEL COSMOS
