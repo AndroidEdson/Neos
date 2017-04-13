@@ -3,11 +3,13 @@ package com.azore.compustore;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class OrdenesActivity extends AppCompatActivity   {
+public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener   {
 
     // ****************************************INICIO DE RECYCLER*****************************************************
 
@@ -158,9 +160,9 @@ public class OrdenesActivity extends AppCompatActivity   {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu2,menu);
-        /*MenuItem menuItem = menu.findItem(R.id.buscar);
+        MenuItem menuItem = menu.findItem(R.id.buscar);
         SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
-        searchView.setOnQueryTextListener(this);*/
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -258,8 +260,8 @@ public class OrdenesActivity extends AppCompatActivity   {
         adapter= new ClientesActivity.ClientesAdapter(customers,this);
         recyclerView.setAdapter(adapter);*/
     }
-
-  /*  @Override
+/*
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -275,6 +277,7 @@ public class OrdenesActivity extends AppCompatActivity   {
 
 
     }
+    */
 
     //SearchView
     @Override
@@ -286,10 +289,10 @@ public class OrdenesActivity extends AppCompatActivity   {
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
-        final List<Customers> customers = inventory.searchCustomers(newText,chkNombre,chkApellido,chkDireccion,chkph,chkemail);
-        adapter = new ClientesActivity.ClientesAdapter(customers, getApplicationContext());
+        final List<OrdenesUnion> ordenes = inventory.searchCustomerswithOrders(newText);
+        adapter = new OrdenesActivity.OrdenesUnionAdapter(ordenes, getApplicationContext());
         recyclerView.setAdapter(adapter);
         return false;
     }
-    */
+
 }

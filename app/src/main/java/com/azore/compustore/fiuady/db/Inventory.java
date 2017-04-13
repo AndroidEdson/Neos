@@ -989,6 +989,32 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
     }
 
 
+    //buscar clientes
+    public List<OrdenesUnion> searchCustomerswithOrders(String input) {
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        String querysearchOrders = "SELECT * FROM (SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id ORDER BY date(a.date) DESC) WHERE first_name LIKE '%"+input+"%'";
+
+        OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(querysearchOrders, null))
+        );
+
+
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
 
 
 
