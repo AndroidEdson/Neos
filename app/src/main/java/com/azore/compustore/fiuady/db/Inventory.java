@@ -116,10 +116,10 @@ class OrderAssembliesCursor extends  CursorWrapper{
 class OrderStatusCursor extends  CursorWrapper{
     public OrderStatusCursor(Cursor cursor) {super(cursor);}
 
-    public Order_Status getOrders  () {
+    public Order_Status getOrderStatus  () {
         Cursor cursor = getWrappedCursor();
         return new Order_Status (getInt(cursor.getColumnIndex(InventoryDbSchema.OrderStatus_Table.Columns.ID)),
-                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.OrderStatus_Table.Columns.DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrderStatus_Table.Columns.DESCRIPTION)),
                 cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.OrderStatus_Table.Columns.EDITABLE)),
                 cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrderStatus_Table.Columns.PREVIOUS)),
                 cursor.getString(cursor.getColumnIndex(InventoryDbSchema.OrderStatus_Table.Columns.NEXT)));
@@ -988,9 +988,78 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
         return list;
     }
 
+    //buscar clientes
+    public List<OrdenesUnion> searchCustomerswithOrders(String input) {
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        String querysearchOrders = "SELECT * FROM (SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id ORDER BY date(a.date) DESC) WHERE first_name LIKE '%"+input+"%'";
+
+        OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(querysearchOrders, null))
+        );
 
 
 
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+
+
+
+    public  List<Order_Status> getAllOrderStatus() {
+
+        List<Order_Status> list = new ArrayList<Order_Status>();
+
+        OrderStatusCursor cursor = new OrderStatusCursor(db.query(InventoryDbSchema.OrderStatus_Table.NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "id  ASC"));
+
+
+        while (cursor.moveToNext()){
+            list.add((cursor.getOrderStatus()));  // metodo wrappcursor
+        }
+        return list;
+    }
+
+    public  List<OrdenesUnion> getFiltersOrder(String id_status) {
+
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizox2 = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING id_status= " +  id_status+" ORDER BY date(a.date) DESC";
+
+        OrderUnionCursor cursor = new OrderUnionCursor(db.rawQuery(query_macizox2, null));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));
+        }
+
+        return list;
+    }
 
     //***************************************************************************************************
 //***************************************************************************************************
