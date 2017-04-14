@@ -8,13 +8,13 @@ public final class Order_Status {
 
 
     int id;
-    int description;
+    String  description;
     int editable;
     String previous;
     String next;
 
 
-    public Order_Status(int id, int description, int editable, String previous, String next) {
+    public Order_Status(int id, String description, int editable, String previous, String next) {
 
 
         this.id = id;
@@ -31,11 +31,11 @@ public final class Order_Status {
     }
 
 
-    public int getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(int description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

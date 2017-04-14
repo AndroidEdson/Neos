@@ -12,12 +12,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.azore.compustore.fiuady.db.Assemblies;
+import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.OrdenesUnion;
+import com.azore.compustore.fiuady.db.Order_Status;
 import com.azore.compustore.fiuady.db.Orders;
+import com.azore.compustore.fiuady.db.Products;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -131,6 +137,9 @@ public class OrdenesActivity extends AppCompatActivity   {
     private AlertDialog dialogShow ;
     private final int request_code=0;
 
+    private Spinner categoriesSpinner;
+    public int PosicionSpinner;
+
     // ******************************************************************************************************
 
     // **************************************** ON CREATE  ****************************************************
@@ -138,20 +147,71 @@ public class OrdenesActivity extends AppCompatActivity   {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clientes);
+        setContentView(R.layout.activity_ordenes);
         //Cambiar texto de App bar
         getSupportActionBar().setTitle("Ordenes");
 
         inventory = new Inventory(getApplicationContext());
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_customers);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        categoriesSpinner = (Spinner) findViewById(R.id.spinner_ordenes);
         inventory = new Inventory(getApplicationContext());
 
         final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
         adapter = new OrdenesUnionAdapter(ordenes_union, this);
         recyclerView.setAdapter(adapter);
 
-    }
+        final List<Order_Status> ordes_status_list = inventory.getAllOrderStatus();
+
+        final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
+
+
+       spinner_adapter.add("Todos");
+     final List<Order_Status> order_statuses = inventory.getAllOrderStatus();
+     for (Order_Status order_status : order_statuses) {
+         spinner_adapter.add( order_status.getDescription());
+     }
+//
+        categoriesSpinner.setAdapter(spinner_adapter);
+
+
+
+        categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+               //  int j = Integer.valueOf(spinner_adapter.getItem(position));
+                //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
+
+              PosicionSpinner = position;
+              if (position==0 ) {
+//
+                  final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
+                  adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                  recyclerView.setAdapter(adapter);
+//
+              }
+              else{
+//
+                  List<OrdenesUnion> ordenes_union =inventory.getFiltersOrder(String.valueOf(ordes_status_list.get(position-1).getId()));
+                  adapter = new OrdenesUnionAdapter (ordenes_union, getApplicationContext());
+                  recyclerView.setAdapter(adapter);
+//
+              }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+//
+            }
+        });
+
+
+
+
+    } // END ON CREATE
 
 
     //Hace que aparezca el icono en el App Bar

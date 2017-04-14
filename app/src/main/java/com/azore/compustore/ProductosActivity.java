@@ -114,13 +114,13 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private ProductosActivity.ProductsAdapter adapter;
     private Inventory inventory;
     private Spinner categoriesSpinner;
+    public int PosicionSpinner;
 
 
 
     private final int request_code=0;
     private final int request_code2=1;
     private AlertDialog dialogShow ;
-    public int PosicionSpinner;
     private List<Products> productos_pr;
 
 
