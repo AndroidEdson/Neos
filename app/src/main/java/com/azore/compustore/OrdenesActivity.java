@@ -1,5 +1,6 @@
 package com.azore.compustore;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,8 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.Assemblies;
 import com.azore.compustore.fiuady.db.CategoryProduct;
@@ -28,6 +36,7 @@ import com.azore.compustore.fiuady.db.Orders;
 import com.azore.compustore.fiuady.db.Products;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -86,12 +95,11 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
             int position = getAdapterPosition() ;
             OrdenesUnion ordenesUnion=this.ordenesUnions.get(position);
 
-//
-          //  Intent intent = new Intent(getApplicationContext(), PopUp_Ensambles.class);
-          //  intent.putExtra(PopUp_Ensambles.EXTRA_DESCRIPTION_ENSAMBLE, assemblies.getDescription());
-          //  intent.putExtra(PopUp_Ensambles.EXTRA_ID_ENSAMBLE, Integer.toString(assemblies.getId()));
-          //  //   Toast.makeText(getApplicationContext(), "works ", Toast.LENGTH_SHORT).show();
-          //  startActivityForResult(intent, request_code2);
+
+
+            Intent intent = new Intent(getApplicationContext(), Pop_Up_ordenes_N1.class);
+            intent.putExtra(Pop_Up_ordenes_N1.EXTRA_ORDER_ID, String.valueOf(ordenesUnion.getId()));
+            startActivityForResult(intent, request_code);
 
 
         }
@@ -140,7 +148,21 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
     private final int request_code=0;
 
     private Spinner categoriesSpinner;
-    public int PosicionSpinner;
+    public int PosicionSpinner=0;
+    private CheckBox checkBox_inicial;
+    private CheckBox checkBox_final;
+    private LinearLayout linear_filterDate;
+
+    private int dia, mes, anio;
+    private  TextView txt_date_initial;
+    private  TextView txt_date_final;
+    private  DatePickerDialog datePickerDialog;
+    private  String date_begin;
+    private  String date_End;
+    private  String tag,monat,jahr;
+    private ImageButton btn_filter_date;
+    private static String string_date_begin="1000-01-01";
+    private static String string_date_End="3000-12-12";
 
     // ******************************************************************************************************
 
@@ -153,15 +175,37 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
         //Cambiar texto de App bar
         getSupportActionBar().setTitle("Ordenes");
 
-        inventory = new Inventory(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_orders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         categoriesSpinner = (Spinner) findViewById(R.id.spinner_ordenes);
+        checkBox_inicial= (CheckBox)findViewById(R.id.checkBox_date_initial);
+        checkBox_final= (CheckBox)findViewById(R.id.checkBox_date_end);
+        linear_filterDate= (LinearLayout)findViewById(R.id.linear_date_ordenes);
+        txt_date_initial= (TextView)findViewById(R.id.txt_Date_beging);
+        txt_date_final= (TextView)findViewById(R.id.txt_Date_end);
+        btn_filter_date= (ImageButton) findViewById(R.id.btn_filter_date_order);
         inventory = new Inventory(getApplicationContext());
+
+
+        //LA PRIMERA VEZ QUE LO CORRAS COMPILA TODOS LOS UPDATES PARA CAMBIAR EL FORMATO DE LA FECHA
+       // inventory.updateOrderDate("2016-10-05","0");
+       // inventory.updateOrderDate("2016-11-12","1");
+       // inventory.updateOrderDate("2016-12-26","2");
+       // inventory.updateOrderDate("2017-01-03","3");
+       // inventory.updateOrderDate("2017-01-15","4");
+       // inventory.updateOrderDate("2017-02-04","5");
+       // inventory.updateOrderDate("2017-03-05","6");
+       // inventory.updateOrderDate("2017-03-12","7");
+       // inventory.updateOrderDate("2017-03-18","8");
+
+
+      //  String orders = inventory.getOneOrderTable(String.valueOf(8));
+      //  Toast.makeText(getApplicationContext(), orders  , Toast.LENGTH_LONG).show();
 
         final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
         adapter = new OrdenesUnionAdapter(ordenes_union, this);
         recyclerView.setAdapter(adapter);
+       // datePickerDialog.updateDate(2017,04,01);
 
         final List<Order_Status> ordes_status_list = inventory.getAllOrderStatus();
 
@@ -175,6 +219,192 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
      }
 //
         categoriesSpinner.setAdapter(spinner_adapter);
+
+        btn_filter_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (checkBox_inicial.isChecked() && checkBox_final.isChecked()) {
+
+                    if (PosicionSpinner == 0) {
+
+                        final List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDateAll(date_begin, date_End);
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    } else {
+
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    }
+
+                }
+                else if ( checkBox_final.isChecked()==true && checkBox_inicial.isChecked()==false)
+                {
+                    if (PosicionSpinner == 0) {
+
+                        final List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDateAll(string_date_begin, date_End);
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    } else {
+
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    }
+
+                }else if ( checkBox_final.isChecked()==false && checkBox_inicial.isChecked()==true)
+                {
+                    if (PosicionSpinner == 0) {
+
+                        final List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDateAll(date_begin, string_date_End);
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    } else {
+
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    }
+
+                }
+                else{
+
+                    if (PosicionSpinner==0 ) {
+//
+                        final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
+                        adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    }
+                    else{
+//
+                        List<OrdenesUnion> ordenes_union =inventory.getFiltersOrder(String.valueOf(ordes_status_list.get(PosicionSpinner-1).getId()));
+                        adapter = new OrdenesUnionAdapter (ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+//
+                    }
+
+                }
+
+            }
+        });
+
+
+        checkBox_inicial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+               if (isChecked){
+                   btn_filter_date.setVisibility(View.VISIBLE);
+                   linear_filterDate.setVisibility(View.VISIBLE);
+                   final Calendar c= Calendar.getInstance();
+                   dia=c.get(Calendar.DAY_OF_MONTH);
+                   mes=c.get(Calendar.MONTH);
+                   anio= c.get(Calendar.YEAR);
+
+
+                 datePickerDialog = new DatePickerDialog(OrdenesActivity.this, new DatePickerDialog.OnDateSetListener() {
+                       @Override
+                       public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            tag=String.valueOf(dayOfMonth);
+                           monat=String.valueOf(month+1);
+                           if (String.valueOf(month+1).length() == 1) {  monat= "0"+String.valueOf(month+1) ;   }
+                           if (String.valueOf(dayOfMonth).length() == 1) { tag= "0"+String.valueOf(dayOfMonth) ;   }
+                           jahr=String.valueOf(year);
+                           date_begin=jahr+"-"+monat+"-"+tag;
+
+                           txt_date_initial.setText(tag+"-"+monat +"-" + year);
+
+
+                       }
+                   }, dia, mes, anio);
+                   datePickerDialog.show();
+
+                   if(txt_date_initial.getText().toString().equals("Fecha Inicial")){
+                       date_begin=string_date_begin;
+                   }
+
+               }
+               else
+               {
+                   if (checkBox_final.isChecked()){
+
+                   }
+                   else{
+                       linear_filterDate.setVisibility(View.GONE);
+                       btn_filter_date.setVisibility(View.INVISIBLE);
+                   }
+
+               }
+
+
+
+            }
+        });
+
+        checkBox_final.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+
+                    btn_filter_date.setVisibility(View.VISIBLE);
+                    linear_filterDate.setVisibility(View.VISIBLE);
+                    final Calendar c= Calendar.getInstance();
+                    dia=c.get(Calendar.DAY_OF_MONTH);
+                    mes=c.get(Calendar.MONTH);
+                    anio= c.get(Calendar.YEAR);
+
+
+                    datePickerDialog = new DatePickerDialog(OrdenesActivity.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            tag=String.valueOf(dayOfMonth);
+                            monat=String.valueOf(month+1);
+                            if (String.valueOf(month+1).length() == 1) {  monat= "0"+String.valueOf(month+1) ;   }
+                            if (String.valueOf(dayOfMonth).length() == 1) { tag= "0"+String.valueOf(dayOfMonth) ;   }
+                            jahr=String.valueOf(year);
+
+                            date_End=jahr+"-"+monat+"-"+tag;
+
+                            txt_date_final.setText(tag+"-"+ monat +"-" + year);
+
+                            if(txt_date_final.getText().toString().equals("Fecha Final")){
+                                date_End=string_date_End;
+                            }
+
+
+                        }
+                    }, dia, mes, anio);
+
+                    datePickerDialog.show();
+
+
+                }
+                else
+                {
+                    if (checkBox_inicial.isChecked()){
+
+                    }
+                    else{
+                        linear_filterDate.setVisibility(View.GONE);
+                        btn_filter_date.setVisibility(View.INVISIBLE);
+
+                    }
+
+                }
+
+
+
+            }
+        });
 
 
 
@@ -251,9 +481,6 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
                 mBuilder.setView(mView);
                 dialogShow = mBuilder.create();
                 dialogShow.show();
-
-
-
 
                 mGuardar.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,4 +582,84 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
         return false;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ( (requestCode==request_code && resultCode== RESULT_OK)){
+            final List<Order_Status> ordes_status_list = inventory.getAllOrderStatus();
+
+            if (checkBox_inicial.isChecked() && checkBox_final.isChecked()) {
+
+                if (PosicionSpinner == 0) {
+
+                    final List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDateAll(date_begin, date_End);
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                } else {
+
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                }
+
+            }
+            else if ( checkBox_final.isChecked()==true && checkBox_inicial.isChecked()==false)
+            {
+                if (PosicionSpinner == 0) {
+
+                    final List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDateAll(string_date_begin, date_End);
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                } else {
+
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                }
+
+            }else if ( checkBox_final.isChecked()==false && checkBox_inicial.isChecked()==true)
+            {
+                if (PosicionSpinner == 0) {
+
+                    final List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDateAll(date_begin, string_date_End);
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                } else {
+
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                }
+
+            }
+            else{
+
+                if (PosicionSpinner==0 ) {
+//
+                    final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
+                    adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                }
+                else{
+//
+                    List<OrdenesUnion> ordenes_union =inventory.getFiltersOrder(String.valueOf(ordes_status_list.get(PosicionSpinner-1).getId()));
+                    adapter = new OrdenesUnionAdapter (ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+//
+                }
+
+            } // TERMINA REQUEST
+
+
+        }
+    }
 }

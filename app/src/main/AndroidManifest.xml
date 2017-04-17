@@ -14,6 +14,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -54,7 +55,7 @@
             android:name=".PopUp_modif_ensamble"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity android:name=".add_assemblies" />
-        <activity android:name=".modif_ensamble"></activity>
+        <activity android:name=".modif_ensamble" />
         <activity
             android:name=".Pop_up_customers"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
@@ -65,7 +66,18 @@
         <activity
             android:name=".modify_customers"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-
+        <activity
+            android:name=".Pop_Up_ordenes_N1"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".pop_menu_orders_modif_N3"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".confirmation_status_order_N2"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"  />
+        <activity android:name="modifi_qty_ensamblie_N4"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"  />
+        <activity android:name=".Modif_Ordenes_N2">
+        </activity>
     </application>
 
 </manifest>

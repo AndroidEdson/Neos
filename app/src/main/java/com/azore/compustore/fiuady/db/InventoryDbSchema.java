@@ -142,6 +142,18 @@ public final class InventoryDbSchema {
         }
     }
 
+    public static final class AssemblieOrders_Union_Table {
+
+        public static final class Columns {
+            public static final String ID = "id";
+            public static final String ASSEMBLY_ID = "assembly_id";
+            public static final String DESCRIPTION = "description";
+            public static final String QTY = "qty";
+            public static final String TOTAL = "total";
+
+        }
+    }
+
 
 
 //FIN DE LAS TABLAS______________________________________________________________________________

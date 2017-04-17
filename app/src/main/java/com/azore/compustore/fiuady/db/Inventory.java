@@ -155,12 +155,6 @@ class OrderUnionCursor extends  CursorWrapper{
 
 
 
-//***************************************************************************************************
-//***************************************************************************************************
-//***************************************************************************************************
-
-
-
 
 
 //***************************************************************************************************
@@ -190,6 +184,26 @@ class CustomersCursor extends  CursorWrapper{
                 cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Customers_Table.Columns.EMAIL)));
     }
 }
+
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+// ORDERS IN ASSEMBLIES UNION CURSOR ES USADO PARA OBTENER INFORMACION DE UN ENSAMBLE RESPPECTO A LA ORDEN
+class OrderAssembliesUnionCursor extends  CursorWrapper{
+    public OrderAssembliesUnionCursor(Cursor cursor) {super(cursor);}
+
+    public AssemblieOrders_Union getAssemblieOrdersUnion  () {
+        Cursor cursor = getWrappedCursor();
+        return new AssemblieOrders_Union (getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblieOrders_Union_Table.Columns.ID)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblieOrders_Union_Table.Columns.ASSEMBLY_ID)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.AssemblieOrders_Union_Table.Columns.DESCRIPTION)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.AssemblieOrders_Union_Table.Columns.QTY)),
+                cursor.getDouble(cursor.getColumnIndex(InventoryDbSchema.AssemblieOrders_Union_Table.Columns.TOTAL)));
+    }
+}
+
 
 //***************************************************************************************************
 //***************************************************************************************************
@@ -953,7 +967,6 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
              null,
              null,
              null));
-
      i = cursor.getCount();
      return i;
 
@@ -1004,8 +1017,6 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
         OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(querysearchOrders, null))
         );
-
-
 
         while (cursor.moveToNext()) {
             list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
@@ -1060,6 +1071,202 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
         return list;
     }
+
+    // SIRVE PARA OBTENER EL FILTRO ENTRE DOS FECHAS Y DENTRO DE UNA CATEGORIA STATUS
+
+    public List<OrdenesUnion> getOrderFilterDate(String date_begin, String date_end, String status_id) {
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        String between_two_Dates = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING a.date BETWEEN date('"+ date_begin+ "') AND date('"+ date_end +"') AND id_status="+ status_id +" ORDER BY date(a.date) DESC";
+        OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(between_two_Dates, null))
+        );
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+
+
+    // SIRVE PARA OBTENER EL FILTRO ENTRE DOS FECHAS Y INCLUYENDO TODOS LOS STATUS
+
+    public List<OrdenesUnion> getOrderFilterDateAll(String date_begin, String date_end ) {
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        String between_two_Dates = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING a.date BETWEEN date('"+ date_begin+ "') AND date('"+ date_end +"') ORDER BY date(a.date) DESC";
+        OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(between_two_Dates, null))
+        );
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+
+
+    // ACTUALIZAR O MODIFICAR la fecha (
+    public  void  updateOrderDate(String date, String id)
+    {
+
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Orders_Table.Columns.DATE, date);// asegura que siempre da correcto
+
+        db.update(InventoryDbSchema.Orders_Table.NAME, values, InventoryDbSchema.Orders_Table.Columns.ID + " = ?", new String[]{id});
+
+    }
+
+    // PARA OBTENER UNA UNICA ORDEN
+    public  OrdenesUnion getOneOrder(String id_order) {
+
+        OrdenesUnion ordenesUnion;
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizox2 = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING a.id= "+ id_order;
+
+        OrderUnionCursor cursor = new OrderUnionCursor(db.rawQuery(query_macizox2, null));
+
+        cursor.moveToNext();
+      ordenesUnion= cursor.getOrdenesUnion();
+
+        return ordenesUnion;
+    }
+
+//PARA OBTENER UNICA ORDEN_STATUS DEL ID
+    public  Order_Status getOneOrderStatus(String id_status) {
+
+        Order_Status order_status;
+
+        OrderStatusCursor cursor = new OrderStatusCursor(db.query(InventoryDbSchema.OrderStatus_Table.NAME,
+                null,
+                InventoryDbSchema.OrderStatus_Table.Columns.ID + "=?",
+                new String[] {id_status},
+                null,
+                null,
+                null));
+
+     cursor.moveToNext();
+        order_status= cursor.getOrderStatus();
+        return order_status;
+    }
+
+    public  void  updateStatusOrderId(String id_order, String new_status)
+    {
+
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Orders_Table.Columns.STATUS_ID, Integer.valueOf(new_status));// asegura que siempre da correcto
+
+        db.update(InventoryDbSchema.Orders_Table.NAME, values, InventoryDbSchema.Orders_Table.Columns.ID + " = ? ", new String[]{id_order});
+
+    }
+
+    public  void  AddChangeLog(String id_order, String new_changelog)
+    {
+
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Orders_Table.Columns.CHANGE_LOG, new_changelog);// asegura que siempre da correcto
+
+        db.update(InventoryDbSchema.Orders_Table.NAME, values, InventoryDbSchema.Orders_Table.Columns.ID + " = ?", new String[]{id_order});
+
+    }
+
+
+    public  String getOneOrderTable(String id_order) {
+
+        String orders;
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizox2 = "SELECT change_log FROM orders where id= "+ id_order;
+
+        OrdersCursor cursor = new OrdersCursor(db.rawQuery(query_macizox2, null));
+
+        cursor.moveToNext();
+        orders= cursor.getString(cursor.getColumnIndex("change_log"));
+
+
+        return orders;
+    }
+
+
+
+    public List<AssemblieOrders_Union> getEnsambliesInOrder(String id_order ) {
+            List<AssemblieOrders_Union> list = new ArrayList<AssemblieOrders_Union>();
+
+            String new_macizo =
+                    "SELECT a.id, a.assembly_id, ap.description, a.qty, (costo*a.qty) as total \n" +
+                    "FROM order_assemblies a\n" +
+                    "INNER JOIN assemblies ap ON (a.assembly_id = ap.id)\n" +
+                    "INNER JOIN (SELECT ap.id, ap.description, sum(ac.price*dc.qty) as costo \n" +
+                    "           FROM assemblies ap \n" +
+                    "           INNER JOIN assembly_products dc  ON (dc.id= ap.id)\n" +
+                    "           INNER JOIN products         ac  ON (ac.id= dc.product_id)\n" +
+                    "           group by ap.id) z\n" +
+                    "           ON (z.id= ap.id)     \n" +
+                    "where a.id= "+ id_order + " ORDER BY ap.description ASC";
+
+
+            OrderAssembliesUnionCursor cursor = new OrderAssembliesUnionCursor((db.rawQuery(new_macizo, null))
+            );
+
+            while (cursor.moveToNext()) {
+                list.add((cursor.getAssemblieOrdersUnion()));  // metodo wrappcursor
+
+            }
+            cursor.close();
+            return list;
+        }
+
+
+        // PARA ACTUALIZAR EL QTY DEL ENSAMBLE EN LA ORDEN
+    public  void  updateQtyAssemblyFromOrder(String id_order, String id_assembly, int new_qty)
+    {
+
+
+        ContentValues values = new ContentValues();
+        values.put(InventoryDbSchema.Order_Assemblies_Table.Columns.QUANTITY, new_qty);// asegura que siempre da correcto
+
+        db.update(InventoryDbSchema.Order_Assemblies_Table.NAME, values, InventoryDbSchema.Order_Assemblies_Table.Columns.ID + " = ? AND " + InventoryDbSchema.Order_Assemblies_Table.Columns.ASSEMBLY_ID + " = ? " , new String[]{id_order,id_assembly});
+
+    }
+
+    // PARA ACTUALIZAR EL QTY DEL ENSAMBLE EN LA ORDEN
+    public  void  DeleteAssemblyFromOrder(String id_order, String id_assembly)
+    {
+
+        db.delete(InventoryDbSchema.Order_Assemblies_Table.NAME, "id = ? AND assembly_id =?", new String[] {id_order,id_assembly});
+
+    }
+
 
     //***************************************************************************************************
 //***************************************************************************************************
