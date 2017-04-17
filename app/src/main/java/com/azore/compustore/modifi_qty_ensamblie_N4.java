@@ -55,6 +55,8 @@ public class modifi_qty_ensamblie_N4 extends Activity {
         txt_add_product = (TextView) findViewById( R.id.textview_products);
         txt_tag_stock = (TextView) findViewById( R.id.textView_tag_stock);
 
+        txt_add_product.setText("Agregar ");
+        txt_tag_stock.setText("Añadir a ensamble: ");
         Intent i = getIntent();
         id_order = i.getStringExtra(EXTRA_ORDER_ID);
         id_assembly = i.getStringExtra(EXTRA_ENSAMBLE_ID);

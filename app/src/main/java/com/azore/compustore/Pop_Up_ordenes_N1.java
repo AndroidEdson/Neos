@@ -72,6 +72,7 @@ public class Pop_Up_ordenes_N1 extends Activity {
         txt_orden.setText("Orden: " + ordenesUnion_aux.getId() + ", " + ordenesUnion_aux.getLast_name() + " " + ordenesUnion_aux.getFirst_name());
 
 
+
         if (order_status_aux.getEditable() == 0)
         {
            linear_modif.setVisibility(TextView.GONE);
@@ -102,6 +103,9 @@ public class Pop_Up_ordenes_N1 extends Activity {
                 break;
         }
 
+
+       // inventory.updateStatusOrderId("0", "0");
+       // inventory.updateStatusOrderId("1", "0");
 
 
         btn_next.setOnClickListener(new View.OnClickListener() {
@@ -158,11 +162,8 @@ public class Pop_Up_ordenes_N1 extends Activity {
 
             }
 
-
             inventory.updateStatusOrderId(id_order, change_state);
-            Intent intent_back = new Intent();
-            setResult(RESULT_OK, intent_back);
-            finish();
+
         }
         if ( (requestCode==requestcode1 && resultCode== RESULT_OK)) {
 
@@ -177,10 +178,12 @@ public class Pop_Up_ordenes_N1 extends Activity {
             // Toast.makeText(getApplicationContext(), a_letter , Toast.LENGTH_LONG).show();
 
             inventory.updateStatusOrderId(id_order, change_state);
-          Intent intent_back = new Intent();
-          setResult(RESULT_OK, intent_back);
-          finish();
+     ;
         }
+
+        Intent intent_back = new Intent();
+        setResult(RESULT_OK, intent_back);
+        finish();
 
     }
 }// END CLASS

@@ -94,8 +94,7 @@ public class pop_menu_orders_modif_N3 extends Activity {
                 startActivityForResult(inten, request_code1);
                 //  inventory.deleteProductFromEnsambly(delete_confirmation,id_product);
                Intent intent_back = new Intent();
-            //   setResult(RESULT_OK, intent_back);
-            //   finish();
+
             }
         });
 
@@ -106,7 +105,7 @@ public class pop_menu_orders_modif_N3 extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if ( (requestCode==request_code1 && resultCode== RESULT_OK)){
-           // inventory.DeleteAssemblyFromOrder(id_order,id_ensamble);
+            inventory.DeleteAssemblyFromOrder(id_order,id_ensamble);
         }
 
        Intent intent_back = new Intent();

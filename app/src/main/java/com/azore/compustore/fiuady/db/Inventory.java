@@ -1268,6 +1268,27 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
     }
 
 
+
+    public void AddAssemblyOrder(int id_order, int id_ensamble, int qty)
+    {
+        ///Agregar un elemento a la base de datos
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Order_Assemblies_Table.Columns.ID, id_order);
+        contentValues.put(InventoryDbSchema.Order_Assemblies_Table.Columns.ASSEMBLY_ID, id_ensamble);
+        contentValues.put(InventoryDbSchema.Order_Assemblies_Table.Columns.QUANTITY, qty);
+
+        db.insert(InventoryDbSchema.Order_Assemblies_Table.NAME, null, contentValues);
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+    public void deleteAllAssembliesFromOrder( String id_ensamble) {
+
+        db.delete(InventoryDbSchema.Order_Assemblies_Table.NAME, InventoryDbSchema.Order_Assemblies_Table.Columns.ID +" = ? ", new String[] {id_ensamble});
+    }
+
+
+
     //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************

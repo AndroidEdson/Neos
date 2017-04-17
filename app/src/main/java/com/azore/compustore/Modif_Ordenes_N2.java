@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.AssemblieOrders_Union;
 import com.azore.compustore.fiuady.db.Assemblies;
@@ -23,6 +24,7 @@ import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.OrdenesUnion;
 import com.azore.compustore.fiuady.db.Products;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -129,8 +131,7 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
     int request_code=0;
     private Button btn_save ;
     private Button btn_cancel ;
-    private List<String> new_products;
-    private List<String> qty_original;
+      private List<AssemblieOrders_Union> assemblieOrders_unions_original;
 
     //**********************************************************************************************
     //**********************************************************************************************
@@ -150,6 +151,8 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
         btn_save= (Button) findViewById(R.id.btnGuardar);
         btn_cancel= (Button) findViewById(R.id.btnCancelar);
 
+
+
         txt_description.setEnabled(false);
         inventory= new Inventory(getApplicationContext());
 
@@ -159,19 +162,44 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
         ordenesUnion= inventory.getOneOrder(id_order);
         txt_description.setText("Orden: "+ordenesUnion.getId()+ " " + ordenesUnion.getLast_name()+", "+ ordenesUnion.getFirst_name());
 
-        List<AssemblieOrders_Union> assemblieOrders_unions_original =inventory.getEnsambliesInOrder(id_order);
-
-        for (int j=0; j<assemblieOrders_unions_original.size(); j++)
-        {
-            new_products.add(String.valueOf(assemblieOrders_unions_original.get(j).getId()));
-            qty_original.add(String.valueOf(assemblieOrders_unions_original.get(j).getQty()));
-        }
-
-
+         assemblieOrders_unions_original =inventory.getEnsambliesInOrder(id_order);
 
         final List<AssemblieOrders_Union> assemblieOrders_unions = inventory.getEnsambliesInOrder(id_order);
         adapter = new AssembliesOrdersUnionAdapter( assemblieOrders_unions, this);
         recyclerView.setAdapter(adapter);
+
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Cambios Realizados !",Toast.LENGTH_SHORT).show();
+                Intent intent_back = new Intent();
+                setResult(RESULT_OK, intent_back);
+                finish();
+            }
+        });
+
+
+
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                inventory.deleteAllAssembliesFromOrder(id_order);
+                for (int i = 0; i < assemblieOrders_unions_original.size(); i++) {
+                    if (assemblieOrders_unions_original.get(i) != null) {
+                        inventory.AddAssemblyOrder(assemblieOrders_unions_original.get(i).getId(), assemblieOrders_unions_original.get(i).getAssembly_id(),assemblieOrders_unions_original.get(i).getQty());
+                    }
+                }
+
+                Toast.makeText(getApplicationContext(), "No se realizaron modificaciones", Toast.LENGTH_SHORT).show();
+                Intent intent_back = new Intent();
+                setResult(RESULT_OK, intent_back);
+                finish();
+            }
+        });
 
 
 
@@ -225,5 +253,17 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+        inventory.deleteAllAssembliesFromOrder(id_order);
+        for (int i = 0; i < assemblieOrders_unions_original.size(); i++) {
+            if (assemblieOrders_unions_original.get(i) != null) {
+                inventory.AddAssemblyOrder(assemblieOrders_unions_original.get(i).getId(), assemblieOrders_unions_original.get(i).getAssembly_id(),assemblieOrders_unions_original.get(i).getQty());
+            }
+        }
+
+        //Toast.makeText(getApplicationContext(), "No se realizaron modificaciones", Toast.LENGTH_SHORT).show();
+        super.onBackPressed();
+    }
 }// END CLASS
