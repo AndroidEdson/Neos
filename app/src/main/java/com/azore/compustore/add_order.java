@@ -21,10 +21,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import com.azore.compustore.fiuady.db.AssemblieOrders_Union;
-import com.azore.compustore.fiuady.db.Assemblies;
 import com.azore.compustore.fiuady.db.Customers;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
+
 
 
 import java.util.Date;
@@ -72,7 +72,7 @@ public class add_order extends AppCompatActivity {
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_ID,String.valueOf(assemblieOrders_union.getAssembly_id()));
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_DESCRIPTION,assemblieOrders_union.getDescription());
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_QTY,String.valueOf(assemblieOrders_union.getQty()));
-            intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ORDER_ID,lastorderid);
+            intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ORDER_ID,String.valueOf(lastorderid));
             startActivityForResult(intent, request_code);
         }
 

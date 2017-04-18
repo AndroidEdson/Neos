@@ -73,6 +73,7 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
             int position = getAdapterPosition() ;
             AssemblieOrders_Union assemblieOrders_union=this.assemblieOrders_unions.get(position);
 
+
             Intent intent = new Intent(getApplicationContext(), pop_menu_orders_modif_N3.class);
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_ID,String.valueOf(assemblieOrders_union.getAssembly_id()));
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_DESCRIPTION,assemblieOrders_union.getDescription());
