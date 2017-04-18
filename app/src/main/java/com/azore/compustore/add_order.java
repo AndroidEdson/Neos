@@ -67,15 +67,13 @@ public class add_order extends AppCompatActivity {
         public void onClick(View v) {
             int position = getAdapterPosition() ;
             AssemblieOrders_Union assemblieOrders_union=this.assemblieOrders_unions.get(position);
-/*
+
             Intent intent = new Intent(getApplicationContext(), pop_menu_orders_modif_N3.class);
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_ID,String.valueOf(assemblieOrders_union.getAssembly_id()));
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_DESCRIPTION,assemblieOrders_union.getDescription());
             intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ENSAMBLE_QTY,String.valueOf(assemblieOrders_union.getQty()));
-            intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ORDER_ID,id_order);
+            intent.putExtra(pop_menu_orders_modif_N3.EXTRA_ORDER_ID,lastorderid);
             startActivityForResult(intent, request_code);
-*/
-
         }
 
     }
@@ -120,10 +118,10 @@ public class add_order extends AppCompatActivity {
     private AssembliesOrdersUnionAdapter adapter;
     private Button btn_save ;
     private Button btn_cancel ;
-    private int requestcode;
+    private int request_code;
     public  List<Customers> clientes ;
     public int lastorderid;
-    public  int neworderid;
+
 
 
     @Override
@@ -135,7 +133,6 @@ public class add_order extends AppCompatActivity {
         getSupportActionBar().setTitle("Nueva Orden");
         inventory = new Inventory(getApplicationContext());
         lastorderid=inventory.getLastId(InventoryDbSchema.Orders_Table.NAME)+1;
-
 
 
         //spinner start
@@ -212,7 +209,7 @@ public class add_order extends AppCompatActivity {
                 int customerid= clientes.get(add_order_spinner.getSelectedItemPosition()).getId();
                 inventory.AddOrder(lastorderid,customerid,date);
                 Intent intent = new Intent(getApplicationContext(), Add_Assembly_to_Order.class);
-                startActivityForResult(intent, requestcode);
+                startActivityForResult(intent, request_code);
 
         }
         return super.onOptionsItemSelected(item);
