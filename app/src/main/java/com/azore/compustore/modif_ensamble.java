@@ -211,11 +211,16 @@ public class modif_ensamble extends AppCompatActivity {
 
                     if(name_description.equals(new_description.getText().toString()))
                     {
-                        inventory.updateAssemblies(id, new_description.getText().toString());
-                        Intent intent_back = new Intent();
-                        setResult(RESULT_OK, intent_back);
-                        Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
-                        finish();
+                        List<Products> products =inventory.getProductsAssembly(id);
+                        if (products.size()==0){
+                            Toast.makeText(getApplicationContext(), "Ensamble Vacío, Ingrese un producto!", Toast.LENGTH_SHORT).show();
+                        }else {
+                            inventory.updateAssemblies(id, new_description.getText().toString());
+                            Intent intent_back = new Intent();
+                            setResult(RESULT_OK, intent_back);
+                            Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }else{
 
                         if (aux >= 1) {
@@ -223,11 +228,16 @@ public class modif_ensamble extends AppCompatActivity {
 
                         }else {
 
-                            inventory.updateAssemblies(id, new_description.getText().toString());
-                            Intent intent_back = new Intent();
-                            setResult(RESULT_OK, intent_back);
-                            Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
-                            finish();
+                            List<Products> products =inventory.getProductsAssembly(id);
+                            if (products.size()==0){
+                                Toast.makeText(getApplicationContext(), "Ensamble Vacío, Ingrese un producto!", Toast.LENGTH_SHORT).show();
+                            }else {
+                                inventory.updateAssemblies(id, new_description.getText().toString());
+                                Intent intent_back = new Intent();
+                                setResult(RESULT_OK, intent_back);
+                                Toast.makeText(getApplicationContext(), "Ensamble Modificado", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
                         }
 
                     }
@@ -242,22 +252,7 @@ public class modif_ensamble extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                 // Toast.makeText(getApplicationContext(),new_products.get(1)+ " " + new_products.get(2)+ " " +new_products.get(3), Toast.LENGTH_LONG).show();
-             //   List<Products> products = inventory.getProductsAssembly(id);
 
-            //    int permission_delete = inventory.ExistAssembliesInOrders(id);
-
-            //    if (permission_delete>=1)
-            //    {
-            //        inventory.deleteAllProductsFromAssembly(id);
-//
-            //    }
-            //    else {
-//
-            //        inventory.deleteAssemblies(id);
-            //        inventory.AddAssemblies(Integer.valueOf(id), name_description);
-            //
-            //    }
                 inventory.deleteAllProductsFromAssembly(id);
 
                 for (int i = 0; i < new_products.size(); i++) {

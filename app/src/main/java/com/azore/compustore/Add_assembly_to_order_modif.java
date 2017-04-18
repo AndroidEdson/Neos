@@ -1,37 +1,30 @@
 package com.azore.compustore;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.Assemblies;
-import com.azore.compustore.fiuady.db.CategoryProduct;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
-import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
 
-public class Add_Assembly_to_Order extends AppCompatActivity {
+/**
+ * Created by Armín on 18/04/2017.
+ */
+
+public class Add_assembly_to_order_modif extends AppCompatActivity  {
 
     private class AssembliesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -59,10 +52,10 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
             int position = getAdapterPosition() ;
             Assemblies assemblies=this.assemblies.get(position);
 
-            Intent intent = new Intent(getApplicationContext(), PopUp_add_Ensamble_Order.class);
-            intent.putExtra(PopUp_add_Ensamble_Order.EXTRA_DESCRIPTION_ENSAMBLE, assemblies.getDescription());
-            intent.putExtra(PopUp_add_Ensamble_Order.EXTRA_ENSAMBLE_ID,String.valueOf(assemblies.getId()));
-         //   intent.putExtra(PopUp_add_Ensamble_Order.EXTRA_ID_ORDER,id_order);
+            Intent intent = new Intent(getApplicationContext(), PopUp_add_Ensamble_order_modif.class);
+            intent.putExtra(PopUp_add_Ensamble_order_modif.EXTRA_DESCRIPTION_ENSAMBLE, assemblies.getDescription());
+            intent.putExtra(PopUp_add_Ensamble_order_modif.EXTRA_ENSAMBLE_ID,String.valueOf(assemblies.getId()));
+               intent.putExtra(PopUp_add_Ensamble_order_modif.EXTRA_ID_ORDER,id_order);
 
             startActivityForResult(intent, requestcode);
         }
@@ -70,7 +63,7 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
     }
 
 
-    private  class AssembliesAdapter extends  RecyclerView.Adapter<Add_Assembly_to_Order.AssembliesHolder>{
+    private  class AssembliesAdapter extends  RecyclerView.Adapter<AssembliesHolder>{
         private List<Assemblies> assemblies;
         Context context;
 
@@ -81,13 +74,13 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
 
 
         @Override
-        public Add_Assembly_to_Order.AssembliesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public AssembliesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.ensambles_list_item,parent,false);
-            return new Add_Assembly_to_Order.AssembliesHolder(view,context,assemblies);
+            return new AssembliesHolder(view,context,assemblies);
         }
 
         @Override
-        public void onBindViewHolder(Add_Assembly_to_Order.AssembliesHolder holder, int position) {
+        public void onBindViewHolder(AssembliesHolder holder, int position) {
             holder.bindCategories(assemblies.get(position));
         }
 
@@ -104,7 +97,7 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
     public static String EXTRA_ID_ORDER ="com.azore.compustore.EXTRA_ID_ORDER" ;
 
     private RecyclerView recyclerView;
-    private Add_Assembly_to_Order.AssembliesAdapter adapter;
+    private AssembliesAdapter adapter;
     private Inventory inventory;
     String id_order;
     int requestcode;
@@ -121,7 +114,7 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
         getSupportActionBar().setTitle("Agregar ensamble a la orden");
 
         Intent i = getIntent();
-       id_order= i.getStringExtra(EXTRA_ID_ORDER);
+        id_order= i.getStringExtra(EXTRA_ID_ORDER);
 
 
         inventory= new Inventory(getApplicationContext());
@@ -130,7 +123,7 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
 
 
         final List<Assemblies> assemblies = inventory.getAssemblies_alfabetic();
-        adapter= new Add_Assembly_to_Order.AssembliesAdapter(assemblies,this);
+        adapter= new AssembliesAdapter(assemblies,this);
         recyclerView.setAdapter(adapter);
 
 
@@ -149,15 +142,13 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         final List<Assemblies> assemblies = inventory.getAssemblies_alfabetic();
-        adapter= new Add_Assembly_to_Order.AssembliesAdapter(assemblies,this);
+        adapter= new AssembliesAdapter(assemblies,this);
         recyclerView.setAdapter(adapter);
 
         setResult(RESULT_OK);
         finish();
 
     }
-
-
 
     /*
     //Hace que aparezca el icono en el App Bar
@@ -167,7 +158,4 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
         return true;
     }
     */
-
-
-
 }

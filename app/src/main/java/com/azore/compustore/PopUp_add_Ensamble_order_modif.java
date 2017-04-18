@@ -2,7 +2,6 @@ package com.azore.compustore;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -14,10 +13,11 @@ import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 
 /**
- * Created by Azore on 17/04/2017.
+ * Created by Armín on 18/04/2017.
  */
 
-public class PopUp_add_Ensamble_Order extends Activity {
+public class PopUp_add_Ensamble_order_modif extends Activity {
+
     ImageButton btn_assembly;
     private Inventory inventory;
     TextView txt_product_name;
@@ -49,9 +49,11 @@ public class PopUp_add_Ensamble_Order extends Activity {
         Intent i = getIntent();
         name_product= i.getStringExtra(EXTRA_DESCRIPTION_ENSAMBLE);
         id_assembly = i.getStringExtra(EXTRA_ENSAMBLE_ID);
+        id_order = i.getStringExtra(EXTRA_ID_ORDER);
+
 
         inventory= new Inventory(getApplicationContext());
-        id_order= String.valueOf(inventory.getLastId(InventoryDbSchema.Orders_Table.NAME));
+       // id_order= String.valueOf(inventory.getLastId(InventoryDbSchema.Orders_Table.NAME));
 
         btn_assembly = (ImageButton) findViewById(R.id.pop_add_stock_products);
         txt_product_name = (TextView) findViewById(R.id.textview_products);

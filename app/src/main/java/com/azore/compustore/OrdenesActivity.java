@@ -496,32 +496,6 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
 
 
-
-    public void updateRecycler(){
-        /*inventory= new Inventory(getApplicationContext());
-        final List<Customers> customers = inventory.customers_alfabetic();
-        adapter= new ClientesActivity.ClientesAdapter(customers,this);
-        recyclerView.setAdapter(adapter);*/
-    }
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if ( (requestCode==request_code && resultCode== RESULT_OK)) {
-            inventory = new Inventory(getApplicationContext());
-
-            // customers
-            final List<Customers> customers = inventory.customers_alfabetic();
-            adapter= new ClientesActivity.ClientesAdapter(customers,getApplicationContext());
-
-        }
-        recyclerView.setAdapter(adapter);
-
-
-    }
-    */
-
     //SearchView
     @Override
     public boolean onQueryTextSubmit(String query) {

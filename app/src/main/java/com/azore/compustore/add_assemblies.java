@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.azore.compustore.fiuady.db.AssemblieOrders_Union;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
@@ -126,7 +127,6 @@ public class add_assemblies extends AppCompatActivity {
         setContentView(R.layout.activity_add_assemblies);
         getSupportActionBar().setTitle("Nuevo Ensamble");
 
-
         inventory = new Inventory(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_products_assemblies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -155,9 +155,17 @@ public class add_assemblies extends AppCompatActivity {
                 }
                 else
                 {
-                    inventory.updateAssemblies(String.valueOf(lastid), new_description.getText().toString());
-                    finish();
-                    Toast.makeText(getApplicationContext(), "Agregado Exitosamente",Toast.LENGTH_SHORT).show();
+                    List<Products> products =inventory.getProductsAssembly(String.valueOf(lastid));
+                    if( products.size()==0 ) {
+                        Toast.makeText(getApplicationContext(), "Ensamble Vacío, Ingrese un producto !", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        inventory.updateAssemblies(String.valueOf(lastid), new_description.getText().toString());
+                        finish();
+                        Toast.makeText(getApplicationContext(), "Agregado Exitosamente",Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
 
 

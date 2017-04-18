@@ -159,8 +159,16 @@ public class add_order extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    Toast.makeText(getApplicationContext(), "Agregado Exitosamente",Toast.LENGTH_SHORT).show();
-                     finish();
+                final List<AssemblieOrders_Union> assemblieOrders_unions = inventory.getEnsambliesInOrder(String.valueOf(lastorderid));
+            if( assemblieOrders_unions.size()==0 ) {
+                Toast.makeText(getApplicationContext(), "Orden Vacía, Agregue un ensamble !", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Agregado Exitosamente", Toast.LENGTH_SHORT).show();
+                Intent intent_back = new Intent();
+                setResult(RESULT_OK, intent_back);
+                finish();
+            }
 
             }
         });

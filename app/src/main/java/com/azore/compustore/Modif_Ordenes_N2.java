@@ -24,7 +24,10 @@ import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.OrdenesUnion;
 import com.azore.compustore.fiuady.db.Products;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -132,6 +135,7 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
     private Button btn_save ;
     private Button btn_cancel ;
       private List<AssemblieOrders_Union> assemblieOrders_unions_original;
+    private  int request_code1=1;
 
     //**********************************************************************************************
     //**********************************************************************************************
@@ -172,10 +176,18 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Cambios Realizados !",Toast.LENGTH_SHORT).show();
+
+                final List<AssemblieOrders_Union> assemblieOrders_unions = inventory.getEnsambliesInOrder(id_order);
+            if (assemblieOrders_unions.size()==0)
+            {
+                Toast.makeText(getApplicationContext(), "Orden Vacía, Ingrese un ensamble !", Toast.LENGTH_SHORT).show();
+            }else {
+
+                Toast.makeText(getApplicationContext(), "Cambios Realizados !", Toast.LENGTH_SHORT).show();
                 Intent intent_back = new Intent();
                 setResult(RESULT_OK, intent_back);
                 finish();
+            }
             }
         });
 
@@ -222,23 +234,16 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.agregar:
-                // Codigo prueba
-
-           //    Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
-           //    intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT,id_product);
-           //    intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT,name_product);
-
-           //    intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, name_description);
-           //    intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, id);
-           //    startActivityForResult(intent, requestcode3);
 
 
-
-           //    return true;
-            // Codigo prueba
+                Intent intent = new Intent(getApplicationContext(), Add_assembly_to_order_modif.class);
+                intent.putExtra(Add_assembly_to_order_modif.EXTRA_ID_ORDER, String.valueOf(ordenesUnion.getId())) ;
+                startActivityForResult(intent, request_code1);
 
         }
         return super.onOptionsItemSelected(item);
+
+
 
     }
 

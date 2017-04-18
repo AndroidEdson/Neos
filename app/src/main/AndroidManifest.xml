@@ -84,6 +84,11 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity android:name=".Modif_Ordenes_N2"></activity>
         <activity android:name=".Add_Assembly_to_Order"></activity>
+        <activity
+            android:name=".PopUp_add_Ensamble_order_modif"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".Add_assembly_to_order_modif"></activity>
+
     </application>
 
 </manifest>
