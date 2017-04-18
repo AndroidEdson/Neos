@@ -185,6 +185,13 @@ public class add_assemblies extends AppCompatActivity {
     //***************************************************************************
     //***************************END ONCREATE*********************************
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        inventory.deleteAssemblies(String.valueOf(lastid));
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);

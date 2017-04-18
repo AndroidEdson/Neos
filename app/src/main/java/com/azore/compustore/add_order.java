@@ -17,6 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import com.azore.compustore.fiuady.db.AssemblieOrders_Union;
 import com.azore.compustore.fiuady.db.Assemblies;
 import com.azore.compustore.fiuady.db.Customers;
@@ -24,6 +27,7 @@ import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -173,6 +177,13 @@ public class add_order extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        inventory.deleteOrders(String.valueOf(lastorderid));
+    }
+
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -187,8 +198,11 @@ public class add_order extends AppCompatActivity {
 
             case R.id.agregar:
                 // Codigo prueba
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat sd1 = new SimpleDateFormat("yyyy-MM-dd");
+                String date =  sd1.format(new Date(c.getTimeInMillis()));
                 int customerid= clientes.get(add_order_spinner.getSelectedItemPosition()).getId();
-                inventory.AddOrder(lastorderid,customerid,"2017-01-15");
+                inventory.AddOrder(lastorderid,customerid,date);
                 Intent intent = new Intent(getApplicationContext(), Add_Assembly_to_Order.class);
                 startActivityForResult(intent, requestcode);
 
