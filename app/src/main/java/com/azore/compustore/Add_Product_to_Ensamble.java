@@ -153,7 +153,6 @@ public class Add_Product_to_Ensamble extends AppCompatActivity  implements Searc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
-
         inventory = new Inventory(getApplicationContext());
 
         Intent i = getIntent();

@@ -188,15 +188,15 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
 
         //LA PRIMERA VEZ QUE LO CORRAS COMPILA TODOS LOS UPDATES PARA CAMBIAR EL FORMATO DE LA FECHA
-       // inventory.updateOrderDate("2016-10-05","0");
-       // inventory.updateOrderDate("2016-11-12","1");
-       // inventory.updateOrderDate("2016-12-26","2");
-       // inventory.updateOrderDate("2017-01-03","3");
-       // inventory.updateOrderDate("2017-01-15","4");
-       // inventory.updateOrderDate("2017-02-04","5");
-       // inventory.updateOrderDate("2017-03-05","6");
-       // inventory.updateOrderDate("2017-03-12","7");
-       // inventory.updateOrderDate("2017-03-18","8");
+        inventory.updateOrderDate("2016-10-05","0");
+        inventory.updateOrderDate("2016-11-12","1");
+        inventory.updateOrderDate("2016-12-26","2");
+        inventory.updateOrderDate("2017-01-03","3");
+        inventory.updateOrderDate("2017-01-15","4");
+        inventory.updateOrderDate("2017-02-04","5");
+        inventory.updateOrderDate("2017-03-05","6");
+        inventory.updateOrderDate("2017-03-12","7");
+        inventory.updateOrderDate("2017-03-18","8");
 
 
       //  String orders = inventory.getOneOrderTable(String.valueOf(8));
@@ -462,55 +462,11 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        /*
+
             case R.id.agregar:
-
-                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-                final View mView = getLayoutInflater().inflate(R.layout.customer_add,null);
-                final EditText mNombre = (EditText)mView.findViewById(R.id.customer_first_name);
-                final EditText mApellido = (EditText)mView.findViewById(R.id.customer_last_name);
-                final EditText mDireccion = (EditText)mView.findViewById(R.id.customer_address);
-                final EditText mTel1 = (EditText)mView.findViewById(R.id.customer_phone1);
-                final EditText mTel2 = (EditText)mView.findViewById(R.id.customer_phone2);
-                final EditText mTel3 = (EditText)mView.findViewById(R.id.customer_phone3);
-                final EditText mEmail = (EditText)mView.findViewById(R.id.customer_email);
-                Button mGuardar = (Button) mView.findViewById(R.id.customer_save);
-                Button mCancelar = (Button) mView.findViewById(R.id.customer_cancel);
-
-
-                mBuilder.setView(mView);
-                dialogShow = mBuilder.create();
-                dialogShow.show();
-
-                mGuardar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if ( mNombre.getText().toString().equals("") || mApellido.getText().toString().equals("")|| mDireccion.getText().toString().equals("") )
-                        {
-                            Toast.makeText(getApplicationContext(), "¡Error! Campo Vacío", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-
-                            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                            inventory.AddCustomer(inventory.getLastId(InventoryDbSchema.Customers_Table.NAME) + 1,mNombre.getText().toString(),mApellido.getText().toString(),mDireccion.getText().toString(),mTel1.getText().toString(),mTel2.getText().toString(),mTel3.getText().toString(),mEmail.getText().toString());
-                            dialogShow.dismiss();
-                            updateRecycler();
-                        }
-                    }
-                });
-
-
-                mCancelar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CancelarshowAlert();
-                    }
-                });
-
-
-
-                return true;*/
+                Intent i = new Intent(getApplicationContext(),add_order.class);
+                startActivityForResult(i, request_code);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

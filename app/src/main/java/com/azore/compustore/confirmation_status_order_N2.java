@@ -3,7 +3,7 @@ package com.azore.compustore;
 import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
+import java.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;

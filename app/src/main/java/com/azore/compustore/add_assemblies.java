@@ -208,7 +208,7 @@ public class add_assemblies extends AppCompatActivity {
 
                 if(original_name.equals(new_description.getText().toString())) {
 
-                    //inventory.AddAssemblies(lastid, new_description.getText().toString());
+                    inventory.AddAssemblies(lastid, new_description.getText().toString());
                     Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
 
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");

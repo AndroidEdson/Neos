@@ -62,22 +62,28 @@
         <activity
             android:name=".PopUp_add_product_Ensamble"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
+        <activity
+            android:name=".PopUp_add_Ensamble_Order"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity android:name=".Add_Product_to_Ensamble" />
         <activity
             android:name=".modify_customers"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".add_order" />
         <activity
             android:name=".Pop_Up_ordenes_N1"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".pop_menu_orders_modif_N3"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".confirmation_status_order_N2"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"  />
-        <activity android:name="modifi_qty_ensamblie_N4"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"  />
-        <activity android:name=".Modif_Ordenes_N2">
-        </activity>
+        <activity
+            android:name=".confirmation_status_order_N2"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".modifi_qty_ensamblie_N4"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity android:name=".Modif_Ordenes_N2"></activity>
+        <activity android:name=".Add_Assembly_to_Order"></activity>
     </application>
 
 </manifest>

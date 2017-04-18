@@ -727,7 +727,7 @@ public final class Inventory {
         values.put(InventoryDbSchema.AssemblyProducts_Table.Columns.QUANTITY,qty );
         //db.update(InventoryDbSchema.AssemblyProducts_Table.NAME, values, InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID + "= ?", new String[]{product_id});
          db.update(InventoryDbSchema.AssemblyProducts_Table.NAME, values, InventoryDbSchema.AssemblyProducts_Table.Columns.PRODUCT_ID + " = ? AND " + InventoryDbSchema.AssemblyProducts_Table.Columns.ID + "= ?", new String[]{product_id, id});
-    db.close();
+         db.close();
     }
 
 
@@ -1264,6 +1264,71 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
     {
 
         db.delete(InventoryDbSchema.Order_Assemblies_Table.NAME, "id = ? AND assembly_id =?", new String[] {id_order,id_assembly});
+
+    }
+
+    public  int getNumberOfEnsamblesOnActualOrder(String id_order, String id_assembly) {
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+        int qty_product=0;
+        String query = "SELECT qty FROM order_assemblies WHERE id= " + id_order + " AND assembly_id=" + id_assembly;
+
+        Cursor cursor = (db.rawQuery(query, null));
+
+        if (cursor.getCount() >= 1) {
+            cursor.moveToFirst();
+            qty_product= cursor.getInt(cursor.getColumnIndex("qty"));
+
+        }
+        else{
+            qty_product=0;
+        }
+        //List<Products> list = new ArrayList<Products>();
+        return qty_product;
+
+
+    }
+
+    // FUNCION PARA AÑADIR NUEVA ORDEN
+    public void AddOrder(int order_id,int customer_id,String date)
+    {
+        ///Agregar un elemento a la base de datos
+
+        db =inventoryHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Orders_Table.Columns.ID, order_id);
+        contentValues.put(InventoryDbSchema.Orders_Table.Columns.STATUS_ID, 0);
+        contentValues.put(InventoryDbSchema.Orders_Table.Columns.COSTUMER_ID, customer_id);
+        contentValues.put(InventoryDbSchema.Orders_Table.Columns.DATE, date);
+
+        db.insert(InventoryDbSchema.Orders_Table.NAME, null, contentValues);
+
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+    // FUNCION PARA AÑADIR NUEVOS ENSAMBLE A LA ORDEN
+    public void AddOrderAssembly(String id_order,String assembly_id)
+    {
+        ///Agregar un elemento a la base de datos
+        db =inventoryHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryDbSchema.Order_Assemblies_Table.Columns.ID, Integer.valueOf(id_order));
+        contentValues.put(InventoryDbSchema.Order_Assemblies_Table.Columns.ASSEMBLY_ID, Integer.valueOf(assembly_id));
+        contentValues.put(InventoryDbSchema.Order_Assemblies_Table.Columns.QUANTITY, 1);
+
+        db.insert(InventoryDbSchema.Order_Assemblies_Table.NAME, null, contentValues);
+        // Cursor cursor = new CategoryCursor((db.insert("categories", null , contentValues )));
+    }
+
+    public void deleteOrders (String id)
+    {
+        //ELIMINA LA CATEGORIA
+        db.delete(InventoryDbSchema.Order_Assemblies_Table.NAME , InventoryDbSchema.Order_Assemblies_Table.Columns.ID+" = ?", new String[] {id});
+
+        //elimina primero los products internos
+        db.delete(InventoryDbSchema.Orders_Table.NAME , InventoryDbSchema.Orders_Table.Columns.ID+" = ?", new String[] {id});
+
 
     }
 
