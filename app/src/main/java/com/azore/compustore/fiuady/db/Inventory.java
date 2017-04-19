@@ -830,6 +830,22 @@ public final class Inventory {
 
     }
 
+    //BUSCAR ENSAMBLE
+
+    public List<Assemblies> searchEnsamble(String input) {
+        List<Assemblies> list = new ArrayList<Assemblies>();
+
+
+        AssembliesCursor cursor = new AssembliesCursor((db.rawQuery("SELECT * FROM assemblies WHERE description LIKE '%"+ input +"%'  ORDER BY description ASC" , null)));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getAssemblies()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+
 
 //***************************************************************************************************
  //***************************************************************************************************
@@ -1013,7 +1029,7 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
                 "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
                 "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
                 "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
-                "GROUP BY a.id ORDER BY date(a.date) DESC) WHERE first_name LIKE '%"+input+"%'";
+                "GROUP BY a.id ORDER BY date(a.date) DESC) WHERE (first_name LIKE '%"+input+"%' OR last_name LIKE '%"+input+"%')";
 
         OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(querysearchOrders, null))
         );
@@ -1351,6 +1367,7 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
         db.delete(InventoryDbSchema.Order_Assemblies_Table.NAME, InventoryDbSchema.Order_Assemblies_Table.Columns.ID +" = ? ", new String[] {id_ensamble});
     }
+
 
 
 

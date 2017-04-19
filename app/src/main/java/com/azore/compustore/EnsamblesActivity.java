@@ -2,10 +2,12 @@ package com.azore.compustore;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +24,7 @@ import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
 
-public class EnsamblesActivity extends AppCompatActivity {
+public class EnsamblesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private class AssembliesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -145,7 +147,10 @@ public class EnsamblesActivity extends AppCompatActivity {
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu2,menu);
+        MenuItem menuItem = menu.findItem(R.id.buscar);
+        SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
         return true;
 
 
@@ -170,4 +175,20 @@ public class EnsamblesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+    //SearchView
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        onQueryTextChange(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        final List<Assemblies> assemblies = inventory.searchEnsamble(newText);
+        adapter= new EnsamblesActivity.AssembliesAdapter(assemblies,this);
+        recyclerView.setAdapter(adapter);
+        return false;
+    }
+
 }

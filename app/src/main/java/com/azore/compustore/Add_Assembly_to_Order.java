@@ -25,13 +25,14 @@ import android.widget.Toast;
 
 import com.azore.compustore.fiuady.db.Assemblies;
 import com.azore.compustore.fiuady.db.CategoryProduct;
+import com.azore.compustore.fiuady.db.Customers;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
 
 import java.util.List;
 
-public class Add_Assembly_to_Order extends AppCompatActivity {
+public class Add_Assembly_to_Order extends AppCompatActivity implements SearchView.OnQueryTextListener  {
 
     private class AssembliesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -159,14 +160,31 @@ public class Add_Assembly_to_Order extends AppCompatActivity {
 
 
 
-    /*
+
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu3,menu);
+        MenuItem menuItem = menu.findItem(R.id.buscar);
+        SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
-    */
+    //SearchView
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        onQueryTextChange(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        final List<Assemblies> assemblies = inventory.searchEnsamble(newText);
+        adapter= new Add_Assembly_to_Order.AssembliesAdapter(assemblies,this);
+        recyclerView.setAdapter(adapter);
+        return false;
+    }
 
 
 

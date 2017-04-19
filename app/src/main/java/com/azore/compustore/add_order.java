@@ -225,6 +225,7 @@ public class add_order extends AppCompatActivity {
         if(assemblieOrders_unions.size() > 0) {
             add_order_spinner.setEnabled(false);
         }
+        else{add_order_spinner.setEnabled(true);}
 
     }
 }
