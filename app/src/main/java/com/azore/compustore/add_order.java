@@ -121,6 +121,7 @@ public class add_order extends AppCompatActivity {
     private int request_code;
     public  List<Customers> clientes ;
     public int lastorderid;
+    public boolean btn_save_pressed = false;
 
 
 
@@ -156,6 +157,7 @@ public class add_order extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                btn_save_pressed = true;
                 final List<AssemblieOrders_Union> assemblieOrders_unions = inventory.getEnsambliesInOrder(String.valueOf(lastorderid));
             if( assemblieOrders_unions.size()==0 ) {
                 Toast.makeText(getApplicationContext(), "Orden Vacía, Agregue un ensamble !", Toast.LENGTH_SHORT).show();
@@ -187,6 +189,14 @@ public class add_order extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         inventory.deleteOrders(String.valueOf(lastorderid));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (btn_save_pressed==false) {
+            inventory.deleteOrders(String.valueOf(lastorderid));
+        }
     }
 
     //Hace que aparezca el icono en el App Bar
