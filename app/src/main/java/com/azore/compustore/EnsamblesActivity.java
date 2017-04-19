@@ -119,9 +119,6 @@ public class EnsamblesActivity extends AppCompatActivity {
        // int lastid= inventory.getLastId(InventoryDbSchema.Products_Table.NAME);
         //Toast.makeText(getApplicationContext(),  String.valueOf(lastid), Toast.LENGTH_SHORT).show();
 
-
-
-
     }
 
     //**************************************************************************************

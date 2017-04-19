@@ -98,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
     }
     // Boton reportes
     public void BtnReportes(View v){
-        //Intent i = new Intent(this,ReportesActivity.class);
-       // startActivity(i);
 
+        Intent i = new Intent(this,ReportesActivity.class);
+        startActivity(i);
 
     }
 

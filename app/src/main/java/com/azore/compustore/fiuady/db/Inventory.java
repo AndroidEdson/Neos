@@ -1354,7 +1354,29 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
 
 
-    //***************************************************************************************************
+    public List<Products> getMissing_products()
+    {
+
+        List<Products> list = new ArrayList<Products>();
+
+        String query = "SELECT a.id, a.category_id,  a.description, abs((a.price)*(a.qty - b.qty*c.qty)) as price , (a.qty - b.qty*c.qty) as qty\n" +
+                "FROM  products a\n" +
+                "INNER JOIN assembly_products b ON ( a.id = b.product_id) \n" +
+                "INNER JOIN order_assemblies  c ON ( c.assembly_id = b.id)\n" +
+                "GROUP BY a.id HAVING (a.qty - b.qty*c.qty) <0 ORDER BY a.description ASC";
+
+        ProductCursor cursor = new ProductCursor(db.rawQuery(query, null));
+
+        while (cursor.moveToNext()){
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+        }
+        cursor.close();
+
+        return list;
+
+    }
+
+//***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************
 } // END FINAL DEL MUNDO UNIVERSAL DEL COSMOS
