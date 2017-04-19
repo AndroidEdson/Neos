@@ -82,13 +82,13 @@
         <activity
             android:name=".modifi_qty_ensamblie_N4"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".Modif_Ordenes_N2"></activity>
-        <activity android:name=".Add_Assembly_to_Order"></activity>
+        <activity android:name=".Modif_Ordenes_N2" />
+        <activity android:name=".Add_Assembly_to_Order" />
         <activity
             android:name=".PopUp_add_Ensamble_order_modif"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity android:name=".Add_assembly_to_order_modif"></activity>
-
+        <activity android:name=".Add_assembly_to_order_modif" />
+        <activity android:name=".Reportes_Missing_Products"></activity>
     </application>
 
 </manifest>

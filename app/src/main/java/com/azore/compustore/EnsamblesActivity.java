@@ -121,9 +121,6 @@ public class EnsamblesActivity extends AppCompatActivity implements SearchView.O
        // int lastid= inventory.getLastId(InventoryDbSchema.Products_Table.NAME);
         //Toast.makeText(getApplicationContext(),  String.valueOf(lastid), Toast.LENGTH_SHORT).show();
 
-
-
-
     }
 
     //**************************************************************************************
