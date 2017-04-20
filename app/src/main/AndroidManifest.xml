@@ -25,6 +25,10 @@
         <activity android:name=".OrdenesActivity" />
         <activity android:name=".ReportesActivity" />
         <activity
+            android:name=".Month_sales_main"
+            android:label="Card View"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
             android:name=".Pop"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
         <activity
@@ -88,7 +92,8 @@
             android:name=".PopUp_add_Ensamble_order_modif"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity android:name=".Add_assembly_to_order_modif" />
-        <activity android:name=".Reportes_Missing_Products"></activity>
+        <activity android:name=".Reportes_Missing_Products" />
+        <activity android:name=".info_month_sales"></activity>
     </application>
 
 </manifest>

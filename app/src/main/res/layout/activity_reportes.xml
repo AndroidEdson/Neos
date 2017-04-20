@@ -27,8 +27,8 @@
             android:layout_alignStart="@+id/txt_tag_missing_product"
             android:layout_alignTop="@+id/btn_more_sales"
             android:layout_marginTop="33dp"
-            android:text="Lista de Productos faltantes"
-            android:textColor="@color/darkred"
+            android:text="Resumen de Ventas "
+            android:textColor="@color/darkblue"
             android:textStyle="bold" />
 
         <ImageButton
@@ -62,7 +62,7 @@
             android:id="@+id/btn_more_sales"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_warning_products_missing"
+            android:src="@drawable/ic_calendar"
             android:layout_marginTop="37dp"
             android:layout_below="@+id/btn_simulador"
             android:layout_alignLeft="@+id/btn_simulador"

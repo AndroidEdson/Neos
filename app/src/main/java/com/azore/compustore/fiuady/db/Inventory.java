@@ -204,6 +204,21 @@ class OrderAssembliesUnionCursor extends  CursorWrapper{
     }
 }
 
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
+// PARA REPORTES TENER LA GANANCIA POR MES
+
+class SalesMonthCursor extends  CursorWrapper{
+    public SalesMonthCursor(Cursor cursor) {super(cursor);}
+
+    public SalesMonth getSalesMonth  () {
+        Cursor cursor = getWrappedCursor();
+        return new SalesMonth (getInt(cursor.getColumnIndex(InventoryDbSchema.SalesMonth.Columns.COUNT)),
+                cursor.getDouble(cursor.getColumnIndex(InventoryDbSchema.SalesMonth.Columns.GAIN)));
+    }
+}
 
 //***************************************************************************************************
 //***************************************************************************************************
@@ -1375,11 +1390,12 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
         List<Products> list = new ArrayList<Products>();
 
-        String query = "SELECT a.id, a.category_id,  a.description, abs((a.price)*(a.qty - b.qty*c.qty)) as price , (a.qty - b.qty*c.qty) as qty\n" +
+        String query = "SELECT id, category_id, description, abs(qty_stock-sum (qty_orders*qty_ensambles))*price_one as price , (qty_stock-sum (qty_orders*qty_ensambles)) as qty FROM (\n" +
+                "SELECT a.id, a.category_id,  a.description, a.price as price_one ,  c.id as id_order, b.qty as qty_ensambles, c.qty as qty_orders, a.qty as qty_stock\n" +
                 "FROM  products a\n" +
                 "INNER JOIN assembly_products b ON ( a.id = b.product_id) \n" +
                 "INNER JOIN order_assemblies  c ON ( c.assembly_id = b.id)\n" +
-                "GROUP BY a.id HAVING (a.qty - b.qty*c.qty) <0 ORDER BY a.description ASC";
+                "order by a.id ) group by id order by description ASC";
 
         ProductCursor cursor = new ProductCursor(db.rawQuery(query, null));
 
@@ -1390,6 +1406,56 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
         return list;
 
+    }
+
+    public  SalesMonth getSalesMonth(String fecha_inicio,String fecha_final) {
+
+        SalesMonth salesMonth;
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query_macizox3 = "SELECT COUNT(*) as sale, sum(costo) as total FROM (\n" +
+                "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date  \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING a.date BETWEEN date('"+fecha_inicio+"') AND date('"+fecha_final+"') AND  id_status>=2   ORDER BY date(a.date) DESC)";
+
+        SalesMonthCursor cursor = new SalesMonthCursor(db.rawQuery(query_macizox3, null));
+
+        cursor.moveToNext();
+
+        salesMonth= cursor.getSalesMonth();
+
+
+        return salesMonth;
+    }
+
+
+    public List<OrdenesUnion> getSalesMonthOrdersUnion(String date_begin, String date_end ) {
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        String between_two_Dates = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date  \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING a.date BETWEEN date('"+date_begin+ "') AND date('" + date_end+"') AND  id_status>=2   ORDER BY date(a.date) DESC\n";
+        OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(between_two_Dates, null))
+        );
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
     }
 
 //***************************************************************************************************

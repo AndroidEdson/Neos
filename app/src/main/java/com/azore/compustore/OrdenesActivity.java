@@ -188,15 +188,15 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
 
         //LA PRIMERA VEZ QUE LO CORRAS COMPILA TODOS LOS UPDATES PARA CAMBIAR EL FORMATO DE LA FECHA
-        inventory.updateOrderDate("2016-10-05","0");
-        inventory.updateOrderDate("2016-11-12","1");
-        inventory.updateOrderDate("2016-12-26","2");
-        inventory.updateOrderDate("2017-01-03","3");
-        inventory.updateOrderDate("2017-01-15","4");
-        inventory.updateOrderDate("2017-02-04","5");
-        inventory.updateOrderDate("2017-03-05","6");
-        inventory.updateOrderDate("2017-03-12","7");
-        inventory.updateOrderDate("2017-03-18","8");
+      //  inventory.updateOrderDate("2016-10-05","0");
+      //  inventory.updateOrderDate("2016-11-12","1");
+      //  inventory.updateOrderDate("2016-12-26","2");
+      //  inventory.updateOrderDate("2017-01-03","3");
+      //  inventory.updateOrderDate("2017-01-15","4");
+      //  inventory.updateOrderDate("2017-02-04","5");
+      //  inventory.updateOrderDate("2017-03-05","6");
+      //  inventory.updateOrderDate("2017-03-12","7");
+      //  inventory.updateOrderDate("2017-03-18","8");
 
 
       //  String orders = inventory.getOneOrderTable(String.valueOf(8));

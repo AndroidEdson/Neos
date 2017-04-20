@@ -60,13 +60,17 @@ public class ReportesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent i = new Intent(getApplicationContext(),Month_sales_main.class);
+                startActivity(i);
+
+
             }
         });
 
 
 
 
-
+// appbar_layout--  android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
 
     }
 

@@ -154,6 +154,14 @@ public final class InventoryDbSchema {
         }
     }
 
+    public static final class SalesMonth {
+
+        public static final class Columns {
+            public static final String COUNT = "sale";
+            public static final String GAIN = "total";
+        }
+    }
+
 
 
 //FIN DE LAS TABLAS______________________________________________________________________________
