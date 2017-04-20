@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,6 +117,8 @@ public class add_assemblies extends AppCompatActivity {
     private EditText new_description;
     private  int lastid;
     private  String original_name="";
+    public boolean btn_save_pressed = false;
+
 
     //***************************************************************************
     //***************************************************************************
@@ -123,10 +126,10 @@ public class add_assemblies extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assemblies);
         getSupportActionBar().setTitle("Nuevo Ensamble");
-
         inventory = new Inventory(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_products_assemblies);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -145,7 +148,7 @@ public class add_assemblies extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                btn_save_pressed = true;
                 int i= inventory.NameValidationGeneric(InventoryDbSchema.Assemblies_Table.NAME,new_description.getText().toString());
 
                 if ( new_description.getText().toString().equals("")){
@@ -197,7 +200,15 @@ public class add_assemblies extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        inventory.deleteAssemblies(String.valueOf(lastid));
+            inventory.deleteAssemblies(String.valueOf(lastid));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (btn_save_pressed==false) {
+            inventory.deleteAssemblies(String.valueOf(lastid));
+        }
     }
 
     @Override
