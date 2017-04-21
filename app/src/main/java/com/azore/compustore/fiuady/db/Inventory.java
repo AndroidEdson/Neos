@@ -1390,12 +1390,15 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
         List<Products> list = new ArrayList<Products>();
 
-        String query = "SELECT id, category_id, description, abs(qty_stock-sum (qty_orders*qty_ensambles))*price_one as price , (qty_stock-sum (qty_orders*qty_ensambles)) as qty FROM (\n" +
-                "SELECT a.id, a.category_id,  a.description, a.price as price_one ,  c.id as id_order, b.qty as qty_ensambles, c.qty as qty_orders, a.qty as qty_stock\n" +
+        String query = "SELECT new_id as id, category_id, description, abs(qty_stock-sum (qty_orders*qty_ensambles))*price_one as price , qty_stock-sum (qty_orders*qty_ensambles) as qty\n" +
+                "FROM (\n" +
+                "SELECT * FROM (\n" +
+                "SELECT a.id as new_id, a.category_id,  a.description, a.price as price_one ,  c.id as id_order, b.qty as qty_ensambles, c.qty as qty_orders, a.qty as qty_stock, c.id as id_order\n" +
                 "FROM  products a\n" +
                 "INNER JOIN assembly_products b ON ( a.id = b.product_id) \n" +
                 "INNER JOIN order_assemblies  c ON ( c.assembly_id = b.id)\n" +
-                "order by a.id ) group by id order by description ASC";
+                "order by a.id ) INNER JOIN orders d ON (id_order = d.id)\n" +
+                "where status_id>=2 ) GROUP BY description HAVING qty<0 ORDER BY description ASC";
 
         ProductCursor cursor = new ProductCursor(db.rawQuery(query, null));
 
