@@ -224,6 +224,26 @@ class SalesMonthCursor extends  CursorWrapper{
 //***************************************************************************************************
 //***************************************************************************************************
 
+// PARA ENSAMBLES VENDIDOS DEL MES
+
+class EnsamblesVendidosCursor extends  CursorWrapper{
+    public EnsamblesVendidosCursor(Cursor cursor) {super(cursor);}
+
+    public Ensambles_vendidos_Mes getEnsamblesVendidosMes  () {
+        Cursor cursor = getWrappedCursor();
+        return new Ensambles_vendidos_Mes (getInt(cursor.getColumnIndex(InventoryDbSchema.Ensambles_vendidos_mes.Columns.ID)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Ensambles_vendidos_mes.Columns.DESCRIPTION)),
+                cursor.getInt(cursor.getColumnIndex(InventoryDbSchema.Ensambles_vendidos_mes.Columns.QTY)),
+                cursor.getString(cursor.getColumnIndex(InventoryDbSchema.Ensambles_vendidos_mes.Columns.DATE)),
+                cursor.getDouble(cursor.getColumnIndex(InventoryDbSchema.Ensambles_vendidos_mes.Columns.PRICE_ASSEMBLY)));
+    }
+}
+
+
+//***************************************************************************************************
+//***************************************************************************************************
+//***************************************************************************************************
+
 
 
 // INICIO DE FUNCIONES INVENTORY
@@ -1461,6 +1481,29 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
         return list;
     }
 
+
+    public List<Ensambles_vendidos_Mes> getListEnsamblesVendidosMes(String date_begin, String date_end ) {
+        List<Ensambles_vendidos_Mes> list = new ArrayList<Ensambles_vendidos_Mes>();
+
+        String between_two_Dates = "SELECT a.id, d.description , c.qty, a.date, sum (c.qty*ap.qty*p.price) as price_assembly\n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p         ON  (p.id=ap.product_id)\n" +
+                " where   a.date BETWEEN date('"+date_begin+"') AND date('"+ date_end+ "') AND a.status_id>= 2 GROUP BY d.description ORDER BY c.qty DESC" ;
+
+        EnsamblesVendidosCursor cursor= new EnsamblesVendidosCursor((db.rawQuery(between_two_Dates, null))
+        );
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getEnsamblesVendidosMes()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
 //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************

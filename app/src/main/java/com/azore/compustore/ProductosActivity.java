@@ -161,7 +161,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         categoriesSpinner.setAdapter(spinner_adapter);
 
-        adapter = new ProductosActivity.ProductsAdapter(products, this);
+        adapter = new ProductsAdapter(products, this);
         recyclerView.setAdapter(adapter);
 
 

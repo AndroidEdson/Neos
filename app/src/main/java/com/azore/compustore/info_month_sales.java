@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.OrdenesUnion;
+import com.azore.compustore.fiuady.db.SalesMonth;
 
 import java.util.List;
 
@@ -126,7 +127,9 @@ public class info_month_sales extends AppCompatActivity {
 
     private  String date_begin;
     private  String date_ending;
-
+    private TextView txt_count;
+    private TextView txt_gain;
+    private SalesMonth salesMonth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +138,8 @@ public class info_month_sales extends AppCompatActivity {
         Intent i = getIntent();
         date_begin = i.getStringExtra(EXTRA_DATE_BEGIN);
         date_ending = i.getStringExtra(EXTRA_DATE_END);
+        txt_count= (TextView)findViewById(R.id.txt_count);
+        txt_gain= (TextView)findViewById(R.id.txt_gain);
 
         getSupportActionBar().setTitle("Ordenes en el mes");
 
@@ -142,6 +147,10 @@ public class info_month_sales extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         inventory = new Inventory(getApplicationContext());
 
+        salesMonth= inventory.getSalesMonth(date_begin,date_ending);
+
+        txt_count.setText(String.valueOf(salesMonth.getCount()));
+        txt_gain.setText(Double.toString((double) salesMonth.getGanancia()/100));
 
         final List<OrdenesUnion> ordenes_union = inventory.getSalesMonthOrdersUnion(date_begin,date_ending);
         adapter = new OrdenesUnionAdapter(ordenes_union, this);

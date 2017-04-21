@@ -162,6 +162,17 @@ public final class InventoryDbSchema {
         }
     }
 
+    public static final class Ensambles_vendidos_mes {
+
+        public static final class Columns {
+            public static final String ID = "id";
+            public static final String DESCRIPTION = "description";
+            public static final String QTY = "qty";
+            public static final String DATE = "date";
+            public static final String PRICE_ASSEMBLY = "price_assembly";
+        }
+    }
+
 
 
 //FIN DE LAS TABLAS______________________________________________________________________________

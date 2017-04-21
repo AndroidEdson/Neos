@@ -114,7 +114,12 @@ public class Month_sales_main extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
 
-                    Toast.makeText(getApplicationContext(), String.valueOf(aux), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), String.valueOf(aux), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), ensambles_in_month.class);
+                    intent.putExtra(ensambles_in_month.EXTRA_DATE_BEGIN, mes_begin.get(position));
+                    intent.putExtra(ensambles_in_month.EXTRA_DATE_END, mes_ending.get(position));
+
+                    startActivityForResult(intent, request_code);
 
                     //showPopupMenu(holder.overflow);
                 }

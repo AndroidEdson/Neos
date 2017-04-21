@@ -93,7 +93,8 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity android:name=".Add_assembly_to_order_modif" />
         <activity android:name=".Reportes_Missing_Products" />
-        <activity android:name=".info_month_sales"></activity>
+        <activity android:name=".info_month_sales" />
+        <activity android:name=".ensambles_in_month"></activity>
     </application>
 
 </manifest>
