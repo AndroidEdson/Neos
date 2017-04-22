@@ -1504,6 +1504,108 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
         cursor.close();
         return list;
     }
+
+    // SIMULACION
+
+    public void create_actual_temporal_stock()
+    {
+        String query = "CREATE TABLE tabla1 AS \n" +
+                "\n" +
+                "SELECT a.id as id,a.category_id as category_id,a.description as description,\n" +
+                "IFNULL(b.price,a.price)  as price,\n" +
+                "IFNULL(b.qty,a.qty)  as qty  FROM \n" +
+                "(  SELECT a.id as id, a.category_id as category_id,  a.description as description, a.price as price,a.qty as qty FROM  ( SELECT a.id as id, a.category_id,  a.description, a.price as price,a.qty as qty, c.id as id_order\n" +
+                "                FROM  products a\n" +
+                "                INNER JOIN assembly_products b ON ( a.id = b.product_id) \n" +
+                "                INNER JOIN order_assemblies  c ON ( c.assembly_id = b.id)\n" +
+                "                order by a.id )a INNER JOIN orders d ON (id_order = d.id)\n" +
+                "                where status_id<2) a\n" +
+                "\n" +
+                "LEFT OUTER JOIN \n" +
+                "(\n" +
+                "SELECT new_id as id, category_id,id_order, description, abs(qty_stock-sum (qty_orders*qty_ensambles))*price_one as price , qty_stock-sum (qty_orders*qty_ensambles) as qty\n" +
+                "                FROM (\n" +
+                "                SELECT * FROM  (\n" +
+                "                SELECT a.id as new_id, a.category_id,  a.description, a.price as price_one ,  c.id as id_order, b.qty as qty_ensambles, c.qty as qty_orders, a.qty as qty_stock, c.id as id_order\n" +
+                "                FROM  products a\n" +
+                "                INNER JOIN assembly_products b ON ( a.id = b.product_id) \n" +
+                "                INNER JOIN order_assemblies  c ON ( c.assembly_id = b.id)\n" +
+                "                order by a.id ) INNER JOIN orders d ON (id_order = d.id)\n" +
+                "                where status_id>=2 ) GROUP BY description  ORDER BY description ASC\n" +
+                "                )b ON a.id = b.id";
+
+        // where status_id>=2
+
+        db.execSQL(query);
+    }
+    // CREAR TABLA TEMPORAL 2 VACIA (PRODUCTOS REQUERIDOS)
+
+    public void crear_tabla_2()
+    {
+        String query = "CREATE TABLE tabla2 AS SELECT * from products where 0";
+
+       db.execSQL(query);
+
+    }
+
+
+
+    // BORRAR TABLAS TEMPORALES
+
+    public void drop1()
+    {
+        String query = "DROP TABLE IF EXISTS tabla1";
+
+       db.execSQL(query);
+
+    }
+    public void drop2()
+    {
+        String query = "DROP TABLE IF EXISTS tabla2";
+
+        db.execSQL(query);
+
+    }
+
+    public void insert_products(int order_id)
+    {
+        String query = "INSERT INTO tabla2 SELECT c.id as id,c.category_id as category_id, c.description as description,(sum (a.qty*b.qty))*c.price as price, sum (a.qty*b.qty) as qty\n" +
+                "FROM order_assemblies a\n" +
+                "INNER JOIN assembly_products b ON (a.assembly_id = b.id)\n" +
+                "INNER JOIN products c ON (b.product_id = c.id)  WHERE a.id ="+ order_id + " GROUP BY description  ORDER BY description ASC\n";
+
+        db.execSQL(query);
+
+    }
+
+
+
+
+    public List<Products> getMissing_products_of_order(int id_order)
+    {
+
+        List<Products> list = new ArrayList<Products>();
+
+        String query = "SELECT c.id as id,c.category_id as category_id,c.description as description ,c.price as price,c.qty as qty\n" +
+                "FROM order_assemblies a\n" +
+                "INNER JOIN assembly_products b ON (a.assembly_id = b.id)\n" +
+                "INNER JOIN (SELECT a.id,a.category_id,a.description,IFNULL(b.price,0) + IFNULL(a.price,0) as price,IFNULL(b.qty,0) - IFNULL(a.qty,0) as qty\n" +
+                "FROM (\n" +
+                "SELECT id, category_id, description,price, sum(qty) as qty FROM tabla2 GROUP BY description\n" +
+                ") a\n" +
+                "LEFT OUTER JOIN tabla1 b ON a.id = b.id ) c ON (b.product_id = c.id) where a.id ="+id_order+ " AND c.qty<0";
+
+        ProductCursor cursor = new ProductCursor(db.rawQuery(query, null));
+
+        while (cursor.moveToNext()){
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+        }
+        cursor.close();
+
+        return list;
+
+    }
+
 //***************************************************************************************************
 //***************************************************************************************************
 //***************************************************************************************************

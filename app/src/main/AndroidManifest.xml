@@ -95,6 +95,7 @@
         <activity android:name=".Reportes_Missing_Products" />
         <activity android:name=".info_month_sales" />
         <activity android:name=".ensambles_in_month"></activity>
+        <activity android:name=".reportes_simulador"></activity>
     </application>
 
 </manifest>

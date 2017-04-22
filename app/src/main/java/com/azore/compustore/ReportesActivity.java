@@ -50,7 +50,8 @@ public class ReportesActivity extends AppCompatActivity {
         btn_simulation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(getApplicationContext(),reportes_simulador.class);
+                startActivity(i);
 
 
             }

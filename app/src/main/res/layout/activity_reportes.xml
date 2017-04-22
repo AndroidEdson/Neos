@@ -73,13 +73,13 @@
             android:id="@+id/txt_tag_missing_product2"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:textStyle="bold"
-            android:text="Lista de Productos faltantes"
-            android:layout_marginBottom="22dp"
-            android:textColor="@color/darkred"
             android:layout_above="@+id/btn_more_sales"
             android:layout_alignLeft="@+id/txt_tag_missing_product"
-            android:layout_alignStart="@+id/txt_tag_missing_product" />
+            android:layout_alignStart="@+id/txt_tag_missing_product"
+            android:layout_marginBottom="22dp"
+            android:text="Simulador de confirmación de órdenes"
+            android:textColor="@color/darkred"
+            android:textStyle="bold" />
 
 
 </RelativeLayout>
