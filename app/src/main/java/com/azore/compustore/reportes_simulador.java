@@ -83,10 +83,10 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
             OrdenesUnion ordenesUnion=this.ordenesUnions.get(position);
 
 
-/*
-            Intent intent = new Intent(getApplicationContext(), Pop_Up_ordenes_N1.class);
-            intent.putExtra(Pop_Up_ordenes_N1.EXTRA_ORDER_ID, String.valueOf(ordenesUnion.getId()));
-            startActivityForResult(intent, request_code);*/
+
+            Intent intent = new Intent(getApplicationContext(), Missing_Products_Of_Order.class);
+            intent.putExtra(Missing_Products_Of_Order.EXTRA_ORDER_ID, String.valueOf(ordenesUnion.getId()));
+            startActivity(intent);
 
 
         }
@@ -116,8 +116,12 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
             holder.bindCategories(ordenesUnions.get(position));
 
             List<Products> productosfaltantes=inventory.getMissing_products_of_order(ordenesUnions.get(position).getId());
+            List<Products> productosdelaorden=inventory.getproductsofordervalidation(ordenesUnions.get(position).getId());
             if (productosfaltantes.isEmpty()){
                 holder.layout.setBackgroundColor(Color.GREEN);
+            }
+            else if(productosdelaorden.size()!= productosfaltantes.size()){
+                holder.layout.setBackgroundColor(Color.YELLOW);
             }
             else {
                 holder.layout.setBackgroundColor(Color.RED);
@@ -164,7 +168,7 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_orders_simulator);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnion();
+        final List<OrdenesUnion> ordenes_union = inventory.getOrdersUnionPendientes();
 
         for (OrdenesUnion orden : ordenes_union){
             inventory.insert_products(orden.getId());
@@ -199,7 +203,7 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
-        final List<OrdenesUnion> ordenes = inventory.searchCustomerswithOrders(newText);
+        final List<OrdenesUnion> ordenes = inventory.searchCustomerswithOrdersPendientes(newText);
         inventory.drop1();
         inventory.drop2();
         inventory.crear_tabla_2();
@@ -216,8 +220,8 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //inventory.drop1();
-        //inventory.drop2();
+        inventory.drop1();
+        inventory.drop2();
     }
 
     @Override

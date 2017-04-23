@@ -1052,6 +1052,36 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
         return list;
     }
 
+    // PARA OBTENER LA LISTA DEL ORDENES PENDIENTES CON LOS DATOS  DE LA INTERFAZ
+
+
+
+    public  List<OrdenesUnion> getOrdersUnionPendientes() {
+
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        //  Cursor cursor = db.rawQuery("SELECT * FROM categories ORDER BY id", null);
+
+        String query = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "\n" +
+                "                FROM orders                 a\n" +
+                "                INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "                INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "                INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "                INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "                INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "                INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "                GROUP BY a.id HAVING a.status_id = 0 ORDER BY date(a.date) DESC";
+
+        OrderUnionCursor cursor = new OrderUnionCursor(db.rawQuery(query, null));
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));
+        }
+
+        return list;
+    }
+
     //buscar clientes
     public List<OrdenesUnion> searchCustomerswithOrders(String input) {
         List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
@@ -1065,6 +1095,30 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
                 "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
                 "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
                 "GROUP BY a.id ORDER BY date(a.date) DESC) WHERE (first_name LIKE '%"+input+"%' OR last_name LIKE '%"+input+"%')";
+
+        OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(querysearchOrders, null))
+        );
+
+        while (cursor.moveToNext()) {
+            list.add((cursor.getOrdenesUnion()));  // metodo wrappcursor
+
+        }
+        cursor.close();
+        return list;
+    }
+    //buscar clientes con ordenes pendientes
+    public List<OrdenesUnion> searchCustomerswithOrdersPendientes(String input) {
+        List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
+
+        String querysearchOrders = "SELECT * FROM (SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
+                "FROM orders                 a\n" +
+                "INNER JOIN  order_status    b ON ( a.status_id = b.id )  \n" +
+                "INNER JOIN order_assemblies c ON ( a.id= c.id)\n" +
+                "INNER JOIN assemblies       d ON ( c.assembly_id = d.id)\n" +
+                "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
+                "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
+                "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
+                "GROUP BY a.id HAVING a.status_id = 0 ORDER BY date(a.date) DESC) WHERE (first_name LIKE '%"+input+"%' OR last_name LIKE '%"+input+"%')";
 
         OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(querysearchOrders, null))
         );
@@ -1523,7 +1577,7 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
                 "\n" +
                 "LEFT OUTER JOIN \n" +
                 "(\n" +
-                "SELECT new_id as id, category_id,id_order, description, abs(qty_stock-sum (qty_orders*qty_ensambles))*price_one as price , qty_stock-sum (qty_orders*qty_ensambles) as qty\n" +
+                "SELECT new_id as id, category_id,id_order, description, price_one as price , qty_stock-sum (qty_orders*qty_ensambles) as qty\n" +
                 "                FROM (\n" +
                 "                SELECT * FROM  (\n" +
                 "                SELECT a.id as new_id, a.category_id,  a.description, a.price as price_one ,  c.id as id_order, b.qty as qty_ensambles, c.qty as qty_orders, a.qty as qty_stock, c.id as id_order\n" +
@@ -1535,7 +1589,7 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
                 "                )b ON a.id = b.id";
 
         // where status_id>=2
-
+//abs(qty_stock-sum (qty_orders*qty_ensambles))*price_one as price
         db.execSQL(query);
     }
     // CREAR TABLA TEMPORAL 2 VACIA (PRODUCTOS REQUERIDOS)
@@ -1589,11 +1643,32 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
         String query = "SELECT c.id as id,c.category_id as category_id,c.description as description ,c.price as price,c.qty as qty\n" +
                 "FROM order_assemblies a\n" +
                 "INNER JOIN assembly_products b ON (a.assembly_id = b.id)\n" +
-                "INNER JOIN (SELECT a.id,a.category_id,a.description,IFNULL(b.price,0) + IFNULL(a.price,0) as price,IFNULL(b.qty,0) - IFNULL(a.qty,0) as qty\n" +
+                "INNER JOIN (SELECT a.id,a.category_id,a.description,abs(IFNULL(b.qty,0) - IFNULL(a.qty,0))*b.price as price,IFNULL(b.qty,0) - IFNULL(a.qty,0) as qty\n" +
                 "FROM (\n" +
                 "SELECT id, category_id, description,price, sum(qty) as qty FROM tabla2 GROUP BY description\n" +
                 ") a\n" +
-                "LEFT OUTER JOIN tabla1 b ON a.id = b.id ) c ON (b.product_id = c.id) where a.id ="+id_order+ " AND c.qty<0";
+                "LEFT OUTER JOIN tabla1 b ON a.id = b.id ) c ON (b.product_id = c.id) where a.id ="+id_order+ " AND c.qty<0 GROUP BY description";
+
+        ProductCursor cursor = new ProductCursor(db.rawQuery(query, null));
+
+        while (cursor.moveToNext()){
+            list.add((cursor.getProduct()));  // metodo wrappcursor
+        }
+        cursor.close();
+
+        return list;
+
+    }
+
+    public List<Products> getproductsofordervalidation(int id_order)
+    {
+
+        List<Products> list = new ArrayList<Products>();
+
+        String query = "SELECT c.id as id,c.category_id as category_id, c.description as description,c.price as price, c.qty as qty\n" +
+                "FROM order_assemblies a\n" +
+                "INNER JOIN assembly_products b ON (a.assembly_id = b.id)\n" +
+                "INNER JOIN products c ON (b.product_id = c.id) WHERE a.id ="+id_order+ " GROUP BY description  ORDER BY description ASC";
 
         ProductCursor cursor = new ProductCursor(db.rawQuery(query, null));
 
