@@ -1179,7 +1179,7 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
 
     // SIRVE PARA OBTENER EL FILTRO ENTRE DOS FECHAS Y DENTRO DE UNA CATEGORIA STATUS
 
-    public List<OrdenesUnion> getOrderFilterDate(String date_begin, String date_end, String status_id) {
+    public List<OrdenesUnion> getOrderFilterDate(String date_begin, String date_end, String status_id, String monto,String autor) {
         List<OrdenesUnion> list = new ArrayList<OrdenesUnion>();
 
         String between_two_Dates = "SELECT a.id,b.id as id_status,  b.description as status_description , e.id as id_customer,  e.first_name, e.last_name, sum(c.qty * p.price* ap.qty) as costo, a.date \n" +
@@ -1190,7 +1190,7 @@ public List<Customers> searchCustomers(String input,boolean first_name,boolean l
                 "INNER JOIN customers        e ON ( a.customer_id = e.id) \n" +
                 "INNER JOIN assembly_products ap ON (d.id = ap.id)\n" +
                 "INNER JOIN products p ON     (p.id=ap.product_id)\n" +
-                "GROUP BY a.id HAVING a.date BETWEEN date('"+ date_begin+ "') AND date('"+ date_end +"') AND id_status="+ status_id +" ORDER BY date(a.date) DESC";
+                "GROUP BY a.id HAVING a.date BETWEEN date('"+ date_begin+ "') AND date('"+ date_end +"') AND id_status="+ status_id + monto+" AND (e.first_name LIKE '%"+autor+"%' OR e.last_name LIKE '%"+autor+"%')"+" ORDER BY date(a.date) DESC";
         OrderUnionCursor cursor = new OrderUnionCursor((db.rawQuery(between_two_Dates, null))
         );
 

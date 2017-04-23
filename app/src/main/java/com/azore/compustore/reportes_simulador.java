@@ -1,4 +1,5 @@
 package com.azore.compustore;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +27,7 @@ import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.OrdenesUnion;
 import com.azore.compustore.fiuady.db.Products;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class reportes_simulador extends AppCompatActivity implements SearchView.OnQueryTextListener  {
@@ -147,6 +154,25 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
     private Inventory inventory;
     private final int request_code=0;
 
+    private CheckBox checkBox_inicial;
+    private CheckBox checkBox_final;
+    private LinearLayout linear_filterDate;
+
+    private int dia, mes, anio;
+    private  TextView txt_date_initial;
+    private  TextView txt_date_final;
+    private DatePickerDialog datePickerDialog;
+    private  String date_begin;
+    private  String date_End;
+    private  String tag,monat,jahr;
+    private ImageButton btn_filter_date;
+    private static String string_date_begin="1000-01-01";
+    private static String string_date_End="3000-12-12";
+    private EditText monto_editext;
+    private CheckBox chkMonto;
+
+    private String customer ="";
+
 
     // ******************************************************************************************************
 
@@ -160,11 +186,22 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
         getSupportActionBar().setTitle("Simulador");
 
 
+
+
         inventory = new Inventory(getApplicationContext());
         inventory.drop1();
         inventory.drop2();
         inventory.crear_tabla_2();
         inventory.create_actual_temporal_stock();
+
+        checkBox_inicial= (CheckBox)findViewById(R.id.checkBox_date_initial);
+        checkBox_final= (CheckBox)findViewById(R.id.checkBox_date_end);
+        linear_filterDate= (LinearLayout)findViewById(R.id.linear_date_ordenes);
+        txt_date_initial= (TextView)findViewById(R.id.txt_Date_beging);
+        txt_date_final= (TextView)findViewById(R.id.txt_Date_end);
+        btn_filter_date= (ImageButton) findViewById(R.id.btn_filter_date_order);
+        monto_editext = (EditText) findViewById(R.id.monto_text);
+        chkMonto = (CheckBox) findViewById(R.id.monto_check);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_orders_simulator);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -178,6 +215,181 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
         recyclerView.setAdapter(adapter);
 
 
+        btn_filter_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Monto = String.valueOf(Double.parseDouble(monto_editext.getText().toString())*100);
+                Toast.makeText(getApplicationContext(),"Filtrado",Toast.LENGTH_SHORT).show();
+                if (checkBox_inicial.isChecked() && checkBox_final.isChecked()) {
+                    if(chkMonto.isChecked()) {
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+                    else {
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, "0", "",customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+//
+                }
+                else if ( checkBox_final.isChecked()==true && checkBox_inicial.isChecked()==false)
+                {
+                    if(chkMonto.isChecked()) {
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, "0"," AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
+                    adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                    recyclerView.setAdapter(adapter);}
+                    else {
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, "0","",customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+//
+
+
+                }else if ( checkBox_final.isChecked()==false && checkBox_inicial.isChecked()==true)
+                {
+                    if(chkMonto.isChecked()) {
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+                    else {
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, "0", "",customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+//
+
+                }
+                else{
+
+                    if(chkMonto.isChecked()) {
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, string_date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+
+
+                    else{
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, string_date_End, "0","",customer);
+                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+//
+
+                }
+
+            }
+        });
+        checkBox_inicial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+                    btn_filter_date.setVisibility(View.VISIBLE);
+                    linear_filterDate.setVisibility(View.VISIBLE);
+                    final Calendar c= Calendar.getInstance();
+                    dia=c.get(Calendar.DAY_OF_MONTH);
+                    mes=c.get(Calendar.MONTH);
+                    anio= c.get(Calendar.YEAR);
+
+
+                    datePickerDialog = new DatePickerDialog(reportes_simulador.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            tag=String.valueOf(dayOfMonth);
+                            monat=String.valueOf(month+1);
+                            if (String.valueOf(month+1).length() == 1) {  monat= "0"+String.valueOf(month+1) ;   }
+                            if (String.valueOf(dayOfMonth).length() == 1) { tag= "0"+String.valueOf(dayOfMonth) ;   }
+                            jahr=String.valueOf(year);
+                            date_begin=jahr+"-"+monat+"-"+tag;
+
+                            txt_date_initial.setText(tag+"-"+monat +"-" + year);
+
+
+                        }
+                    }, dia, mes, anio);
+                    datePickerDialog.show();
+
+                    if(txt_date_initial.getText().toString().equals("Fecha Inicial")){
+                        date_begin=string_date_begin;
+                    }
+
+                }
+                else
+                {
+                    if (checkBox_final.isChecked()){
+
+                    }
+                    else{
+                        linear_filterDate.setVisibility(View.GONE);
+                    }
+
+                }
+
+
+
+            }
+        });
+
+        checkBox_final.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked){
+
+                    btn_filter_date.setVisibility(View.VISIBLE);
+                    linear_filterDate.setVisibility(View.VISIBLE);
+                    final Calendar c= Calendar.getInstance();
+                    dia=c.get(Calendar.DAY_OF_MONTH);
+                    mes=c.get(Calendar.MONTH);
+                    anio= c.get(Calendar.YEAR);
+
+
+                    datePickerDialog = new DatePickerDialog(reportes_simulador.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            tag=String.valueOf(dayOfMonth);
+                            monat=String.valueOf(month+1);
+                            if (String.valueOf(month+1).length() == 1) {  monat= "0"+String.valueOf(month+1) ;   }
+                            if (String.valueOf(dayOfMonth).length() == 1) { tag= "0"+String.valueOf(dayOfMonth) ;   }
+                            jahr=String.valueOf(year);
+
+                            date_End=jahr+"-"+monat+"-"+tag;
+
+                            txt_date_final.setText(tag+"-"+ monat +"-" + year);
+
+                            if(txt_date_final.getText().toString().equals("Fecha Final")){
+                                date_End=string_date_End;
+                            }
+
+
+                        }
+                    }, dia, mes, anio);
+
+                    datePickerDialog.show();
+
+
+                }
+                else
+                {
+                    if (checkBox_inicial.isChecked()){
+
+                    }
+                    else{
+                        linear_filterDate.setVisibility(View.GONE);
+                        btn_filter_date.setVisibility(View.INVISIBLE);
+
+                    }
+
+                }
+
+
+
+            }
+        });
+
 
     } // END ON CREATE
 
@@ -187,7 +399,7 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu3,menu);
         MenuItem menuItem = menu.findItem(R.id.buscar);
-        SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
+        SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.buscar));
         searchView.setOnQueryTextListener(this);
         return true;
     }
@@ -208,6 +420,8 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
         inventory.drop2();
         inventory.crear_tabla_2();
         inventory.create_actual_temporal_stock();
+        customer = newText;
+
         for (OrdenesUnion orden : ordenes){
             inventory.insert_products(orden.getId());
         }

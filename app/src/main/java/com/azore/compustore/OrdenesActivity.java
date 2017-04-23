@@ -234,7 +234,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 //
                     } else {
 
-                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()),"","");
                         adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
                         recyclerView.setAdapter(adapter);
 //
@@ -251,7 +251,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 //
                     } else {
 
-                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()),"","");
                         adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
                         recyclerView.setAdapter(adapter);
 //
@@ -267,7 +267,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 //
                     } else {
 
-                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()),"","");
                         adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
                         recyclerView.setAdapter(adapter);
 //
@@ -530,7 +530,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 //
                 } else {
 
-                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()),"","");
                     adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 //
@@ -547,7 +547,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 //
                 } else {
 
-                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()),"","");
                     adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 //
@@ -563,7 +563,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 //
                 } else {
 
-                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()));
+                    List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, String.valueOf(ordes_status_list.get(PosicionSpinner - 1).getId()),"","");
                     adapter = new OrdenesUnionAdapter(ordenes_union, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 //
