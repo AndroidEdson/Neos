@@ -34,6 +34,10 @@ public class Pop extends Activity{
     public static final String EXTRA_DESCRIPTION = "com.azore.compustore.extra_description";
     private LinearLayout modified_layout;
     private LinearLayout delete_layout;
+    private final String KEY_NAME= "key_name";
+    private final String KEY_ID= "key_id";
+
+
 
     private EditText new_name_category;
     private int aux=0;
@@ -49,10 +53,11 @@ public class Pop extends Activity{
 
         id= i.getStringExtra(EXTRA_ID);
         name=i.getStringExtra(EXTRA_DESCRIPTION);
+
         if(savedInstanceState!= null)
         {
-            id= savedInstanceState.getString(EXTRA_ID, "");
-            name= savedInstanceState.getString(EXTRA_DESCRIPTION, "");
+            id= savedInstanceState.getString(KEY_ID, "");
+            name= savedInstanceState.getString(KEY_NAME, "");
         }
 
 
@@ -96,12 +101,12 @@ public class Pop extends Activity{
             public void onClick(View v) {
 
                 if (modified_layout.getVisibility()== View.VISIBLE) {
-                    new_name_category.setText("");
+                    new_name_category.setText(name);
                     save_button.setEnabled(false);
                     modified_layout.setVisibility(View.GONE);
 
                 }else {
-                    new_name_category.setText("");
+                    new_name_category.setText(name);
                     save_button.setEnabled(true);
                     modified_layout.setVisibility(View.VISIBLE);
 
@@ -125,16 +130,24 @@ public class Pop extends Activity{
                 }
                 else { //SI LA CADENA CONTIENE ALGO
 
-                    // VERIFICAR QUE NO HAYA COINCIDENCIA
-                if (inventory.NameValidation(new_name_category.getText().toString().toUpperCase()) >= 1) {
-                    Toast.makeText(getApplicationContext(), "Ya existe una categoria con este nombre", Toast.LENGTH_SHORT).show();
-                } else {
-                    inventory.updateCategory(id,new_name_category.getText().toString());
-                    Toast.makeText(getApplicationContext(), "Categoria modificada", Toast.LENGTH_SHORT).show();
-                    Intent intent_back = new Intent();
-                    setResult(RESULT_OK, intent_back);
-                    finish();
-                }
+                    if (new_name_category.getText().toString().equals(name)) {
+                        Intent intent_back = new Intent();
+                        setResult(RESULT_OK, intent_back);
+                        finish();
+
+                    } else {
+                        // VERIFICAR QUE NO HAYA COINCIDENCIA
+                        if (inventory.NameValidation(new_name_category.getText().toString().toUpperCase()) >= 1) {
+                            Toast.makeText(getApplicationContext(), "Ya existe una categoria con este nombre", Toast.LENGTH_SHORT).show();
+                        } else {
+                            inventory.updateCategory(id, new_name_category.getText().toString());
+                            Toast.makeText(getApplicationContext(), "Categoria modificada", Toast.LENGTH_SHORT).show();
+                            Intent intent_back = new Intent();
+                            setResult(RESULT_OK, intent_back);
+                            finish();
+                        }
+
+                    }
                 }
 
             }
@@ -171,5 +184,14 @@ public class Pop extends Activity{
 
 
         }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_NAME,name);
+        outState.putString(KEY_ID,id);
+
     }
 }

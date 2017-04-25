@@ -1,8 +1,11 @@
 package com.azore.compustore;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,7 +63,7 @@ public class CategoriasActivity extends AppCompatActivity   {
     }
 
 
-    private  class CategoriesAdapter extends  RecyclerView.Adapter<CategoryHolder>{
+    private class CategoriesAdapter extends  RecyclerView.Adapter<CategoryHolder>{
         private List<CategoryProduct> categories_product;
         Context context;
 
@@ -95,7 +98,7 @@ public class CategoriasActivity extends AppCompatActivity   {
 
     private final int request_code=0;
     private final int request_code2=1;
-    private AlertDialog dialogShow ;
+    public static AlertDialog dialogShow ;
 
 
 
@@ -129,10 +132,6 @@ public class CategoriasActivity extends AppCompatActivity   {
 
 
 
-
-
-
-
     //Hace que aparezca el icono en el App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,61 +151,62 @@ public class CategoriasActivity extends AppCompatActivity   {
             case R.id.agregar:
                 // Codigo prueba
 
-                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-                final View mView = getLayoutInflater().inflate(R.layout.category_add,null);
-                final EditText mName = (EditText)mView.findViewById(R.id.etName);
-                Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
-                Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
+   final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+   final View mView = getLayoutInflater().inflate(R.layout.category_add,null);
+   final EditText mName = (EditText)mView.findViewById(R.id.etName);
+   Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
+   Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
 
-                mBuilder.setView(mView);
-                dialogShow = mBuilder.create();
-                dialogShow.show();
-                mGuardar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+   mBuilder.setView(mView);
+   dialogShow = mBuilder.create();
+   dialogShow.show();
+   mGuardar.setOnClickListener(new View.OnClickListener() {
+       @Override
+       public void onClick(View v) {
 
-                        if (  mName.getText().toString().equals("") )
-                        {
-                            Toast.makeText(getApplicationContext(), "¡Error! Campos Vacíos", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-
-
-                            if( inventory.NameValidation(mName.getText().toString()) >= 1 )
-                            {
-                                Toast.makeText(getApplicationContext(), "Ya existe un producto con ese nombre", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
-                                inventory.AddCategory(inventory.getLastId(InventoryDbSchema.Categories_Table.NAME) + 1, mName.getText().toString());
-                                dialogShow.dismiss();
-                                updateRecycler();
-
-                            }
-                        }
-                    }
-                });
+           if (  mName.getText().toString().equals("") )
+           {
+               Toast.makeText(getApplicationContext(), "¡Error! Campos Vacíos", Toast.LENGTH_SHORT).show();
+           }
+           else {
 
 
-                mCancelar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CancelarshowAlert();
-                    }
-                });
+               if( inventory.NameValidation(mName.getText().toString()) >= 1 )
+               {
+                   Toast.makeText(getApplicationContext(), "Ya existe un producto con ese nombre", Toast.LENGTH_SHORT).show();
+               }
+               else
+               {
+                   Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                   inventory.AddCategory(inventory.getLastId(InventoryDbSchema.Categories_Table.NAME) + 1, mName.getText().toString());
+                   dialogShow.dismiss();
+                   updateRecycler();
+
+               }
+           }
+       }
+   });
 
 
-
-
-
+   mCancelar.setOnClickListener(new View.OnClickListener() {
+       @Override
+       public void onClick(View v) {
+           CancelarshowAlert();
+       }
+     });
+           //     showDialog();
                 return true;
 
         }
         return super.onOptionsItemSelected(item);
 
     }
-    public void CancelarshowAlert( ){
+
+
+
+
+
+    public  void CancelarshowAlert(){
         AlertDialog.Builder myAlert= new AlertDialog.Builder(this);
         myAlert.setMessage("¿Seguro que quieres cancelar?")
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -220,7 +220,6 @@ public class CategoriasActivity extends AppCompatActivity   {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                       dialogShow.dismiss();
-
                     }
                 })
                 .setTitle("Product Categories")
@@ -231,11 +230,91 @@ public class CategoriasActivity extends AppCompatActivity   {
     }
 
 
+
     public void updateRecycler(){
         inventory= new Inventory(getApplicationContext());
         final List<CategoryProduct> categories = inventory.category_alfabetic();
         adapter= new CategoriesAdapter(categories,this);
         recyclerView.setAdapter(adapter);
+    }
+
+
+
+    public static class MyAlertDialogFragment extends DialogFragment {
+
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+
+            return new AlertDialog.Builder(getActivity())
+                    .setIcon(R.drawable.ic_shortcut_warning)
+                    .setTitle("jjj")
+                    .create();
+        }
+    }
+
+
+    public static class MyAlertDialogFragment2 extends DialogFragment {
+
+        @Override
+        public  Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            final Inventory inventory2 = new Inventory(getContext());
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+            final View mView = getActivity().getLayoutInflater().inflate(R.layout.category_add, null);
+        final EditText mName = (EditText)mView.findViewById(R.id.etName);
+        Button mGuardar = (Button) mView.findViewById(R.id.btnGuardar);
+        Button mCancelar = (Button) mView.findViewById(R.id.btnCancelar);
+
+         mBuilder.setView(mView);
+         //dialogShow = mBuilder.create();
+         //dialogShow.show();
+         mGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (  mName.getText().toString().equals("") )
+                {
+                    Toast.makeText(getContext(), "¡Error! Campos Vacíos", Toast.LENGTH_SHORT).show();
+                }
+                else {
+
+
+                    if( inventory2.NameValidation(mName.getText().toString()) >= 1 )
+                    {
+                        Toast.makeText(getContext(), "Ya existe un producto con ese nombre", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+
+                        Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+        });
+
+
+         mCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // CancelarshowAlert(getContext());
+            }
+        });
+        //    showDialog();
+
+            return mBuilder.create();
+    }
+    }
+
+
+
+    void showDialog() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // Create and show the dialog.
+        MyAlertDialogFragment2 newFragment = new MyAlertDialogFragment2 ();
+        newFragment.show(ft, "dialog");
     }
 
     @Override

@@ -100,6 +100,7 @@ public class EnsamblesActivity extends AppCompatActivity implements SearchView.O
     private RecyclerView recyclerView;
     private AssembliesAdapter adapter;
     private Inventory inventory;
+
     int requestcode1=0;
     int request_code2=1;
     @Override
@@ -178,6 +179,7 @@ public class EnsamblesActivity extends AppCompatActivity implements SearchView.O
         onQueryTextChange(query);
         return false;
     }
+
 
     @Override
     public boolean onQueryTextChange(String newText) {
