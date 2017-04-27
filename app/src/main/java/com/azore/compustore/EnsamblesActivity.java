@@ -100,6 +100,9 @@ public class EnsamblesActivity extends AppCompatActivity implements SearchView.O
     private RecyclerView recyclerView;
     private AssembliesAdapter adapter;
     private Inventory inventory;
+    private String search_text;
+
+    private final String KEY_SEARCH= "key_search";
 
     int requestcode1=0;
     int request_code2=1;
@@ -121,6 +124,21 @@ public class EnsamblesActivity extends AppCompatActivity implements SearchView.O
 
        // int lastid= inventory.getLastId(InventoryDbSchema.Products_Table.NAME);
         //Toast.makeText(getApplicationContext(),  String.valueOf(lastid), Toast.LENGTH_SHORT).show();
+
+
+        if(savedInstanceState!= null)
+        {
+            search_text= savedInstanceState.getString(KEY_SEARCH, "");
+
+        }
+
+        if(search_text != null) {
+            final List<Assemblies> assemblies2 = inventory.searchEnsamble(search_text);
+            adapter= new EnsamblesActivity.AssembliesAdapter(assemblies2,this);
+            recyclerView.setAdapter(adapter);
+        }
+
+
 
     }
 
@@ -184,10 +202,22 @@ public class EnsamblesActivity extends AppCompatActivity implements SearchView.O
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        search_text=newText;
         final List<Assemblies> assemblies = inventory.searchEnsamble(newText);
         adapter= new EnsamblesActivity.AssembliesAdapter(assemblies,this);
         recyclerView.setAdapter(adapter);
         return false;
     }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH,search_text);
+
+
+    }
+
 
 }
