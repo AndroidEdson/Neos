@@ -211,20 +211,20 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
             inventory.insert_products(orden.getId());
         }
 
-        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, this);
-        recyclerView.setAdapter(adapter);
-
-
         btn_filter_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Monto = String.valueOf(Double.parseDouble(monto_editext.getText().toString())*100);
                 Toast.makeText(getApplicationContext(),"Filtrado",Toast.LENGTH_SHORT).show();
                 if (checkBox_inicial.isChecked() && checkBox_final.isChecked()) {
                     if(chkMonto.isChecked()) {
-                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
-                        adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
-                        recyclerView.setAdapter(adapter);
+                        if (monto_editext.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Ingresa un monto", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String Monto = String.valueOf(Double.parseDouble(monto_editext.getText().toString())*100);
+                            List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto, customer);
+                            adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
+                            recyclerView.setAdapter(adapter);
+                        }
                     }
                     else {
                         List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, date_End, "0", "",customer);
@@ -236,9 +236,13 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
                 else if ( checkBox_final.isChecked()==true && checkBox_inicial.isChecked()==false)
                 {
                     if(chkMonto.isChecked()) {
+                        if (monto_editext.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Ingresa un monto", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String Monto = String.valueOf(Double.parseDouble(monto_editext.getText().toString())*100);
                     List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, "0"," AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
                     adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
-                    recyclerView.setAdapter(adapter);}
+                    recyclerView.setAdapter(adapter);}}
                     else {
                         List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, date_End, "0","",customer);
                         adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
@@ -250,9 +254,13 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
                 }else if ( checkBox_final.isChecked()==false && checkBox_inicial.isChecked()==true)
                 {
                     if(chkMonto.isChecked()) {
-                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
+                        if (monto_editext.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Ingresa un monto", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String Monto = String.valueOf(Double.parseDouble(monto_editext.getText().toString())*100);
+                            List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
                         adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
-                        recyclerView.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);}
                     }
                     else {
                         List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(date_begin, string_date_End, "0", "",customer);
@@ -265,9 +273,13 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
                 else{
 
                     if(chkMonto.isChecked()) {
-                        List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, string_date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
+                        if (monto_editext.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Ingresa un monto", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String Monto = String.valueOf(Double.parseDouble(monto_editext.getText().toString())*100);
+                            List<OrdenesUnion> ordenes_union = inventory.getOrderFilterDate(string_date_begin, string_date_End, "0", " AND sum(c.qty * p.price* ap.qty)=" + Monto,customer);
                         adapter = new reportes_simulador.OrdenesUnionAdapter(ordenes_union, getApplicationContext());
-                        recyclerView.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);}
                     }
 
 

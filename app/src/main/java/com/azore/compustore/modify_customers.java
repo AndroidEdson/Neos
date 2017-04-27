@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -28,8 +29,25 @@ public class modify_customers extends Activity {
 
     private Inventory inventory;
     String id;
+    private String name;
+    private String lastname;
+    private String phone1;
+    private String phone2;
+    private String phone3;
+    private String address;
+    private String email;
+
+
 
     public static String EXTRA_ID = "com.azore.compustore.id";
+    public static String EXTRA_First_Name = "com.azore.compustore.customername";
+    public static String EXTRA_Last_Name = "com.azore.compustore.customerlastname";
+    public static String EXTRA_Address = "com.azore.compustore.customeraddres";
+    public static String EXTRA_Phone1 = "com.azore.compustore.customerPhone1";
+    public static String EXTRA_Phone2 = "com.azore.compustore.customerPhone2";
+    public static String EXTRA_Phone3 = "com.azore.compustore.customerPhone3";
+    public static String EXTRA_Email = "com.azore.compustore.customerEmail";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +55,17 @@ public class modify_customers extends Activity {
         Intent i = getIntent();
         id= i.getStringExtra(EXTRA_ID);
         inventory = new Inventory(getApplicationContext());
+
+        name=i.getStringExtra(EXTRA_First_Name);
+        lastname=i.getStringExtra(EXTRA_Last_Name);
+        phone1=i.getStringExtra(EXTRA_Phone1);
+        phone2=i.getStringExtra(EXTRA_Phone2);
+        phone3=i.getStringExtra(EXTRA_Phone3);
+        address=i.getStringExtra(EXTRA_Address);
+        email=i.getStringExtra(EXTRA_Email);
+
+
+
 
 
         final EditText mNombre = (EditText)findViewById(R.id.customer_first_name);
@@ -49,7 +78,13 @@ public class modify_customers extends Activity {
         Button mGuardar = (Button) findViewById(R.id.customer_save);
         Button mCancelar = (Button) findViewById(R.id.customer_cancel);
 
-
+        mNombre.setText(name);
+        mApellido.setText(lastname);
+        mDireccion.setText(address);
+        mTel1.setText(phone1);
+        mTel2.setText(phone2);
+        mTel3.setText(phone3);
+        mEmail.setText(email);
 
 
 

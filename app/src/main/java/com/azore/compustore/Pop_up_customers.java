@@ -24,10 +24,23 @@ public class Pop_up_customers extends Activity{
 
     public static String EXTRA_Customer_ID = "com.azore.compustore.customerid";
     public static String EXTRA_First_Name = "com.azore.compustore.customername";
+    public static String EXTRA_Last_Name = "com.azore.compustore.customerlastname";
+    public static String EXTRA_Address = "com.azore.compustore.customeraddres";
+    public static String EXTRA_Phone1 = "com.azore.compustore.customerPhone1";
+    public static String EXTRA_Phone2 = "com.azore.compustore.customerPhone2";
+    public static String EXTRA_Phone3 = "com.azore.compustore.customerPhone3";
+    public static String EXTRA_Email = "com.azore.compustore.customerEmail";
+
 
 
     private String id;
     private String name;
+    private String lastname;
+    private String phone1;
+    private String phone2;
+    private String phone3;
+    private String address;
+    private String email;
     private int aux=0;
     private LinearLayout delete_layout;
     private LinearLayout layout;
@@ -44,9 +57,18 @@ public class Pop_up_customers extends Activity{
         btn_edit= (ImageButton)findViewById(R.id.popup_image_categori_edit);
         btn_delete= (ImageButton)findViewById(R.id.popup_image_categori_delete);
         txt_customer_name= (TextView)findViewById(R.id.textview_categories) ;
+        btn_edit= (ImageButton)findViewById(R.id.popup_image_categori_edit);
+        btn_delete= (ImageButton)findViewById(R.id.popup_image_categori_delete);
+
 
         id= i.getStringExtra(EXTRA_Customer_ID);
         name=i.getStringExtra(EXTRA_First_Name);
+        lastname=i.getStringExtra(EXTRA_Last_Name);
+        phone1=i.getStringExtra(EXTRA_Phone1);
+        phone2=i.getStringExtra(EXTRA_Phone2);
+        phone3=i.getStringExtra(EXTRA_Phone3);
+        address=i.getStringExtra(EXTRA_Address);
+        email=i.getStringExtra(EXTRA_Email);
 
 
 
@@ -57,6 +79,9 @@ public class Pop_up_customers extends Activity{
         }
 
         txt_customer_name.setText(name);
+
+
+
         layout = (LinearLayout)findViewById(R.id.linear_modified_categorie);
         layout.setVisibility(View.GONE);
 
@@ -95,6 +120,13 @@ public class Pop_up_customers extends Activity{
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), modify_customers.class);
                 intent.putExtra(modify_customers.EXTRA_ID, id);
+                intent.putExtra(modify_customers.EXTRA_First_Name, name);
+                intent.putExtra(modify_customers.EXTRA_Last_Name, lastname);
+                intent.putExtra(modify_customers.EXTRA_Address, address);
+                intent.putExtra(modify_customers.EXTRA_Phone1, phone1);
+                intent.putExtra(modify_customers.EXTRA_Phone2, phone2);
+                intent.putExtra(modify_customers.EXTRA_Phone3, phone3);
+                intent.putExtra(modify_customers.EXTRA_Email, email);
                 startActivityForResult(intent, request_code);
             }
         });

@@ -96,6 +96,12 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
             Intent intent = new Intent(getApplicationContext(), Pop_up_customers.class);
             intent.putExtra(Pop_up_customers.EXTRA_Customer_ID, Integer.toString(customer.getId()));
             intent.putExtra(Pop_up_customers.EXTRA_First_Name, customer.getFirst_name());
+            intent.putExtra(Pop_up_customers.EXTRA_Last_Name, customer.getLast_name());
+            intent.putExtra(Pop_up_customers.EXTRA_Address, customer.getAddress());
+            intent.putExtra(Pop_up_customers.EXTRA_Phone1, customer.getPhone1());
+            intent.putExtra(Pop_up_customers.EXTRA_Phone2, customer.getPhone2());
+            intent.putExtra(Pop_up_customers.EXTRA_Phone3, customer.getPhone3());
+            intent.putExtra(Pop_up_customers.EXTRA_Email, customer.getEmail());
             startActivityForResult(intent, request_code);
 
         }
