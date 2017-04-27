@@ -191,13 +191,7 @@ public class add_order extends AppCompatActivity {
         inventory.deleteOrders(String.valueOf(lastorderid));
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (btn_save_pressed==false) {
-            inventory.deleteOrders(String.valueOf(lastorderid));
-        }
-    }
+
 
     //Hace que aparezca el icono en el App Bar
     @Override

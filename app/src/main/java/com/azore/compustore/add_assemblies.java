@@ -203,13 +203,7 @@ public class add_assemblies extends AppCompatActivity {
             inventory.deleteAssemblies(String.valueOf(lastid));
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (btn_save_pressed==false) {
-            inventory.deleteAssemblies(String.valueOf(lastid));
-        }
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
