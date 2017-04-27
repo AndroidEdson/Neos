@@ -35,15 +35,32 @@ public class PopUp_products extends Activity {
     public static String EXTRA_DESCRIPTION = "com.azore.compustore.description";
     public static String EXTRA_ID = "com.azore.compustore.id";
     public static String EXTRA_QTY = "com.azore.compustore.qty";
+    public static String EXTRA_PRICE = "com.azore.compustore.price";
+    public static String EXTRA_CATEG = "com.azore.compustore.categ";
+
+
 
     private String id;
     private String name;
     private String qty;
+    private String price;
+    private String id_categorie;
+
     private  AlertDialog dialogShow ;
     int  request_code2=1;
     int  request_code3=2;
     private int aux=0;
     private LinearLayout delete_layout;
+
+    private final String KEY_NAME= "key_name";
+    private final String KEY_ID= "key_id";
+    private final String KEY_QTY= "key_qty";
+    private final String KEY_PRICE= "key_price";
+    private final String KEY_CATEG= "key_categ";
+
+
+
+
 
 
     @Override
@@ -62,12 +79,20 @@ public class PopUp_products extends Activity {
         id= i.getStringExtra(EXTRA_ID);
         name=i.getStringExtra(EXTRA_DESCRIPTION);
         qty=i.getStringExtra(EXTRA_QTY);
+        price=i.getStringExtra(EXTRA_PRICE);
+        id_categorie=i.getStringExtra(EXTRA_CATEG);
+
+
 
 
         if(savedInstanceState!= null)
         {
-            id= savedInstanceState.getString(EXTRA_ID, "");
-            name= savedInstanceState.getString(EXTRA_DESCRIPTION, "");
+            id= savedInstanceState.getString(KEY_ID, "");
+            name= savedInstanceState.getString(KEY_NAME, "");
+            qty= savedInstanceState.getString(KEY_QTY, "");
+            price= savedInstanceState.getString(KEY_PRICE, "");
+            id_categorie= savedInstanceState.getString(KEY_CATEG, "");
+
         }
 
         txt_product_name.setText(name);
@@ -82,15 +107,12 @@ public class PopUp_products extends Activity {
         if( aux >= 1 )
         {
             delete_layout.setVisibility(View.GONE);
-
-
-
         }
         else {
             delete_layout.setVisibility(View.VISIBLE);
         }
 
-btn_stock.setOnClickListener(new View.OnClickListener() {
+    btn_stock.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
 
@@ -120,6 +142,10 @@ btn_stock.setOnClickListener(new View.OnClickListener() {
          public void onClick(View v) {
              Intent intent = new Intent(getApplicationContext(), modify_products.class);
              intent.putExtra(modify_products.EXTRA_ID_STOCK, id);
+             intent.putExtra(modify_products.EXTRA_DESCRIPTION, name);
+             intent.putExtra(modify_products.EXTRA_PRICE, price);
+             intent.putExtra(modify_products.EXTRA_CATEG, id_categorie);
+
              startActivityForResult(intent, request_code2);
          }
      });
@@ -157,4 +183,19 @@ btn_stock.setOnClickListener(new View.OnClickListener() {
 
         }
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_NAME,name);
+        outState.putString(KEY_ID,id);
+        outState.putString(KEY_QTY,qty);
+        outState.putString(KEY_PRICE,price);
+        outState.putString(KEY_CATEG,id_categorie);
+
+
+    }
+
+
 }//END CLASS

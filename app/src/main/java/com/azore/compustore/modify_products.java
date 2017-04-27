@@ -23,23 +23,50 @@ import java.util.List;
 
 public class modify_products extends Activity {
 
-
-
     //public static String EXTRA_ID_STOCK = "com.azore.compustore.id.stock";
 
 
     private Inventory inventory;
-    String id;
+    private String id;
+    private String name;
+    private String id_categorie;
+    private String price;
 
+
+    public static String EXTRA_DESCRIPTION = "com.azore.compustore.description";
+    public static String EXTRA_PRICE = "com.azore.compustore.price";
     public static String EXTRA_ID_STOCK = "com.azore.compustore.id-product";
+    public static String EXTRA_CATEG = "com.azore.compustore.categ";
+
+    private final String KEY_NAME= "key_name";
+    private final String KEY_ID= "key_id";
+    private final String KEY_QTY= "key_qty";
+    private final String KEY_PRICE= "key_price";
+    private final String KEY_CATEG= "key_categ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.products_add);
+
         Intent i = getIntent();
         id= i.getStringExtra(EXTRA_ID_STOCK);
+        name= i.getStringExtra(EXTRA_DESCRIPTION);
+        price= i.getStringExtra(EXTRA_PRICE);
+        id_categorie= i.getStringExtra(EXTRA_CATEG);
 
-        id= i.getStringExtra(EXTRA_ID_STOCK);
+
+
+        if(savedInstanceState!= null)
+        {
+            id= savedInstanceState.getString(KEY_ID, "");
+            name= savedInstanceState.getString(KEY_NAME, "");
+            price= savedInstanceState.getString(KEY_PRICE, "");
+            id_categorie= savedInstanceState.getString(KEY_CATEG, "");
+
+
+        }
+
 
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
         final EditText mDescription = (EditText)findViewById(R.id.etDescription);
@@ -50,6 +77,9 @@ public class modify_products extends Activity {
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
         inventory = new Inventory(getApplicationContext());
 
+        mDescription.setText(name);
+        mPrecio.setText(price);
+
         // equivalente a for each
         final List<CategoryProduct> categoriesProduct = inventory.getAllCategoriesProduct();
         for (CategoryProduct category : categoriesProduct) {
@@ -58,9 +88,7 @@ public class modify_products extends Activity {
 
 
         spinner.setAdapter(spinner_adapter);
-
-
-
+        spinner.setSelection(Integer.valueOf(id_categorie));
 
         mGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,20 +101,30 @@ public class modify_products extends Activity {
                 }
                 else {
 
-
-                    if( inventory.NameValidationProducts(mDescription.getText().toString()) >= 1 )
-                    {
-                        Toast.makeText(getApplicationContext(), "Ya existe un producto con ese nombre", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
+                    if(mDescription.getText().toString().equals(name)) {
                         inventory.updateProducts(id,categoriesProduct.get(spinner.getSelectedItemPosition()).getId(),mDescription.getText().toString(),(Double.parseDouble(mPrecio.getText().toString()))*100);
                         Intent intent_back = new Intent();
                         setResult(RESULT_OK, intent_back);
                         Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
                         finish();
 
+                    }else {
+
+
+                        if (inventory.NameValidationProducts(mDescription.getText().toString()) >= 1) {
+                            Toast.makeText(getApplicationContext(), "Ya existe un producto con ese nombre", Toast.LENGTH_SHORT).show();
+                        } else {
+                            inventory.updateProducts(id, categoriesProduct.get(spinner.getSelectedItemPosition()).getId(), mDescription.getText().toString(), (Double.parseDouble(mPrecio.getText().toString())) * 100);
+                            Intent intent_back = new Intent();
+                            setResult(RESULT_OK, intent_back);
+                            Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_SHORT).show();
+                            finish();
+
+                        }
                     }
+
+
+
                 }
             }
         });
@@ -100,6 +138,17 @@ public class modify_products extends Activity {
         });
 
 
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_NAME,name);
+        outState.putString(KEY_ID,id);
+        outState.putString(KEY_PRICE,price);
+        outState.putString(KEY_CATEG,id_categorie);
 
 
     }

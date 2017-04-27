@@ -73,9 +73,12 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
             intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
             intent.putExtra(PopUp_products.EXTRA_ID, Integer.toString(product.getId()));
             intent.putExtra(PopUp_products.EXTRA_QTY, Integer.toString(product.getQty()));
+            intent.putExtra(PopUp_products.EXTRA_PRICE, Double.toString((double) product.getPrice()/100));
+            intent.putExtra(PopUp_products.EXTRA_CATEG, String.valueOf(product.getCategory_id()));
+
+
 
             startActivityForResult(intent, request_code2);
-
 
         }
 

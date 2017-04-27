@@ -34,6 +34,10 @@ public class add_stock_products extends Activity {
     public static String EXTRA_QTY_STOCK = "com.azore.compustore.qty_stock";
 
 
+    private final String KEY_NAME= "key_name";
+    private final String KEY_ID= "key_id";
+    private final String KEY_QTY= "key_qty";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +53,14 @@ public class add_stock_products extends Activity {
         name=i.getStringExtra(EXTRA_DESCRIPTION_STOCK);
         qty=i.getStringExtra(EXTRA_QTY_STOCK);
 
-
         if(savedInstanceState!= null)
         {
-            id= savedInstanceState.getString(EXTRA_ID_STOCK, "");
-            name= savedInstanceState.getString(EXTRA_DESCRIPTION_STOCK, "");
-            qty= savedInstanceState.getString(EXTRA_QTY_STOCK, "");
+            id= savedInstanceState.getString(KEY_ID, "");
+            name= savedInstanceState.getString(KEY_NAME, "");
+            qty= savedInstanceState.getString(KEY_QTY, "");
 
         }
+
       //  Toast.makeText(getApplicationContext(),id+ name,Toast.LENGTH_SHORT).show();
       final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
@@ -101,6 +105,15 @@ inventory.updateQuantityProducts(id, String.valueOf(spinner.getSelectedItem().to
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_NAME,name);
+        outState.putString(KEY_ID,id);
+        outState.putString(KEY_QTY,qty);
+
+
+    }
 
 
 
