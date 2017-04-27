@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,6 +119,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private Inventory inventory;
     private Spinner categoriesSpinner;
     public int PosicionSpinner;
+    public String search_text;
 
 
 
@@ -125,6 +127,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private final int request_code2=1;
     private AlertDialog dialogShow ;
     private List<Products> productos_pr;
+    private final String KEY_SEARCH= "key_search";
+
 
 
 
@@ -138,6 +142,12 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         getSupportActionBar().setTitle("Productos");
         inventory = new Inventory(getApplicationContext());
 
+
+        if(savedInstanceState!= null)
+        {
+            search_text= savedInstanceState.getString(KEY_SEARCH, "");
+
+        }
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_products);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -168,7 +178,24 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         recyclerView.setAdapter(adapter);
 
 
-        categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        if(search_text != null) {
+            if (PosicionSpinner == 0) {
+                final List<Products> products2 = inventory.searchProducts(search_text);
+                adapter = new ProductosActivity.ProductsAdapter(products2, getApplicationContext());
+                recyclerView.setAdapter(adapter);
+            } else {
+                final List<CategoryProduct> categoriesProduct2 = inventory.getAllCategoriesProduct();
+                final List<Products> products2 = inventory.searchProductsForCategory(search_text, categoriesProduct.get(PosicionSpinner - 1).getId());
+                adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
+                recyclerView.setAdapter(adapter);
+            }
+        }
+
+
+
+
+
+            categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -211,8 +238,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         MenuItem menuItem = menu.findItem(R.id.buscar);
         SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setOnQueryTextListener(this);
-        return true;
 
+        return true;
     }
 
 
@@ -364,6 +391,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        search_text=newText;
 
         if(newText != null) {
             if(PosicionSpinner == 0){
@@ -381,6 +409,15 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         }
 
         return false;
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH,search_text);
+
+
     }
 
     }
