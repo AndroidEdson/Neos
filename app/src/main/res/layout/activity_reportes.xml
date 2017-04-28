@@ -17,7 +17,7 @@
             android:layout_below="@+id/btn_missing_product"
             android:background="@color/white"
             android:layout_marginTop="31dp"
-            android:src="@drawable/ic_warning_products_missing" />
+            android:src="@drawable/ic_remove_red_eye" />
 
         <TextView
             android:id="@+id/textView5"
@@ -78,7 +78,7 @@
             android:layout_alignStart="@+id/txt_tag_missing_product"
             android:layout_marginBottom="22dp"
             android:text="Simulador de confirmación de órdenes"
-            android:textColor="@color/darkred"
+            android:textColor="@color/purple"
             android:textStyle="bold" />
 
 
