@@ -37,6 +37,11 @@ public class modifi_qty_ensamblie_N4 extends Activity {
     TextView txt_add_product;
     TextView txt_tag_stock;
 
+    private final String KEY_ID_ORDER= "key_id_order";
+    private final String KEY_ENSAMBLE_NAME= "key_ensamble_name";
+    private final String KEY_ID_ENSAMBLE= "key_id_ensamble";
+    private final String KEY_QTY= "key_qty";
+
 
     //************************************************************************************
     //************************************************************************************
@@ -62,6 +67,14 @@ public class modifi_qty_ensamblie_N4 extends Activity {
         id_assembly = i.getStringExtra(EXTRA_ENSAMBLE_ID);
         qty = i.getStringExtra(EXTRA_ENSAMBLE_QTY);
 
+
+        if(savedInstanceState!= null)
+        {
+            id_order= savedInstanceState.getString(KEY_ID_ORDER, "");
+            id_assembly= savedInstanceState.getString(KEY_ID_ENSAMBLE, "");
+            qty= savedInstanceState.getString(KEY_QTY, "");
+
+        }
 
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
@@ -97,6 +110,16 @@ public class modifi_qty_ensamblie_N4 extends Activity {
             }
         });
 
+
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID_ENSAMBLE,id_assembly);
+        outState.putString(KEY_ID_ORDER,id_order);
+        outState.putString(KEY_QTY,qty);
 
     }
     //************************************************************************************

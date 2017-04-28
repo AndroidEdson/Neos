@@ -273,6 +273,21 @@ public class modif_ensamble extends AppCompatActivity {
     //****************************************************************************
     //************************************END ONCREATE****************************************
 
+    @Override
+    public void onBackPressed() {
+
+        inventory.deleteAllProductsFromAssembly(id);
+
+        for (int i = 0; i < new_products.size(); i++) {
+            if (new_products.get(i) != null) {
+                inventory.AddAssemblyProductQty(id, new_products.get(i),  qty_original.get(i));
+            }
+        }
+
+        finish();
+        Toast.makeText(getApplicationContext(), "No se realizaron modificaciones", Toast.LENGTH_SHORT).show();
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

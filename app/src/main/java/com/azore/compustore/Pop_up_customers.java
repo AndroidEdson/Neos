@@ -31,6 +31,14 @@ public class Pop_up_customers extends Activity{
     public static String EXTRA_Phone3 = "com.azore.compustore.customerPhone3";
     public static String EXTRA_Email = "com.azore.compustore.customerEmail";
 
+    private final String KEY_ID= "key_id";
+    private final String KEY_NAME= "key_name";
+    private final String KEY_LAST_NAME= "key_lastname";
+    private final String KEY_ADDRES= "key_address";
+    private final String KEY_PHONE1= "key_phone1";
+    private final String KEY_PHONE2= "key_phone2";
+    private final String KEY_PHONE3= "key_phone3";
+    private final String KEY_MAIL= "key_mail";
 
 
     private String id;
@@ -71,12 +79,19 @@ public class Pop_up_customers extends Activity{
         email=i.getStringExtra(EXTRA_Email);
 
 
-
         if(savedInstanceState!= null)
         {
-            id= savedInstanceState.getString(EXTRA_Customer_ID, "");
-            name= savedInstanceState.getString(EXTRA_Customer_ID, "");
+            id= savedInstanceState.getString(KEY_ID, "");
+            name= savedInstanceState.getString(KEY_NAME, "");
+            lastname= savedInstanceState.getString(KEY_LAST_NAME, "");
+            phone1= savedInstanceState.getString(KEY_PHONE1, "");
+            phone2= savedInstanceState.getString(KEY_PHONE2, "");
+            phone3= savedInstanceState.getString(KEY_PHONE3, "");
+            address= savedInstanceState.getString(KEY_ADDRES, "");
+            email= savedInstanceState.getString(KEY_MAIL, "");
+
         }
+
 
         txt_customer_name.setText(name);
 
@@ -164,4 +179,26 @@ public class Pop_up_customers extends Activity{
 
         }
     }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID,id);
+        outState.putString(KEY_NAME,name);
+        outState.putString(KEY_ADDRES,address);
+        outState.putString(KEY_LAST_NAME,lastname);
+        outState.putString(KEY_PHONE1,phone1);
+        outState.putString(KEY_PHONE2,phone2);
+        outState.putString(KEY_PHONE3,phone3);
+        outState.putString(KEY_MAIL,email);
+
+
+
+    }
+
+
+
+
 }

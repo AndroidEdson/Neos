@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -164,6 +165,18 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
     private static String string_date_begin="1000-01-01";
     private static String string_date_End="3000-12-12";
 
+    public String search_text;
+    private final String KEY_SEARCH= "key_search";
+    private final String KEY_BEGIN= "key_begin";
+    private final String KEY_END= "key_end";
+    private final String KEY_POSITION= "key_position";
+    private boolean flagSpinnerTouch;
+    private boolean flag_date_begin;
+    private boolean flag_date_end;
+
+
+
+
     // ******************************************************************************************************
 
     // **************************************** ON CREATE  ****************************************************
@@ -198,6 +211,17 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
       //  inventory.updateOrderDate("2017-03-12","7");
       //  inventory.updateOrderDate("2017-03-18","8");
 
+        if(savedInstanceState!= null)
+        {
+            search_text= savedInstanceState.getString(KEY_SEARCH, "");
+            date_begin= savedInstanceState.getString(KEY_BEGIN, "");
+            date_End= savedInstanceState.getString(KEY_END, "");
+            PosicionSpinner= savedInstanceState.getInt(KEY_POSITION, 0);
+
+
+        }
+
+
 
       //  String orders = inventory.getOneOrderTable(String.valueOf(8));
       //  Toast.makeText(getApplicationContext(), orders  , Toast.LENGTH_LONG).show();
@@ -218,7 +242,24 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
          spinner_adapter.add( order_status.getDescription());
      }
 //
+        if(search_text != null) {
+
+            final List<OrdenesUnion> ordenes = inventory.searchCustomerswithOrders(search_text);
+            adapter = new OrdenesActivity.OrdenesUnionAdapter(ordenes, getApplicationContext());
+            recyclerView.setAdapter(adapter);
+            txt_date_final.setText(date_End);
+            txt_date_initial.setText(date_begin);
+           // datePickerDialog.dismiss();
+
+
+        }
+
         categoriesSpinner.setAdapter(spinner_adapter);
+
+        if (checkBox_inicial.isChecked() || checkBox_final.isChecked()){
+            linear_filterDate.setVisibility(View.VISIBLE);
+            btn_filter_date.setVisibility(View.VISIBLE);
+        }
 
         btn_filter_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,11 +338,20 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
         });
 
 
+        checkBox_inicial.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flag_date_begin=true;
+                return false;
+            }
+        });
         checkBox_inicial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-               if (isChecked){
+             //   Toast.makeText(getApplicationContext(), "Entro ", Toast.LENGTH_SHORT).show();
+                if(!flag_date_begin) return;
+                if (isChecked){
                    btn_filter_date.setVisibility(View.VISIBLE);
                    linear_filterDate.setVisibility(View.VISIBLE);
                    final Calendar c= Calendar.getInstance();
@@ -324,7 +374,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
 
                        }
-                   }, dia, mes, anio);
+                   }, anio, mes, dia);
                    datePickerDialog.show();
 
                    if(txt_date_initial.getText().toString().equals("Fecha Inicial")){
@@ -349,15 +399,24 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
             }
         });
 
+        checkBox_final.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flag_date_end=true;
+                return false;
+            }
+        });
+
         checkBox_final.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                if(!flag_date_end) return;
                 if (isChecked){
 
                     btn_filter_date.setVisibility(View.VISIBLE);
                     linear_filterDate.setVisibility(View.VISIBLE);
-                    final Calendar c= Calendar.getInstance();
+                     Calendar c= Calendar.getInstance();
                     dia=c.get(Calendar.DAY_OF_MONTH);
                     mes=c.get(Calendar.MONTH);
                     anio= c.get(Calendar.YEAR);
@@ -382,7 +441,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
 
                         }
-                    }, dia, mes, anio);
+                    }, anio, mes, dia);
 
                     datePickerDialog.show();
 
@@ -407,6 +466,15 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
         });
 
 
+        categoriesSpinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flagSpinnerTouch=true;
+                return false;
+            }
+        });
+
+
 
         categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -414,7 +482,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
                //  int j = Integer.valueOf(spinner_adapter.getItem(position));
                 //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
-
+                if(!flagSpinnerTouch) return;
               PosicionSpinner = position;
               if (position==0 ) {
 //
@@ -441,6 +509,10 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
         });
 
 
+        if (checkBox_inicial.isChecked() || checkBox_final.isChecked()){
+            linear_filterDate.setVisibility(View.VISIBLE);
+            btn_filter_date.setVisibility(View.VISIBLE);
+        }
 
 
     } // END ON CREATE
@@ -506,10 +578,22 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        search_text=newText;
         final List<OrdenesUnion> ordenes = inventory.searchCustomerswithOrders(newText);
         adapter = new OrdenesActivity.OrdenesUnionAdapter(ordenes, getApplicationContext());
         recyclerView.setAdapter(adapter);
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH,search_text);
+        outState.putString(KEY_BEGIN,date_begin);
+        outState.putString(KEY_END,date_End);
+        outState.putInt(KEY_POSITION,PosicionSpinner);
+
+
     }
 
 

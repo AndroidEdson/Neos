@@ -36,6 +36,8 @@ public class Pop_Up_ordenes_N1 extends Activity {
     private int requestcode=0;
     private int requestcode1=1;
     private int requestcode2=2;
+    private final String KEY_ID= "key_id";
+
 
 
     //***********************************************************¨***********************************
@@ -65,6 +67,11 @@ public class Pop_Up_ordenes_N1 extends Activity {
 
         id_order = i.getStringExtra(EXTRA_ORDER_ID);
 
+        if(savedInstanceState!= null)
+        {
+            id_order= savedInstanceState.getString(KEY_ID, "");
+            //   original_name= savedInstanceState.getString(KEY_NAME, "");
+        }
         ordenesUnion_aux = inventory.getOneOrder(id_order);
         order_status_aux = inventory.getOneOrderStatus(String.valueOf(ordenesUnion_aux.getId_status()));
 
@@ -146,7 +153,12 @@ public class Pop_Up_ordenes_N1 extends Activity {
     //***************************************END ONCREATE*******************************************************
     //**********************************************************************************************
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID,id_order);
 
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

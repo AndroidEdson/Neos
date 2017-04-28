@@ -41,6 +41,13 @@ public class pop_menu_orders_modif_N3 extends Activity {
     private  int request_code=0;
     private  int request_code1=1;
 
+    private final String KEY_ID_ORDER= "key_id_order";
+    private final String KEY_ENSAMBLE_NAME= "key_ensamble_name";
+    private final String KEY_ID_ENSAMBLE= "key_id_ensamble";
+    private final String KEY_QTY= "key_qty";
+
+
+
 
     //*******************************************************************************
     //*******************************************************************************
@@ -70,6 +77,14 @@ public class pop_menu_orders_modif_N3 extends Activity {
         id_ensamble = i.getStringExtra(EXTRA_ENSAMBLE_ID);
         qty_ensamble = i.getStringExtra(EXTRA_ENSAMBLE_QTY);
 
+        if(savedInstanceState!= null)
+        {
+            id_order= savedInstanceState.getString(KEY_ID_ORDER, "");
+            ensamble_name= savedInstanceState.getString(KEY_ENSAMBLE_NAME, "");
+            id_ensamble= savedInstanceState.getString(KEY_ID_ENSAMBLE, "");
+            qty_ensamble= savedInstanceState.getString(KEY_QTY, "");
+
+        }
 
         txt_product_name.setText(ensamble_name);
 
@@ -97,6 +112,16 @@ public class pop_menu_orders_modif_N3 extends Activity {
 
             }
         });
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID_ENSAMBLE,id_ensamble);
+        outState.putString(KEY_ENSAMBLE_NAME,ensamble_name);
+        outState.putString(KEY_ID_ORDER,id_order);
+        outState.putString(KEY_QTY,qty_ensamble);
 
     }
 

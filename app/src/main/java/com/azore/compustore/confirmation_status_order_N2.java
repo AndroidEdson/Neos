@@ -21,6 +21,8 @@ public class confirmation_status_order_N2 extends Activity {
     public static String EXTRA_ORDER_ID="com.azore.compustore.order.id" ;
     private  String id_order;
     private EditText editText_changelog;
+    private final String KEY_ID= "key_id";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,11 @@ public class confirmation_status_order_N2 extends Activity {
 
         id_order = i.getStringExtra(EXTRA_ORDER_ID);
 
-
+        if(savedInstanceState!= null)
+        {
+            id_order= savedInstanceState.getString(KEY_ID, "");
+            //   original_name= savedInstanceState.getString(KEY_NAME, "");
+        }
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,4 +94,13 @@ public class confirmation_status_order_N2 extends Activity {
 
 
     } // END ON CREATE
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID,id_order);
+
+    }
+
 }

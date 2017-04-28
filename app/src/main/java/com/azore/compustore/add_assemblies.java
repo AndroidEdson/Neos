@@ -114,10 +114,17 @@ public class add_assemblies extends AppCompatActivity {
     int request_code2=1;
     private Button btn_save ;
     private Button btn_cancel ;
+    int flag=0;
     private EditText new_description;
     private  int lastid;
     private  String original_name="";
     public boolean btn_save_pressed = false;
+
+    private final String KEY_NAME= "key_name";
+    private final String KEY_ID= "key_id";
+    private final String KEY_FLAG= "key_flag";
+
+
 
 
     //***************************************************************************
@@ -139,6 +146,19 @@ public class add_assemblies extends AppCompatActivity {
         new_description= (EditText)findViewById(R.id.edit_new_assembli_description);
 
         lastid= inventory.getLastId(InventoryDbSchema.Assemblies_Table.NAME)+1;
+
+        if(savedInstanceState!= null)
+        {
+            lastid= savedInstanceState.getInt(KEY_ID, 0);
+            flag= savedInstanceState.getInt(KEY_FLAG, 0);
+            original_name= savedInstanceState.getString(KEY_NAME, "");
+
+        }
+
+
+        List<Products> products =inventory.getProductsAssembly(String.valueOf(lastid));
+        adapter = new ProductsAdapter(products, getApplicationContext());
+        recyclerView.setAdapter(adapter);
 
         //final List<Products> products = null;
 //  Toast.makeText(getApplicationContext(), products.get(1).getDescription(), Toast.LENGTH_SHORT).show();
@@ -204,6 +224,16 @@ public class add_assemblies extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+     outState.putString(KEY_NAME,original_name);
+     outState.putInt(KEY_ID,lastid);
+        outState.putInt(KEY_FLAG,flag);
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -228,12 +258,10 @@ public class add_assemblies extends AppCompatActivity {
 
                 if(original_name.equals(new_description.getText().toString())) {
 
-                    inventory.AddAssemblies(lastid, new_description.getText().toString());
+                  //  inventory.AddAssemblies(lastid, new_description.getText().toString());
                     Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
-
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT, "");
-
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, new_description.getText().toString());
                     intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, String.valueOf(lastid));
                     startActivityForResult(intent, request_code2);
@@ -244,16 +272,30 @@ public class add_assemblies extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Ya existe un ensamble con ese nombre", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        inventory.AddAssemblies(lastid, new_description.getText().toString());
+                        if(flag==0) {
 
-                        Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
+                            original_name=new_description.getText().toString();
+                            inventory.AddAssemblies(lastid, new_description.getText().toString());
+                            Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
 
-                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");
-                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT, "");
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT, "");
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, new_description.getText().toString());
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, String.valueOf(lastid));
+                            startActivityForResult(intent, request_code2);
+                            flag = 1;
+                        }else{
 
-                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, new_description.getText().toString());
-                        intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, String.valueOf(lastid));
-                        startActivityForResult(intent, request_code2);
+                            Intent intent = new Intent(getApplicationContext(), Add_Product_to_Ensamble.class);
+
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_PRODUCT, "");
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_PRODUCT, "");
+
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_DESCRIPTION_ASSEMBLY, new_description.getText().toString());
+                            intent.putExtra(Add_Product_to_Ensamble.EXTRA_ID_ASSEMBLY, String.valueOf(lastid));
+                            startActivityForResult(intent, request_code2);
+
+                        }
                     }
 
                 }
@@ -273,7 +315,7 @@ public class add_assemblies extends AppCompatActivity {
         adapter = new ProductsAdapter(products, getApplicationContext());
         recyclerView.setAdapter(adapter);
 
-        original_name=new_description.getText().toString();
+      //  original_name=new_description.getText().toString();
 
         //if ((requestCode == request_code2 && resultCode == RESULT_OK)) {
 

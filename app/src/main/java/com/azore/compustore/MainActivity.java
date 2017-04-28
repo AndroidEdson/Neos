@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -67,6 +68,23 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(getApplicationContext(), c.getDescription() , Toast.LENGTH_LONG).show();
 
        // Toast.makeText(this,Integer.toString(categoryProductList.size()),Toast.LENGTH_SHORT).show();
+
+
+        btncategorias.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Toast t= new Toast(getApplicationContext());
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                //  t.makeText(getApplicationContext(), "Categorias", Toast.LENGTH_SHORT).show();
+
+                }
+                if(event.getAction() == MotionEvent.ACTION_UP){
+              //  t.cancel();
+                }
+                return false;
+            }
+        });
 
 
     }

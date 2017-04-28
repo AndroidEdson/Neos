@@ -122,8 +122,12 @@ public class add_order extends AppCompatActivity {
     public  List<Customers> clientes ;
     public int lastorderid;
     public boolean btn_save_pressed = false;
+    int posicionSpinner=0;
+    int customerid=-1;
 
-
+    private final String KEY_NAME= "key_name";
+    private final String KEY_ID= "key_id";
+    private final String KEY_ID_SPINNER= "key_flag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,11 +139,19 @@ public class add_order extends AppCompatActivity {
         inventory = new Inventory(getApplicationContext());
         lastorderid=inventory.getLastId(InventoryDbSchema.Orders_Table.NAME)+1;
 
+        if(savedInstanceState!= null)
+        {
+            lastorderid= savedInstanceState.getInt(KEY_ID, 0);
+            customerid= savedInstanceState.getInt(KEY_ID_SPINNER, 0);
+         //   original_name= savedInstanceState.getString(KEY_NAME, "");
+
+        }
 
         //spinner start
         add_order_spinner  = (Spinner)findViewById(R.id.add_order_spinner);
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
         clientes = inventory.customers_alfabetic();
+
         for (Customers cliente : clientes) {
             spinner_adapter.add(cliente.getFirst_name() + " " + cliente.getLast_name() );
         }
@@ -152,6 +164,16 @@ public class add_order extends AppCompatActivity {
 
         btn_save= (Button) findViewById(R.id.btnGuardar);
         btn_cancel= (Button) findViewById(R.id.btnCancelar);
+
+
+        if(customerid!=-1){
+            add_order_spinner.setEnabled(false);
+            add_order_spinner.setSelection(customerid);
+        }
+
+        final List<AssemblieOrders_Union> assemblieOrders_unions = inventory.getEnsambliesInOrder(String.valueOf(lastorderid));
+        adapter = new add_order.AssembliesOrdersUnionAdapter(assemblieOrders_unions, this);
+        recyclerView.setAdapter(adapter);
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +208,16 @@ public class add_order extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+       // outState.putString(KEY_NAME,lastorderid);
+        outState.putInt(KEY_ID,lastorderid);
+        outState.putInt(KEY_ID_SPINNER,customerid);
+
+
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         inventory.deleteOrders(String.valueOf(lastorderid));
@@ -210,7 +242,7 @@ public class add_order extends AppCompatActivity {
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat sd1 = new SimpleDateFormat("yyyy-MM-dd");
                 String date =  sd1.format(new Date(c.getTimeInMillis()));
-                int customerid= clientes.get(add_order_spinner.getSelectedItemPosition()).getId();
+                 customerid= clientes.get(add_order_spinner.getSelectedItemPosition()).getId();
                 inventory.AddOrder(lastorderid,customerid,date);
                 Intent intent = new Intent(getApplicationContext(), Add_Assembly_to_Order.class);
                 startActivityForResult(intent, request_code);

@@ -161,6 +161,8 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
     public boolean chkph = false;
     public boolean chkemail = false;
 
+    public String search_text;
+    private final String KEY_SEARCH= "key_search";
 
 //__________________________________________________________
 
@@ -178,6 +180,18 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
         adapter = new ClientesActivity.ClientesAdapter(customers, this);
         recyclerView.setAdapter(adapter);
 
+        if(savedInstanceState!= null)
+        {
+            search_text= savedInstanceState.getString(KEY_SEARCH, "");
+
+        }
+
+
+        if(search_text != null) {
+            final List<Customers> customers2 = inventory.searchCustomers(search_text,chkNombre,chkApellido,chkDireccion,chkph,chkemail);
+            adapter = new ClientesActivity.ClientesAdapter(customers2, getApplicationContext());
+            recyclerView.setAdapter(adapter);
+        }
 
         String[] array = {"Nombre", "Apellido", "Dirección", "Telefono", "Email"};
         MultiSelectionSpinner multiSelectionSpinner = (MultiSelectionSpinner) findViewById(R.id.customer_spinner);
@@ -197,6 +211,14 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
         SearchView searchView =  (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setOnQueryTextListener(this);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH,search_text);
+
+
     }
 
 
@@ -334,6 +356,7 @@ public class ClientesActivity extends AppCompatActivity implements MultiSelectio
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        search_text=newText;
         final List<Customers> customers = inventory.searchCustomers(newText,chkNombre,chkApellido,chkDireccion,chkph,chkemail);
         adapter = new ClientesActivity.ClientesAdapter(customers, getApplicationContext());
         recyclerView.setAdapter(adapter);

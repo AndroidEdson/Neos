@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -119,6 +120,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private Inventory inventory;
     private Spinner categoriesSpinner;
     public int PosicionSpinner;
+    public boolean flagSpinnerTouch;
     public String search_text;
 
 
@@ -128,6 +130,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     private AlertDialog dialogShow ;
     private List<Products> productos_pr;
     private final String KEY_SEARCH= "key_search";
+    private final String KEY_POSITION= "key_position";
+
 
 
 
@@ -146,6 +150,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
         if(savedInstanceState!= null)
         {
             search_text= savedInstanceState.getString(KEY_SEARCH, "");
+            PosicionSpinner= savedInstanceState.getInt(KEY_POSITION, 0);
 
         }
 
@@ -156,7 +161,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         inventory = new Inventory(getApplicationContext());
 
-        final List<Products> products = inventory.products_alfabetic();
+        List<Products> products = inventory.products_alfabetic();
 
         final ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
@@ -174,25 +179,21 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 
         categoriesSpinner.setAdapter(spinner_adapter);
 
+
+
+
+
         adapter = new ProductsAdapter(products, this);
         recyclerView.setAdapter(adapter);
 
+        categoriesSpinner.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flagSpinnerTouch=true;
 
-        if(search_text != null) {
-            if (PosicionSpinner == 0) {
-                final List<Products> products2 = inventory.searchProducts(search_text);
-                adapter = new ProductosActivity.ProductsAdapter(products2, getApplicationContext());
-                recyclerView.setAdapter(adapter);
-            } else {
-                final List<CategoryProduct> categoriesProduct2 = inventory.getAllCategoriesProduct();
-                final List<Products> products2 = inventory.searchProductsForCategory(search_text, categoriesProduct.get(PosicionSpinner - 1).getId());
-                adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
-                recyclerView.setAdapter(adapter);
+                return false;
             }
-        }
-
-
-
+        });
 
 
             categoriesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -202,20 +203,20 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                // int j = Integer.valueOf(spinner_adapter.getItem(position));
                 //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
 
+                if (!flagSpinnerTouch) return;
                 PosicionSpinner = position;
-                if (position==0 ) {
+                //Toast.makeText(getApplicationContext(),"Entro ", Toast.LENGTH_SHORT).show();
 
+                if (position==0 ) {
                     final List<Products> products = inventory.products_alfabetic();
                     adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
                     recyclerView.setAdapter(adapter);
 
                 }
                 else{
-
-                     List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position-1).getId()));
+                    List<Products> products =inventory.categoryFilters(String.valueOf(categoriesProduct.get(position-1).getId()));
                     adapter = new ProductosActivity.ProductsAdapter(products, getApplicationContext());
                     recyclerView.setAdapter(adapter);
-
                 }
 
 
@@ -226,6 +227,23 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
 //
             }
         });
+
+
+
+        if(search_text != null && !search_text.equals("")) {
+            if (PosicionSpinner == 0) {
+              //  Toast.makeText(getApplicationContext(),search_text, Toast.LENGTH_SHORT).show();
+
+                products = inventory.searchProducts(search_text);
+                adapter = new ProductsAdapter(products, getApplicationContext());
+                recyclerView.setAdapter(adapter);
+            } else {
+                final List<CategoryProduct> categoriesProduct2 = inventory.getAllCategoriesProduct();
+                products = inventory.searchProductsForCategory(search_text, categoriesProduct2.get(PosicionSpinner - 1).getId());
+                adapter = new ProductsAdapter(products, getApplicationContext());
+                  recyclerView.setAdapter(adapter);
+            }
+        }
 
 
     }
@@ -416,6 +434,8 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_SEARCH,search_text);
+        outState.putInt(KEY_POSITION,PosicionSpinner);
+
 
 
     }

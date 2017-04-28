@@ -36,6 +36,8 @@ public class PopUp_Menu_Modify_Assembly extends Activity {
     private String name_ensamble;
 
     private  LinearLayout quitar_stock;
+    int request_code4=4;
+
 
     public static String EXTRA_QTY_PRODUCT = "com.azore.compustore.id.add.assemblies.description_product.qty";
     public static String EXTRA_DESCRIPTION_PRODUCT = "com.azore.compustore.id.add.assemblies.description_product";
@@ -92,10 +94,15 @@ public class PopUp_Menu_Modify_Assembly extends Activity {
             @Override
             public void onClick(View v) {
 
-                inventory.deleteProductFromEnsambly(id_ensamble,id_product);
-                Intent intent_back = new Intent();
-                setResult(RESULT_OK, intent_back);
-                finish();
+                Intent intent = new Intent(getApplicationContext(), delete_confirmation.class);
+                // intent.putExtra(PopUp_products.EXTRA_DESCRIPTION, product.getDescription());
+                startActivityForResult(intent, request_code4);
+
+
+            //   inventory.deleteProductFromEnsambly(id_ensamble,id_product);
+            //   Intent intent_back = new Intent();
+            //   setResult(RESULT_OK, intent_back);
+            //   finish();
             }
         });
 
@@ -108,6 +115,13 @@ public class PopUp_Menu_Modify_Assembly extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if ( (requestCode==request_code4 && resultCode== RESULT_OK))
+        {
+            inventory.deleteProductFromEnsambly(id_ensamble,id_product);
+            Toast.makeText(getApplicationContext(),"Eliminado", Toast.LENGTH_SHORT).show();
+
+        }
 
         Intent intent_back = new Intent();
         setResult(RESULT_OK, intent_back);

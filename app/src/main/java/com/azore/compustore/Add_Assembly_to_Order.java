@@ -109,6 +109,11 @@ public class Add_Assembly_to_Order extends AppCompatActivity implements SearchVi
     private Inventory inventory;
     String id_order;
     int requestcode;
+
+    private String search_text;
+
+    private final String KEY_SEARCH= "key_search";
+
     //**************************************************************************************
     //**************************************************************************************
     //************************************ONCREATE*********************************************
@@ -134,6 +139,17 @@ public class Add_Assembly_to_Order extends AppCompatActivity implements SearchVi
         adapter= new Add_Assembly_to_Order.AssembliesAdapter(assemblies,this);
         recyclerView.setAdapter(adapter);
 
+        if(savedInstanceState!= null)
+        {
+            search_text= savedInstanceState.getString(KEY_SEARCH, "");
+
+        }
+
+        if(search_text != null) {
+            final List<Assemblies> assemblies2 = inventory.searchEnsamble(search_text);
+            adapter= new AssembliesAdapter(assemblies2,this);
+            recyclerView.setAdapter(adapter);
+        }
 
 
 
@@ -180,10 +196,20 @@ public class Add_Assembly_to_Order extends AppCompatActivity implements SearchVi
     @Override
     public boolean onQueryTextChange(String newText) {
         //aca va el filtro del search , newText es lo que esta en el campo de busqueda
+        search_text=newText;
+
         final List<Assemblies> assemblies = inventory.searchEnsamble(newText);
         adapter= new Add_Assembly_to_Order.AssembliesAdapter(assemblies,this);
         recyclerView.setAdapter(adapter);
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_SEARCH,search_text);
+
+
     }
 
 

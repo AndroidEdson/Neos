@@ -135,8 +135,11 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
     int request_code=0;
     private Button btn_save ;
     private Button btn_cancel ;
-      private List<AssemblieOrders_Union> assemblieOrders_unions_original;
+    private List<AssemblieOrders_Union> assemblieOrders_unions_original;
+    private  List<String> Id;
+
     private  int request_code1=1;
+    private final String KEY_ID= "key_id";
 
     //**********************************************************************************************
     //**********************************************************************************************
@@ -163,6 +166,14 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
 
         Intent i = getIntent();
         id_order = i.getStringExtra(EXTRA_ORDER_ID);
+
+
+
+        if(savedInstanceState!= null)
+        {
+            id_order= savedInstanceState.getString(KEY_ID, "");
+            //   original_name= savedInstanceState.getString(KEY_NAME, "");
+        }
 
         ordenesUnion= inventory.getOneOrder(id_order);
         txt_description.setText("Orden: "+ordenesUnion.getId()+ " " + ordenesUnion.getLast_name()+", "+ ordenesUnion.getFirst_name());
@@ -271,5 +282,16 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
 
         //Toast.makeText(getApplicationContext(), "No se realizaron modificaciones", Toast.LENGTH_SHORT).show();
         super.onBackPressed();
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID,id_order);
+      //  outState.putStringArrayList(KEY_ID,);
+
+
+
     }
 }// END CLASS
