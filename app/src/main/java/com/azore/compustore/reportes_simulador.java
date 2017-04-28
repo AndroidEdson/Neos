@@ -12,6 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -41,6 +42,7 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
         private TextView txtCost;
         private TextView txtDate;
         private LinearLayout layout;
+
 
         Context context;
         private List<OrdenesUnion> ordenesUnions;
@@ -172,6 +174,8 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
     private CheckBox chkMonto;
 
     private String customer ="";
+    private boolean flag_date_begin;
+    private boolean flag_date_end;
 
 
     // ******************************************************************************************************
@@ -294,9 +298,17 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
 
             }
         });
+        checkBox_inicial.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flag_date_begin=true;
+                return false;
+            }
+        });
         checkBox_inicial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!flag_date_begin) return;
 
                 if (isChecked){
                     btn_filter_date.setVisibility(View.VISIBLE);
@@ -321,7 +333,7 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
 
 
                         }
-                    }, dia, mes, anio);
+                    }, anio, mes, dia);
                     datePickerDialog.show();
 
                     if(txt_date_initial.getText().toString().equals("Fecha Inicial")){
@@ -345,9 +357,19 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
             }
         });
 
+        checkBox_final.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                flag_date_end=true;
+                return false;
+            }
+        });
+
+
         checkBox_final.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!flag_date_end) return;
 
                 if (isChecked){
 
@@ -378,7 +400,7 @@ public class reportes_simulador extends AppCompatActivity implements SearchView.
 
 
                         }
-                    }, dia, mes, anio);
+                    }, anio, mes, dia);
 
                     datePickerDialog.show();
 

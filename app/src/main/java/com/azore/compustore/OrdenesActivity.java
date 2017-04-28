@@ -482,7 +482,7 @@ public class OrdenesActivity extends AppCompatActivity implements SearchView.OnQ
 
                //  int j = Integer.valueOf(spinner_adapter.getItem(position));
                 //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
-                if(!flagSpinnerTouch) return;
+              //  if(!flagSpinnerTouch) return;
               PosicionSpinner = position;
               if (position==0 ) {
 //

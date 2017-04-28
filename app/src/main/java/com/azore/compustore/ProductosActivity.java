@@ -203,7 +203,7 @@ public class ProductosActivity extends AppCompatActivity implements SearchView.O
                // int j = Integer.valueOf(spinner_adapter.getItem(position));
                 //Toast.makeText(getApplicationContext(), categoriesProduct.get(position).getDescription(), Toast.LENGTH_SHORT).show();
 
-                if (!flagSpinnerTouch) return;
+                //if (!flagSpinnerTouch) return;
                 PosicionSpinner = position;
                 //Toast.makeText(getApplicationContext(),"Entro ", Toast.LENGTH_SHORT).show();
 

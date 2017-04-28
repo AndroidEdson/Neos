@@ -207,7 +207,7 @@ public class Month_sales_main extends AppCompatActivity{
 
         spinner_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item);
 
-        int  siglo =2000;
+        int  siglo =2015;
         for (int i=0; i<30; i++){
             int anio = siglo+i;
             spinner_adapter.add(String.valueOf(anio));

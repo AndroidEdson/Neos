@@ -136,10 +136,27 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
     private Button btn_save ;
     private Button btn_cancel ;
     private List<AssemblieOrders_Union> assemblieOrders_unions_original;
-    private  List<String> Id;
+    private  int list_id[];
+    private  int list_assembly_id[];
+    private  String list_description[];
+    private  int list_qty[];
+    private  double list_price[];
 
+
+//   this.id = id;
+//       this.assembly_id = assembly_id;
+//       this.description = description;
+//       this.qty = qty;
+//       this.price = price;
+//
     private  int request_code1=1;
     private final String KEY_ID= "key_id";
+    private final String KEY_ID_ORDER= "key_order";
+    private final String KEY_ID_ASSEMBLY= "key_id_assembly";
+    private final String KEY_DESCRIPTION= "key_description";
+    private final String KEY_QTY= "key_qty";
+    private final String KEY_PRICE= "key_price";
+
 
     //**********************************************************************************************
     //**********************************************************************************************
@@ -159,15 +176,13 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
         btn_save= (Button) findViewById(R.id.btnGuardar);
         btn_cancel= (Button) findViewById(R.id.btnCancelar);
 
-
-
         txt_description.setEnabled(false);
         inventory= new Inventory(getApplicationContext());
 
         Intent i = getIntent();
         id_order = i.getStringExtra(EXTRA_ORDER_ID);
 
-
+       // assemblieOrders_unions_original;
 
         if(savedInstanceState!= null)
         {
@@ -180,7 +195,42 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
 
          assemblieOrders_unions_original =inventory.getEnsambliesInOrder(id_order);
 
+
+        list_id= new int[assemblieOrders_unions_original.size()];
+        list_assembly_id= new int[assemblieOrders_unions_original.size()];
+        list_description=  new String[assemblieOrders_unions_original.size()];
+        list_qty=  new int[assemblieOrders_unions_original.size()];
+        list_price=  new double[assemblieOrders_unions_original.size()];
+
+        if(savedInstanceState!= null) {
+            list_id= savedInstanceState.getIntArray(KEY_ID_ORDER);
+            list_assembly_id= savedInstanceState.getIntArray(KEY_ID_ASSEMBLY);
+            list_description= savedInstanceState.getStringArray(KEY_DESCRIPTION);
+            list_qty= savedInstanceState.getIntArray(KEY_QTY);
+            list_price= savedInstanceState.getDoubleArray(KEY_PRICE);
+
+            for(int k=0; k<list_id.length; k++) {
+                AssemblieOrders_Union aux= new AssemblieOrders_Union(list_id[k],list_assembly_id[k],list_description[k],list_qty[k],list_price[k]);
+                assemblieOrders_unions_original.set(k,aux);
+            }
+          // Toast.makeText(getApplicationContext(),"Entró", Toast.LENGTH_SHORT).show();
+        }
+
+
         final List<AssemblieOrders_Union> assemblieOrders_unions = inventory.getEnsambliesInOrder(id_order);
+
+        for(int j=0; j< assemblieOrders_unions_original.size(); j++){
+
+            list_id[j]=assemblieOrders_unions_original.get(j).getId();
+            list_assembly_id[j]=assemblieOrders_unions_original.get(j).getAssembly_id();
+            list_description[j]=assemblieOrders_unions_original.get(j).getDescription();
+            list_qty[j]=assemblieOrders_unions_original.get(j).getQty();
+            list_price[j]=assemblieOrders_unions_original.get(j).getPrice();
+
+        }
+
+
+
         adapter = new AssembliesOrdersUnionAdapter( assemblieOrders_unions, this);
         recyclerView.setAdapter(adapter);
 
@@ -289,8 +339,11 @@ public class Modif_Ordenes_N2 extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_ID,id_order);
-      //  outState.putStringArrayList(KEY_ID,);
-
+        outState.putIntArray(KEY_ID_ORDER,list_id );
+        outState.putIntArray(KEY_ID_ASSEMBLY,list_assembly_id );
+        outState.putStringArray(KEY_DESCRIPTION,list_description );
+        outState.putIntArray(KEY_QTY,list_qty );
+        outState.putDoubleArray(KEY_PRICE,list_price );
 
 
     }

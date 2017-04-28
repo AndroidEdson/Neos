@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.azore.compustore.fiuady.db.AssemblieOrders_Union;
 import com.azore.compustore.fiuady.db.Inventory;
 import com.azore.compustore.fiuady.db.InventoryDbSchema;
 import com.azore.compustore.fiuady.db.Products;
@@ -150,6 +151,23 @@ public class modif_ensamble extends AppCompatActivity {
     public static String EXTRA_DESCRIPTION_ENSAMBLE_MODIF = "com.azore.compustore.id.add.assemblies.description_ensamble.modif";
     public static String EXTRA_ID_ENSAMBLE_MODIF = "com.azore.compustore.id.add.assemblies.id_ensamble.modif";
 
+    private static  String KEY_ID="key_id";
+    private static  String KEY_NAME="key_name";
+
+    private static  String KEY_ID_ORIGINAL="key_id_original";
+    private static  String KEY_QTY_ORIGINAL="key_qty";
+
+    private  int list_id[];
+    private  int list_category_id[];
+    private  String list_description[];
+    int list_price[];
+    private  int list_qty[];
+    private List<Products> list_original;
+
+    int category_id;
+    String description;
+    int price;
+    int qty;
 
     //****************************************************************************
     //****************************************************************************
@@ -161,16 +179,21 @@ public class modif_ensamble extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assemblies);
 
-
         new_products= new ArrayList<String>();
         qty_original= new ArrayList<String>();
 
         Intent i = getIntent();
         name_description= i.getStringExtra(EXTRA_DESCRIPTION_ENSAMBLE_MODIF);
         id=i.getStringExtra(EXTRA_ID_ENSAMBLE_MODIF);
+
+        if(savedInstanceState!= null)
+        {
+            id= savedInstanceState.getString(KEY_ID, "");
+            name_description= savedInstanceState.getString(KEY_NAME, "");
+            //   original_name= savedInstanceState.getString(KEY_NAME, "");
+        }
+
         getSupportActionBar().setTitle(name_description);
-
-
 
         inventory = new Inventory(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.recycler_products_assemblies);
@@ -185,11 +208,45 @@ public class modif_ensamble extends AppCompatActivity {
         new_description.setText(name_description);
 
         List<Products> products =inventory.getProductsAssembly(id);
+        list_original =inventory.getProductsAssembly(id);
+
+
+        list_id= new int[list_original.size()];
+        list_qty= new int[list_original.size()];
+        list_description= new String[list_original.size()];
+        list_price= new int[list_original.size()];
+        list_category_id= new int[list_original.size()];
+
         for (int j=0; j<products.size(); j++)
         {
-            new_products.add(String.valueOf(products.get(j).getId()));
-            qty_original.add(String.valueOf(products.get(j).getQty()));
+            list_id[j]=list_original.get(j).getId();
+            list_category_id[j]=list_original.get(j).getCategory_id();
+            list_description[j]=list_original.get(j).getDescription();
+            list_price[j]=list_original.get(j).getPrice();
+            list_qty[j]=list_original.get(j).getQty();
+
+            new_products.add(String.valueOf(list_original.get(j).getId()));
+            qty_original.add(String.valueOf(list_original.get(j).getQty()));
+
         }
+
+
+
+        if(savedInstanceState!= null) {
+            list_id= savedInstanceState.getIntArray(KEY_ID_ORIGINAL);
+            list_qty= savedInstanceState.getIntArray(KEY_QTY_ORIGINAL);
+
+            for(int k=0; k<list_id.length; k++) {
+              //  Products aux= new Products(list_id[k],list_category_id[k],list_description[k],list_price[k],list_qty[k]);
+              //  list_original.set(k,aux);
+                new_products.set(k,String.valueOf(list_id[k]));
+                qty_original.set(k,String.valueOf(list_qty[k]));
+
+            }
+            //Toast.makeText(getApplicationContext(),"Entró", Toast.LENGTH_SHORT).show();
+        }
+
+
 
         adapter = new ProductsAdapter(products, getApplicationContext());
         recyclerView.setAdapter(adapter);
@@ -272,7 +329,18 @@ public class modif_ensamble extends AppCompatActivity {
     //****************************************************************************
     //****************************************************************************
     //************************************END ONCREATE****************************************
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_ID,id);
+        outState.putString(KEY_NAME,name_description);
 
+        outState.putIntArray(KEY_ID_ORIGINAL,list_id );
+        outState.putIntArray(KEY_QTY_ORIGINAL,list_qty );
+
+
+
+    }
     @Override
     public void onBackPressed() {
 
