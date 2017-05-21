@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
        // Toast.makeText(this,Integer.toString(categoryProductList.size()),Toast.LENGTH_SHORT).show();
 
-
         btncategorias.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
